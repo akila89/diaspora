@@ -8,6 +8,7 @@
 en:
   settings: "Settings"
   profile: "Profile"
+  developer: "Developer"
   account: "Account"
   privacy: "Privacy"
   privacy_policy: "Privacy Policy"
@@ -962,6 +963,43 @@ en:
 
     activity:
       title: "My Activity"
+
+    developer:
+      title: "Developer"
+
+  app:
+    app_details: "App Details"
+    app_name: "App Name"
+    app_discription: "App Discription"
+    app_version: "App Vesion"
+    edit:
+      edit_name: "Your Application Name"
+      edit_discription: "Short Discription"
+      edit_version: "Version of the App"
+      generate_menifest: "Generate Menifest"
+
+  url:
+    _url: "URLs"
+    success: "Success URL"
+    error_login: "Error Login URL"
+    error_auth: "Error Authentication URL"
+    edit:
+      edit_success: "Success URL"
+      edit_error_login: "URL for error login"
+      edit_error_auth: "URL for error authentication"
+
+  post:
+    _post: "Access Levels for Posts"
+    read: "Read"
+    write: "Write"
+    delete: "Delete"
+
+  comment:
+    _comment: "Access Levels for Comments"
+    read: "Read"
+    write: "Write"
+    delete: "Delete"
+
   users:
     edit:
       export_data: "Export Data"
