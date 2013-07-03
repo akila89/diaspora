@@ -99,6 +99,10 @@ Diaspora::Application.routes.draw do
     get :export_photos
   end
 
+  # Developer
+  resource :developer do
+  
+  end
   controller :users do
     get 'public/:username'          => :public,           :as => 'users_public'
     match 'getting_started'         => :getting_started,  :as => 'getting_started'

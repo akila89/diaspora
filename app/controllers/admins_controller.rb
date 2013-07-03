@@ -2,6 +2,7 @@ class AdminsController < ApplicationController
   before_filter :authenticate_user!
   before_filter :redirect_unless_admin
 
+
   def user_search
     params[:user] ||= {}
     params[:user].delete_if {|key, value| value.blank? }

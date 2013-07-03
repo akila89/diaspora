@@ -1,0 +1,92 @@
+- content_for :page_title do
+  = t('developer')
+
+#section_header
+  %h2
+    = t('developer')
+%br
+%br
+.span-12.prepend-5.last
+  .span-5.append-1
+    %h3
+      = t('users.edit.your_handle')
+    %p
+      %b= current_user.diaspora_handle
+  .span-5.last
+    %h3
+      = t('users.edit.your_email')
+    %p
+      %b= current_user.email
+  %br
+  %br
+  %hr
+  %br
+
+  %h3 
+    = t('app.app_details')
+  %br
+  = form_for 'developer', :url => developer_path, :html => { :method => :put } do |f|
+    = f.error_messages
+    %p
+      = f.label :app_name, t('app.app_name')
+      = f.text_field :app_name, :placeholder => t('app.edit.edit_name')
+    %p
+      = f.label :app_discription, t('app.app_discription')
+      = f.text_area :app_discription, :rows => 5, :placeholder => t('app.edit.edit_discription')
+    %p
+      = f.label :app_version, t('app.app_version')
+      = f.text_field :app_version, :placeholder => t('app.edit.edit_version')
+    %br
+    %br 
+    %h3
+      = t('url._url') 
+    %br
+    %p
+      = f.label :success, t('url.success')
+      = f.text_field :success, :placeholder => t('url.edit.edit_success')
+    %p
+      = f.label :error_login, t('url.error_login')
+      = f.text_field :error_login, :placeholder => t('url.edit.edit_error_login')
+    %p
+      = f.label :error_auth, t('url.error_auth')
+      = f.text_field :error_auth, :placeholder => t('url.edit.edit_error_auth')
+    %br
+    %br
+    %h3
+      = t('post._post')
+    %br
+    %p.checkbox_select
+      = f.label :post_read,t('post.read')
+      = f.check_box :post_read
+    %br
+    %p.checkbox_select
+      = f.label :post_write,t('post.write')
+      = f.check_box :post_write
+    %br
+    %p.checkbox_select
+      = f.label :post_delete,t('post.delete')
+      = f.check_box :post_delete
+    %br
+    %br
+    %h3
+      = t('comment._comment')
+    %br
+    %p.checkbox_select
+      = f.label :comment_read,t('comment.read')
+      = f.check_box :comment_read
+    %br
+    %p.checkbox_select
+      = f.label :comment_write,t('comment.write')
+      = f.check_box :comment_write
+    %br
+    %p.checkbox_select
+      = f.label :comment_delete,t('comment.delete')
+      = f.check_box :comment_delete
+    %br
+    %br
+    = f.submit t('app.edit.generate_menifest'), :class => 'button'
+  %br
+  %br
+  %hr
+  %br
+ 
