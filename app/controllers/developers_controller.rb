@@ -1,6 +1,6 @@
 
 class DevelopersController < ApplicationController
- #include Diaspora::Relayable
+ #include Diaspora::EncryptManifest
 
    def developer
 	
@@ -115,6 +115,16 @@ class DevelopersController < ApplicationController
 			},
 	}
         #message=self.encodeJson "asda", menifest.to_json
-	flash[:notice] = menifest.to_json
+	#flash[:notice] = menifest.to_json
+	flash[:notice]=encodeMenifest menifest.to_json
 	end
+	
+	#Encode Menifest
+	def encodeMenifest menifetJson
+ 		jsonContent = JSON.parse(menifetJson)
+		encodedJsonObject = JWT.encode(jsonContent, OpenSSL::PKey::RSA.new(current_user.serialized_private_key),"RS256")
+		decodedJsonObject=JWT.decode(encodedJsonObject, OpenSSL::PKey::RSA.new(current_user.person.public_key),"RS256")
+		decodedJsonObject
+		#OpenSSL::PKey::RSA.new(serialized_private_key)
+        end
 end
