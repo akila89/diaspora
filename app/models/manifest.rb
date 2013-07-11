@@ -5,35 +5,19 @@ class Manifest < ActiveRecord::Base
     JWT.encode(mnfst, OpenSSL::PKey::RSA.new(private_key),"RS256")
   end
   
-  def verify
- 
-  end
-  
-  def get_host_meta
-    url=host_meta_url
-      if user_signed_in?
-          Rails.logger.info("Getting: #{url} for Sandaruwan")
-    begin
-      res = Faraday.get(url)
-      return false if res.status == 404
-      res.body
-    rescue OpenSSL::SSL::SSLError => e
-      Rails.logger.info "Failed to fetch #{url}: SSL setup invalid"
+  def verify(mnfst)
+     manifest_payload = JWT.decode(mnfst, nil, false)
+     developer_id = manifest_payload["dev_id"]
+     person = Webfinger.new(developer_id).fetch
+     begin
+       JWT.decode(mnfst, person.public_key)
+     rescue JWT::DecodeError => e
+      Rails.logger.info("Failed to verify the manifest from the developer: #{developer_id}; #{e.message}")
       raise e
-    rescue => e
-      Rails.logger.info("Failed to fetch: #{url} for Sandaruwan; #{e.message}")
+     rescue => e
+      Rails.logger.info("Failed to verify the manifest from the developer: #{developer_id}; #{e.message}")
       raise e
-    end
-    else
-      @css_framework = :bootstrap # Hack, port site to one framework
-      render file: Rails.root.join("public", "default.html"),
-             layout: 'application'
-    end
-  end
-  
-  def host_meta_url
-    account ="sandaruwan@spyurk.am"
-    domain = account.split('@')[1]
-    "http://#{domain}/.well-known/host-meta"
+     end
+          
   end
 end
