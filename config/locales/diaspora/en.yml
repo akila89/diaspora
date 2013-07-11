@@ -97,6 +97,7 @@ en:
       you_currently: "you currently have %{user_invitation} invites left %{link}"
       add_invites: "add invites"
       email_to: "Email to Invite"
+      under_13: "Show users that are under 13 (COPPA)"
       users:
         zero: "%{count} users found"
         one: "%{count} user found"
@@ -381,6 +382,7 @@ en:
       to: "To"
       personal_message: "Personal message"
       send_an_invitation: "Send an invitation"
+      sending_invitation: "Sending invitation..."
       send_invitation: "Send invitation"
       paste_link: "Share this link with your friends to invite them to Diaspora*, or email them the link directly."
       codes_left:
@@ -594,6 +596,7 @@ en:
     helper:
       results_for: " results for %{params}"
       people_on_pod_are_aware_of: " people on pod are aware of"
+      is_sharing: "%{name} is sharing with you"
     aspect_list:
       edit_membership: "edit aspect membership"
     add_contact_small:

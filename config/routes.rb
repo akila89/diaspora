@@ -5,6 +5,10 @@
 require 'sidekiq/web'
 
 Diaspora::Application.routes.draw do
+  get "manifest/sign"
+  get "manifest/verify"
+  get "manifest/index"
+
   if Rails.env.production?
     mount RailsAdmin::Engine => '/admin_panel', :as => 'rails_admin'
   end
@@ -218,7 +222,7 @@ Diaspora::Application.routes.draw do
   get 'mobile/toggle', :to => 'home#toggle_mobile', :as => 'toggle_mobile'
 
   #Protocol Url
-  get 'protocol' => redirect("https://github.com/diaspora/diaspora/wiki/Diaspora%27s-federation-protocol")
+  get 'protocol' => redirect("http://wiki.diasporafoundation.org/Federation_Protocol_Overview")
 
   # Startpage
   root :to => 'home#show'
