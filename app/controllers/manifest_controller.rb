@@ -5,9 +5,9 @@ class ManifestController < ApplicationController
   end
   
   def sign    
-    mnfst = {"Hellp" => "Madhawa"}
-    manifest = Manifest.new
-    res=manifest.sign(mnfst)
+    mnfst = {"Hellp" => "Madhawa"} # Testing 
+    private_key = current_user.serialized_private_key
+    res = Manifest.new.sign(mnfst,cinnum)
     Rails.logger.info("Content: for #{res}")  
   end
 

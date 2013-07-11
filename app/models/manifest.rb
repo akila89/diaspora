@@ -1,9 +1,8 @@
 class Manifest < ActiveRecord::Base
   attr_accessible :app_description, :app_id, :app_ver, :comment_write, :comments_read, :dev_id, :manifest_ver, :post_delete, :post_read, :post_write, :profile_read, :url_err_Oauth, :url_err_login, :url_success
   
-  def sign (mnfst)
-    user = current_user
-    JWT.encode(mnfst, OpenSSL::PKey::RSA.new(user.serialized_private_key),"RS256")
+  def sign (mnfst,private_key)
+    JWT.encode(mnfst, OpenSSL::PKey::RSA.new(private_key),"RS256")
   end
   
   def verify
