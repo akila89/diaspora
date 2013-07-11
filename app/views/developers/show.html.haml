@@ -25,7 +25,7 @@
   %h3 
     = t('app.app_details')
   %br
-  = form_for 'developer', :url => developer_path, :html => { :method => :put } do |f|
+  = form_for 'developer', :url => 'developer/manifestViewer', :html => { :method => :put } do |f|
     = f.error_messages
     %p
       = f.label :app_name, t('app.app_name')
@@ -82,6 +82,22 @@
     %p.checkbox_select
       = f.label :comment_delete,t('comment.delete')
       = f.check_box :comment_delete
+    %br
+    %br
+    %h3
+      = t('profileDetails._profile')
+    %br
+    %p.checkbox_select
+      = f.label :profile_read,t('profileDetails.read')
+      = f.check_box :profile_read
+    %br
+    %p.checkbox_select
+      = f.label :profile_write,t('profileDetails.write')
+      = f.check_box :profile_write
+    %br
+    %p.checkbox_select
+      = f.label :profile_delete,t('profileDetails.delete')
+      = f.check_box :profile_delete
     %br
     %br
     = f.submit t('app.edit.generate_menifest'), :class => 'button'

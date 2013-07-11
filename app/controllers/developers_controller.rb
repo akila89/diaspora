@@ -5,6 +5,17 @@ class DevelopersController < ApplicationController
    def developer
 	
    end
+   def manifestViewer
+	    manifest=self.createMenifestJson "", "", "", "", 	"","","","", "", "","", "",""
+	    manifest
+   end
+
+  def export
+    #exporter = Diaspora::Exporter.new(Diaspora::Exporters::XML)
+    send_data manifestViewer, :filename => "#{current_user.username}_diaspora_data.json", :type => :json
+  end
+
+
    def show
 
    end
@@ -72,7 +83,29 @@ class DevelopersController < ApplicationController
 	    @comment_delete=false
 	    end
 	end
-	self.createMenifestJson @developer_id, @app_ID, @app_discription, @app_version, @success_url,@error_login,@error_authurl,@post_read, @post_write, @post_delete,@comment_read, @comment_write, @comment_delete 
+	if u[:profile_read]
+	    if u[:profile_read]=='1'
+	    @profile_read=true
+            else
+	    @profile_read=false
+	    end
+	end
+	if u[:profile_write]
+	    if u[:profile_write]=='1'
+	    @profile_write=true
+            else
+	    @profile_write=false
+	    end
+	end
+	if u[:profile_delete]
+	    if u[:profile_delete]=='1'
+	    @profile_delete=true
+            else
+	    @profile_delete=false
+	    end
+	end
+	manifest=self.createMenifestJson @developer_id, @app_ID, @app_discription, @app_version, @success_url,@error_login,@error_authurl,@post_read, @post_write, @post_delete,@comment_read, @comment_write, @comment_delete
+	encodeMenifest manifest  
       end
       redirect_to developer_path
    end 
@@ -116,7 +149,7 @@ class DevelopersController < ApplicationController
 	}
         #message=self.encodeJson "asda", menifest.to_json
 	#flash[:notice] = menifest.to_json
-	flash[:notice]=encodeMenifest menifest.to_json
+	menifest.to_json
 	end
 	
 	#Encode Menifest
@@ -125,6 +158,8 @@ class DevelopersController < ApplicationController
 		encodedJsonObject = JWT.encode(jsonContent, OpenSSL::PKey::RSA.new(current_user.serialized_private_key),"RS256")
 		decodedJsonObject=JWT.decode(encodedJsonObject, OpenSSL::PKey::RSA.new(current_user.person.public_key),"RS256")
 		decodedJsonObject
+		flash[:notice] = decodedJsonObject
 		#OpenSSL::PKey::RSA.new(serialized_private_key)
         end
+
 end

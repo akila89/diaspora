@@ -101,8 +101,12 @@ Diaspora::Application.routes.draw do
 
   # Developer
   resource :developer do
-  
+    put :manifestViewer
+    get :export
   end
+
+
+
   controller :users do
     get 'public/:username'          => :public,           :as => 'users_public'
     match 'getting_started'         => :getting_started,  :as => 'getting_started'

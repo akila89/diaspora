@@ -977,6 +977,7 @@ en:
       edit_discription: "Short Discription"
       edit_version: "Version of the App"
       generate_menifest: "Generate Menifest"
+      download_manifest: "Download Manifest"
 
   url:
     _url: "URLs"
@@ -996,6 +997,12 @@ en:
 
   comment:
     _comment: "Access Levels for Comments"
+    read: "Read"
+    write: "Write"
+    delete: "Delete"
+
+  profileDetails:
+    _profile: "Access Levels for Profile details"
     read: "Read"
     write: "Write"
     delete: "Delete"
