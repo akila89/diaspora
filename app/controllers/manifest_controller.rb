@@ -3,16 +3,16 @@ class ManifestController < ApplicationController
   def index
     
   end
-    def sign
-        if user_signed_in?
-      redirect_to stream_path
-    else
-      @css_framework = :bootstrap # Hack, port site to one framework
-      render file: Rails.root.join("public", "default.html"),
-             layout: 'application'
-    end
+  
+  def sign    
+    mnfst = {"Hellp" => "Madhawa"}
+    manifest = Manifest.new
+    res=manifest.sign(mnfst)
+    Rails.logger.info("Content: for #{res}")  
   end
 
   def verify
+    
   end
+  
 end
