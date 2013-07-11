@@ -3,11 +3,12 @@ class AuthorizeController < ApplicationController
   before_filter :authenticate_user!
   
   def show
-    flash[:notice] = "refresh token - #{generate_refresh_token}"
+    
   end
   
   def update
-    
+    flash[:notice] = "refresh token - #{generate_refresh_token}"
+    render :show
   end
    
   private
