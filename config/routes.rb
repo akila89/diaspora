@@ -5,6 +5,7 @@
 require 'sidekiq/web'
 
 Diaspora::Application.routes.draw do
+
   if Rails.env.production?
     mount RailsAdmin::Engine => '/admin_panel', :as => 'rails_admin'
   end
@@ -214,4 +215,8 @@ Diaspora::Application.routes.draw do
 
   # Startpage
   root :to => 'home#show'
+  
+  #dauth
+  match 'dauth/authorize/authorization_token',    to: 'authorize#show'
+  
 end
