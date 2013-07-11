@@ -10,7 +10,8 @@ class Manifest < ActiveRecord::Base
      developer_id = manifest_payload["dev_id"]
      person = Webfinger.new(developer_id).fetch
      begin
-       JWT.decode(mnfst, person.public_key)
+       res=JWT.decode(mnfst, person.public_key)
+       Rails.logger.info("Ela ela elaaaa #{res}")
      rescue JWT::DecodeError => e
       Rails.logger.info("Failed to verify the manifest from the developer: #{developer_id}; #{e.message}")
       raise e
