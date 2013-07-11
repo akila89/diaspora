@@ -153,10 +153,6 @@ header
     :display inline-block
     :margin-top 5px
 
-  .branding-logo_small
-    :height 16px
-    :width 161px
-
   a
     :color #CCC
     :color rgb(147,147,147)
@@ -410,7 +406,8 @@ ul.as-selections
 
   &:hover
     .controls:first-child
-      @include opacity(0.5)
+      .control_icon
+        @include opacity(0.5)
 
 .info
   :font-size smaller
@@ -624,6 +621,17 @@ form.new_comment
         :right 2em
       h4
         :font-weight bold
+
+  #sharing_message
+    :font-size smaller
+    :align middle
+
+    span
+      :vertical-align middle
+
+    img
+      :vertical-align middle
+      :margin 0.5em
 
 #photo_container
   :text
@@ -2054,7 +2062,15 @@ ul#press_logos
     :color $blue
 
   .participants_link
-    :float left
+    :margin-top 5px
+    :clear right
+    :float right
+    :color #aaa
+    
+  .icons-users
+    :display block
+    :width 25px
+    :height 16px
 
   .conversation_participants_popover_content
     :display none
