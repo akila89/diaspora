@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130613203350) do
+ActiveRecord::Schema.define(:version => 20130630170309) do
 
   create_table "account_deletions", :force => true do |t|
     t.string  "diaspora_handle"
@@ -160,6 +160,25 @@ ActiveRecord::Schema.define(:version => 20130613203350) do
     t.datetime "updated_at",        :null => false
   end
 
+  create_table "manifests", :force => true do |t|
+    t.string   "dev_id"
+    t.string   "app_id"
+    t.string   "app_description"
+    t.string   "app_ver"
+    t.string   "manifest_ver"
+    t.string   "url_success"
+    t.string   "url_err_login"
+    t.string   "url_err_Oauth"
+    t.boolean  "post_read"
+    t.boolean  "post_write"
+    t.boolean  "post_delete"
+    t.boolean  "profile_read"
+    t.boolean  "comments_read"
+    t.boolean  "comment_write"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
+  end
+
   create_table "mentions", :force => true do |t|
     t.integer "post_id",   :null => false
     t.integer "person_id", :null => false
@@ -213,7 +232,7 @@ ActiveRecord::Schema.define(:version => 20130613203350) do
     t.text   "data",                 :null => false
   end
 
-  add_index "o_embed_caches", ["url"], :name => "index_o_embed_caches_on_url"
+  add_index "o_embed_caches", ["url"], :name => "index_o_embed_caches_on_url", :length => {"url"=>255}
 
   create_table "participations", :force => true do |t|
     t.string   "guid"
