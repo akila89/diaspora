@@ -3,12 +3,36 @@ class AuthorizeController < ApplicationController
   before_filter :authenticate_user!
   
   def show
+
+    @dev_handle = 'dev@pod.com'
+    @dev_email = 'dev@mail.com'
+    @app_name = 'Sample App'
+    @app_description = 'Sample App discription'
+    @app_version = 'v1.0'
     
   end
   
   def update
-    flash[:notice] = "refresh token - #{generate_refresh_token}"
-    render :show
+    @authorize = Dauth::RefreshToken.new
+    
+    #get scopes
+    @scopes = Array.new
+    params[:scopes].each do |k,v|
+      @scopes<<k if v=="1" 
+    end
+    
+    @authorize.scopes = @scopes
+    @authorize.token = generate_refresh_token
+    @authorize.app_id = "01"             #TODO get real app_id
+    @authorize.user_guid = "sdafdsfad"   #TODO redirect user_guid
+    @authorize.secret = "secret"         #TODO redirect secrets
+    
+    if @authorize.save
+      flash[:notice] = "refresh token - #{generate_refresh_token}"    
+    else 
+      flash[:notice] = "Authentication Fail" 
+    end
+    redirect_to action: 'show'                       #TODO redirect back to callback URL
   end
    
   private

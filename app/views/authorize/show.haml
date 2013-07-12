@@ -1,58 +1,64 @@
 - content_for :page_title do
-  = t('developer')
+  = t('authentication.title')
 
 #section_header
   %h2
-    = t('developer')
+    = t('authentication.title')
 %br
 %br
-.span-12.prepend-5.last
-  .span-5.append-1
+.span-13.prepend-5.last
+  .span-6.append-1
     %h3
-      = t('users.edit.your_handle')
+      = t('authentication.dev_handle')
     %p
-      %b= current_user.diaspora_handle
-  .span-5.last
+      %b= @dev_handle
+  .span-6.last
     %h3
-      = t('users.edit.your_email')
+      = t('authentication.dev_email')
     %p
-      %b= current_user.email
+      %b= @dev_email
   %br
   %br
   %hr
-  %br
-
   %h3 
-    = t('app.app_details')
+    = t('authentication.app.app_details')
+  %p
+    %h6= t('app.app_name')
+    %b= @app_name
+    %br
+  %p
+    %h6= t('app.app_description')
+    %b= @app_description
+    %br
+  %p
+    %h6= t('app.app_version')
+    %b= @app_version
+    %br
+  %h3 
+    = t('authentication.app.permission')
+  %br
     
-  = form_for 'authorize', :url => 'update', :html => { :method => :put } do |f|
+  = form_for 'scopes' , :url => {:action => 'update'}, :html => { :method => :put } do |f|
     = f.error_messages
-    %p
-      = f.label :app_name, t('app.app_name')
-      = f.text_field :app_name, :placeholder => t('app.edit.edit_name')
-    %p
-      = f.label :app_discription, t('app.app_discription')
-      = f.text_area :app_discription, :rows => 5, :placeholder => t('app.edit.edit_discription')
-    %p
-      = f.label :app_version, t('app.app_version')
-      = f.text_field :app_version, :placeholder => t('app.edit.edit_version')
+    
+    %h4
+      = t('profile._profle')
     %br
-    %br 
-    %h3
-      = t('url._url') 
+    
+    %p.checkbox_select
+      = f.label :profile_read,t('profile.read')
+      = f.check_box :profile_read
     %br
-    %p
-      = f.label :success, t('url.success')
-      = f.text_field :success, :placeholder => t('url.edit.edit_success')
-    %p
-      = f.label :error_login, t('url.error_login')
-      = f.text_field :error_login, :placeholder => t('url.edit.edit_error_login')
-    %p
-      = f.label :error_auth, t('url.error_auth')
-      = f.text_field :error_auth, :placeholder => t('url.edit.edit_error_auth')
+    %p.checkbox_select
+      = f.label :profile_write,t('profile.write')
+      = f.check_box :profile_write
+    %br
+    %p.checkbox_select
+      = f.label :profile_delete,t('profile.delete')
+      = f.check_box :profile_delete
     %br
     %br
-    %h3
+    %h4
       = t('post._post')
     %br
     %p.checkbox_select
@@ -68,7 +74,7 @@
       = f.check_box :post_delete
     %br
     %br
-    %h3
+    %h4
       = t('comment._comment')
     %br
     %p.checkbox_select
@@ -82,11 +88,9 @@
     %p.checkbox_select
       = f.label :comment_delete,t('comment.delete')
       = f.check_box :comment_delete
-    %br
-    %br
-    = f.submit t('app.edit.generate_menifest'), :class => 'button'
-  
-  %br
+    %br    
+    
+    = f.submit t('authentication.submit_btn'), :class => 'button'
   %br
   %br
   %hr
