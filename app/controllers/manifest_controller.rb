@@ -18,8 +18,12 @@ rvxGxkIsdjIc-Zo2aqFKaWDPMS9xwnw4erV5zTy5p9Cc1L1lSxnvHewZhCa9qr8ffRG-uf4SO9XbMZEP
 pWYoqqypdEbsO1yNk0g5d6v4lB096dQi5LVt3uOp0w_70kY2ms0HKw68qo9tQREuld4EbIKrj9I5W8qa5GpIu5FMl46Fd0mihUDE5ey3UnyfEfG95uTyFJrhhnPNZbRWh
 bPct85Z4UfQrnSBjeh9_CbHcsLE8LgLqWlrEteaClK3WjENWuqTpJweH6QLcV2JUGYSsem2CQyXVNmGl0wHmeurev0DEKccG7VjIp2QtLY8mSrY6vFAbSIhfKMmnoA89F
 FIL0uW2B3zksBhwo9Z9159w8Z0GalAHOb3EhmVN76Xayog-yA0_tEprrB-wwEGp1LSzONr7NWPhg19d7BBKnNGLXtBOVQsgM63ypF6dK9e1nP40yqE8GyPlJ5U_TUH4sY
-Y5eU"
-    res = Manifest.new.verify(mnfst)
+Y5eUa"
+begin 
+  res = Manifest.new.verify(mnfst)
+rescue => e
+  Rails.logger.info("Error occured #{e.message}")
+end
     if res
       @css_framework = :bootstrap # Hack, port site to one framework
       render file: Rails.root.join("public", "default.html"),
