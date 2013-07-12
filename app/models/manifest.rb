@@ -21,4 +21,25 @@ class Manifest < ActiveRecord::Base
      end
           
   end
+
+   def createMenifestJson dev_id, app_id, app_discription, app_version, success_url, error_login, list
+		manifest={ 
+
+		:dev_id=>dev_id,
+                :manifest_version=>"1.0",
+		:app_details=>{
+	      		:id=> app_id,
+	                :description=>app_discription,
+	                :version=>app_version
+	                },
+		:callbacks=>{
+			:success=>success_url,
+			:error=>error_login
+			},
+		:access=>list,
+	}
+        #message=self.encodeJson "asda", menifest.to_json
+	#flash[:notice] = menifest.to_json
+	manifest.to_json
+	end
 end

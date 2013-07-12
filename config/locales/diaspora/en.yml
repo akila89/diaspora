@@ -979,7 +979,7 @@ en:
       edit_name: "Your Application Name"
       edit_discription: "Short Discription"
       edit_version: "Version of the App"
-      generate_menifest: "Generate Menifest"
+      generate_menifest: "Generate Manifest"
       download_manifest: "Download Manifest"
 
   url:

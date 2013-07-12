@@ -8,7 +8,9 @@ Diaspora::Application.routes.draw do
   get "manifest/sign"
   get "manifest/verify"
   get "manifest/index"
-
+  get "manifest/edit"
+  get "manifest/export"
+  put "manifest/downloadManifest"
   if Rails.env.production?
     mount RailsAdmin::Engine => '/admin_panel', :as => 'rails_admin'
   end
@@ -102,14 +104,6 @@ Diaspora::Application.routes.draw do
     get :export
     get :export_photos
   end
-
-  # Developer
-  resource :developer do
-    put :manifestViewer
-    get :export
-  end
-
-
 
   controller :users do
     get 'public/:username'          => :public,           :as => 'users_public'
