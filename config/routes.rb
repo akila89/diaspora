@@ -7,7 +7,7 @@ require 'sidekiq/web'
 Diaspora::Application.routes.draw do
 
   get "manifest/sign"
-  get "manifest/verify"
+  post "manifest/verify"
   get "manifest/index"
   get "manifest/edit"
   get "manifest/export"
