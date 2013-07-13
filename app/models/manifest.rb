@@ -1,7 +1,19 @@
 class Manifest < ActiveRecord::Base
-  attr_accessible :app_description, :app_id, :app_ver, :comment_write, :comments_read, :dev_id, :manifest_ver, :post_delete, :post_read, :post_write, :profile_read, :url_err_Oauth, :url_err_login, :url_success
+  serialize :scopes, Array
+
+  attr_accessible :app_description,
+                  :app_id,
+                  :app_version,
+                  :dev_id,
+                  :url_success,
+                  :url_err_login,
+                  :url_err_Oauth,
+                  :manifest_ver,
+                  :signed_jwt,
+                  :scopes
+
   validates :app_description,  presence: true, length: { maximum: 50 }
-  validates :app_ver, presence: true
+  validates :app_version, presence: true
   VALID_EMAIL_REGEX = /^(http|https):\/\/.+$/
   validates :url_err_login, presence: true, format: { with: VALID_EMAIL_REGEX }
   validates :url_success, presence: true, format: { with: VALID_EMAIL_REGEX }
@@ -27,24 +39,21 @@ class Manifest < ActiveRecord::Base
           
   end
 
-   def createManifestJson dev_id, app_id, app_discription, app_version, success_url, error_login, list
-		manifest={ 
-
-		:dev_id=>dev_id,
-                :manifest_version=>"1.0",
-		:app_details=>{
-	      		:id=> app_id,
-	                :description=>app_discription,
-	                :version=>app_version
-	                },
-		:callbacks=>{
-			:success=>success_url,
-			:error=>error_login
+  def createManifestJson manifest
+		manifest_json={
+		  :dev_id=>manifest.dev_id,
+      :manifest_version=>"1.0",
+		  :app_details=>{
+	      :id=> manifest.app_id,
+	      :description=>manifest.app_description,
+	      :version=>manifest.app_version
+	    },
+		  :callbacks=>{
+			  :success=>manifest.url_success,
+			  :error=>manifest.url_err_login
 			},
-		:access=>list,
-	}
-        #message=self.encodeJson "asda", menifest.to_json
-	#flash[:notice] = menifest.to_json
-	manifest.to_json
+		  :access=>manifest.scopes,
+	  }
+	  manifest_json.to_json
 	end
 end
