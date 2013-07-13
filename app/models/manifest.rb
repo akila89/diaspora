@@ -22,24 +22,19 @@ class Manifest < ActiveRecord::Base
     self.signed_jwt = JWT.encode(getManifestHash, OpenSSL::PKey::RSA.new(private_key),"RS256")
     self.save(:validate => false)
   end
-  
-  def verify(mnfst)
-     manifest_payload = JWT.decode(mnfst, nil, false)
-     developer_id = manifest_payload["dev_id"]
-     person = Webfinger.new(developer_id).fetch
-     begin
-       res=JWT.decode(mnfst, person.public_key)
-       Rails.logger.info("Ela ela elaaaa #{res}")
-     rescue JWT::DecodeError => e
+
+  def verify
+    developer_id = self.dev_id
+    person = Webfinger.new(developer_id).fetch
+    begin
+      res=JWT.decode(self.signed_jwt, person.public_key)
+      return true
+    rescue JWT::DecodeError => e
       Rails.logger.info("Failed to verify the manifest from the developer: #{developer_id}; #{e.message}")
-      raise e
-     rescue => e
-      Rails.logger.info("Failed to verify the manifest from the developer: #{developer_id}; #{e.message}")
-      raise e
-     end
-          
+      return false
+    end
   end
-  
+
   def getManifestHash
     manifest_hash={
 		  :dev_id=>self.dev_id,
@@ -57,7 +52,16 @@ class Manifest < ActiveRecord::Base
 	  }
 	  manifest_hash
   end
+  
+  def bySignedJWT jwt
+    payload = JWT.decode(jwt, nil, false)
+    self.dev_id = payload["dev_id"]
+    self.url_success = payload["callbacks"]["success"]
+    self.signed_jwt = jwt
+    self
+  end
 
+  # TODO make this function use self as well. so we can remove the manifest parameter.
   def createManifestJson manifest
 		manifest_json={
 		  :dev_id=>manifest.dev_id,

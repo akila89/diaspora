@@ -18,15 +18,12 @@ class ManifestController < ApplicationController
   def verify
     signed_manifest= params[:signed_manifest]
     Rails.logger.info("content of the signed manifest #{signed_manifest}")
-begin 
-  res = Manifest.new.verify(signed_manifest)
-rescue => e
-  Rails.logger.info("Error occured #{e.message}")
-end
+    manifest = Manifest.new.bySignedJWT signed_manifest
+    res = manifest.verify
     if res
-      @css_framework = :bootstrap # Hack, port site to one framework
-      render file: Rails.root.join("public", "default.html"),
-             layout: 'application'
+      render :text => manifest.url_success
+    else
+      render :text => manifest.url_err_Oauth
     end
   end
 
