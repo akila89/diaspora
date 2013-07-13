@@ -49,9 +49,8 @@ end
 	scopes = Array.new          
 	    manifest.app_description=u[:app_discription]
 	    manifest.app_ver=u[:app_version]  
-	    manifest.url_success=u[:success]        
-	    manifest.url_err_login=u[:error_login]     
-	    manifest.url_err_Oauth=u[:error_auth]                 
+	    manifest.url_success=u[:success_url]        
+	    manifest.url_err_login=u[:error_login_url]                
 	    if u[:post_read]=='1'
 	      scopes.push("post_read")
 	    end                

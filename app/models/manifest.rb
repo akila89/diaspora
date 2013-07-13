@@ -3,8 +3,8 @@ class Manifest < ActiveRecord::Base
   validates :app_description,  presence: true, length: { maximum: 50 }
   validates :app_ver, presence: true
   VALID_EMAIL_REGEX = /^(http|https):\/\/[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(([0-9]{1,5})?\/.*)?$/ix
-  validates :url_err_login, presence: true, format: { with: VALID_EMAIL_REGEX }
-  validates :url_success, presence: true, format: { with: VALID_EMAIL_REGEX }
+  #validates :url_err_login, presence: true, format: { with: VALID_EMAIL_REGEX }
+  #validates :url_success, presence: true, format: { with: VALID_EMAIL_REGEX }
 
   def sign (mnfst,private_key)
     JWT.encode(mnfst, OpenSSL::PKey::RSA.new(private_key),"RS256")
