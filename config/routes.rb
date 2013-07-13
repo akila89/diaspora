@@ -6,8 +6,6 @@ require 'sidekiq/web'
 
 Diaspora::Application.routes.draw do
 
-
-
   if Rails.env.production?
     mount RailsAdmin::Engine => '/admin_panel', :as => 'rails_admin'
   end

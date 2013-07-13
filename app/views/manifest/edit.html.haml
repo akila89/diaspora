@@ -25,7 +25,7 @@
   %h3 
     = t('app.app_details')
   %br
-  = form_for 'developer', :url => 'downloadManifest', :html => { :method => :put } do |f|
+  = form_for 'developer', :url => 'generateManifest', :html => { :method => :put } do |f|
     = f.error_messages
     %p
       = f.label :app_name, t('app.app_name')
@@ -42,11 +42,11 @@
       = t('url._url') 
     %br
     %p
-      = f.label :success, t('url.success')
-      = f.text_field :success, :placeholder => t('url.edit.edit_success')
+      = f.label :success_url, t('url.success')
+      = f.text_field :success_url, :placeholder => t('url.edit.edit_success')
     %p
-      = f.label :error_login, t('url.error_login')
-      = f.text_field :error_login, :placeholder => t('url.edit.edit_error_login')
+      = f.label :error_login_url, t('url.error_login')
+      = f.text_field :error_login_url, :placeholder => t('url.edit.edit_error_login')
     %br
     %br
     %h3
