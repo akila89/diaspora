@@ -109,6 +109,45 @@ ActiveRecord::Schema.define(:version => 20130630170309) do
 
   add_index "conversations", ["author_id"], :name => "conversations_author_id_fk"
 
+  create_table "dauth_access_requests", :force => true do |t|
+    t.string   "auth_token", :null => false
+    t.string   "dev_handle", :null => false
+    t.string   "callback",   :null => false
+    t.text     "scopes"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  create_table "dauth_access_tokens", :force => true do |t|
+    t.string   "refresh_token"
+    t.string   "token"
+    t.string   "secret"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
+  end
+
+  create_table "dauth_allowed_apps", :force => true do |t|
+    t.string   "app_id"
+    t.string   "app_name"
+    t.string   "discription"
+    t.string   "app_home_page_url"
+    t.string   "dev_handle"
+    t.text     "manifest"
+    t.string   "callback"
+    t.datetime "created_at",        :null => false
+    t.datetime "updated_at",        :null => false
+  end
+
+  create_table "dauth_refresh_tokens", :force => true do |t|
+    t.string   "token"
+    t.string   "secret"
+    t.string   "app_id"
+    t.string   "user_guid"
+    t.text     "scopes"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
   create_table "invitation_codes", :force => true do |t|
     t.string   "token"
     t.integer  "user_id"
