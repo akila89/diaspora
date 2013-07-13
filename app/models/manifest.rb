@@ -18,8 +18,9 @@ class Manifest < ActiveRecord::Base
   validates :url_err_login, presence: true, format: { with: VALID_EMAIL_REGEX }
   validates :url_success, presence: true, format: { with: VALID_EMAIL_REGEX }
 
-  def sign (mnfst,private_key)
-    JWT.encode(mnfst, OpenSSL::PKey::RSA.new(private_key),"RS256")
+  def sign private_key
+    self.signed_jwt = JWT.encode(getManifestHash, OpenSSL::PKey::RSA.new(private_key),"RS256")
+    self.save(:validate => false)
   end
   
   def verify(mnfst)
@@ -38,6 +39,24 @@ class Manifest < ActiveRecord::Base
      end
           
   end
+  
+  def getManifestHash
+    manifest_hash={
+		  :dev_id=>self.dev_id,
+      :manifest_version=>"1.0",
+		  :app_details=>{
+	      :id=> self.app_id,
+	      :description=>self.app_description,
+	      :version=>self.app_version
+	    },
+		  :callbacks=>{
+			  :success=>self.url_success,
+			  :error=>self.url_err_login
+			},
+		  :access=>self.scopes,
+	  }
+	  manifest_hash
+  end
 
   def createManifestJson manifest
 		manifest_json={
@@ -53,6 +72,7 @@ class Manifest < ActiveRecord::Base
 			  :error=>manifest.url_err_login
 			},
 		  :access=>manifest.scopes,
+		  :signed_jwt=>manifest.signed_jwt,
 	  }
 	  manifest_json.to_json
 	end

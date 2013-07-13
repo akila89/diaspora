@@ -10,7 +10,7 @@ class ManifestController < ApplicationController
 
   def sign    
     mnfst = {"dev_id" => "dilma@localhost:3000"} # Testing 
-    private_key = current_user.serialized_private_key
+    private_key = current_user.serialized_private_keyadasd
     res = Manifest.new.sign(mnfst,private_key)
     Rails.logger.info("Content: for #{res}")  
   end
@@ -79,6 +79,9 @@ end
 	    end
 	    manifest.scopes = scopes
     end
+
+    private_key = current_user.serialized_private_key
+    manifest.sign(private_key)
 
     if manifest.save
       render "manifest/downloadManifest", :locals => {:appId => appId}
