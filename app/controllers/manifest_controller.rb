@@ -30,15 +30,15 @@ end
     end
   end
 
-  def export
+  def download
     appId=params[:appID]
     scopes=params[:scopes]
     manifest=Manifest.where(["app_id = ?", appId]).select("app_description,app_id,app_ver,comment_write,comments_read,dev_id,manifest_ver,post_delete,post_read,post_write,profile_read,url_err_Oauth,url_err_login,url_success").first
-    res=manifest.createMenifestJson manifest.dev_id, manifest.app_id, manifest.app_description, manifest.app_ver, manifest.url_success,manifest.url_err_login, scopes 
+    res=manifest.createManifestJson manifest.dev_id, manifest.app_id, manifest.app_description, manifest.app_ver, manifest.url_success,manifest.url_err_login, scopes 
     send_data res, :filename => "#{current_user.username}_app.json", :type => :json
    end
 
-  def downloadManifest
+  def generateManifest
 	manifest = Manifest.new
 	manifest.dev_id=current_user.diaspora_handle           
         stamp=Time.now.to_i

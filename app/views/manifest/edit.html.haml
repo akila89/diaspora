@@ -25,7 +25,7 @@
   %h3 
     = t('app.app_details')
   %br
-  = form_for 'developer', :url => 'downloadManifest', :html => { :method => :put } do |f|
+  = form_for 'developer', :url => 'generateManifest', :html => { :method => :put } do |f|
     = f.error_messages
     %p
       = f.label :app_name, t('app.app_name')

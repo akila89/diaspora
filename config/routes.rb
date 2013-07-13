@@ -10,8 +10,8 @@ Diaspora::Application.routes.draw do
   post "manifest/verify"
   get "manifest/index"
   get "manifest/edit"
-  get "manifest/export"
-  put "manifest/downloadManifest"
+  get "manifest/download"
+  put "manifest/generateManifest"
 
   if Rails.env.production?
     mount RailsAdmin::Engine => '/admin_panel', :as => 'rails_admin'

@@ -27,7 +27,7 @@ class Manifest < ActiveRecord::Base
           
   end
 
-   def createMenifestJson dev_id, app_id, app_discription, app_version, success_url, error_login, list
+   def createManifestJson dev_id, app_id, app_discription, app_version, success_url, error_login, list
 		manifest={ 
 
 		:dev_id=>dev_id,
