@@ -45,9 +45,9 @@ Y5eU"
         stamp=Time.now.to_i
         random=Random.new.rand(1..60)
         appId  ="#{random}#{stamp}"
-	manifest.app_id= appId 
+	manifest.app_id= appId
       if u = params[:developer]
-	scopes = Array.new  
+	scopes = Array.new          
 	    manifest.app_description=u[:app_discription]
 	    manifest.app_ver=u[:app_version]  
 	    manifest.url_success=u[:success]        
@@ -80,8 +80,12 @@ Y5eU"
 	    if u[:profile_delete]=='1'
 	      scopes.push("profiledelete")
 	    end
-	manifest.save
-        render "manifest/downloadManifest", :locals => {:appId => appId, :scope => scopes}
+      end
+      if manifest.save
+      render "manifest/downloadManifest", :locals => {:appId => appId, :scope => scopes}
+      else
+       redirect_to :back
+       flash[:notice] = "Missing or incorrect values"
       end
    end 
 
