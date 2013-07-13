@@ -18,7 +18,7 @@ class AuthorizeController < ApplicationController
     #get scopes
     @scopes = Array.new
     params[:scopes].each do |k,v|
-      @scopes<<k if v=="1" 
+      @scopes<<k if v=="1"
     end
     
     @authorize.scopes = @scopes
@@ -33,6 +33,17 @@ class AuthorizeController < ApplicationController
       flash[:notice] = "Authentication Fail" 
     end
     redirect_to action: 'show'                       #TODO redirect back to callback URL
+  end
+  
+  def verify
+    signed_manifest= params[:signed_manifest]
+    Rails.logger.info("content of the signed manifest #{signed_manifest}")
+
+    res = Manifest.new.verify(signed_manifest)
+
+    if res
+      Faraday.post(res[callbacks][success])
+    end
   end
    
   private

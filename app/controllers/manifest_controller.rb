@@ -15,21 +15,6 @@ class ManifestController < ApplicationController
     Rails.logger.info("Content: for #{res}")  
   end
 
-  def verify
-    signed_manifest= params[:signed_manifest]
-    Rails.logger.info("content of the signed manifest #{signed_manifest}")
-begin 
-  res = Manifest.new.verify(signed_manifest)
-rescue => e
-  Rails.logger.info("Error occured #{e.message}")
-end
-    if res
-      @css_framework = :bootstrap # Hack, port site to one framework
-      render file: Rails.root.join("public", "default.html"),
-             layout: 'application'
-    end
-  end
-
   def export
     appId=params[:appID]
     scopes=params[:scopes]
