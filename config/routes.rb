@@ -5,12 +5,14 @@
 require 'sidekiq/web'
 
 Diaspora::Application.routes.draw do
+
   get "manifest/sign"
   get "manifest/verify"
   get "manifest/index"
   get "manifest/edit"
   get "manifest/export"
   put "manifest/downloadManifest"
+
   if Rails.env.production?
     mount RailsAdmin::Engine => '/admin_panel', :as => 'rails_admin'
   end
@@ -220,4 +222,9 @@ Diaspora::Application.routes.draw do
 
   # Startpage
   root :to => 'home#show'
+  
+  #dauth
+  match 'dauth/authorize/authorization_token',    to: 'authorize#show'
+  match 'dauth/authorize/update',                 to: 'authorize#update'
+  
 end

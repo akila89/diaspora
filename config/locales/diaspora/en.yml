@@ -1111,3 +1111,11 @@ en:
     xrd_fetch_failed: "there was an error getting the xrd from account %{account}"
     not_enabled: "webfinger does not seem to be enabled for %{account}'s host"
     no_person_constructed: "No person could be constructed from this hcard."
+    
+  authentication: 
+    title: "Authentication"
+    dev_handle: "Developer Diaspora ID"
+    dev_email: "Developer Email"
+    submit_btn: "Authenticate"
+    app_permission: "Permission"
+       
