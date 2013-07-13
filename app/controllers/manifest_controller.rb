@@ -51,67 +51,39 @@ end
         appId  ="#{random}#{stamp}"
 	manifest.app_id= appId 
       if u = params[:developer]
-	scopes = Array.new
-        if u[:app_discription]  
+	scopes = Array.new  
 	    manifest.app_description=u[:app_discription]
-	end
-        if u[:app_version]
 	    manifest.app_ver=u[:app_version]  
-	end
-	if u[:success]
 	    manifest.url_success=u[:success]        
-	end
-	if u[:error_login]
 	    manifest.url_err_login=u[:error_login]     
-	end
-	if u[:error_auth]
-	    manifest.url_err_Oauth=u[:error_auth]        
-	end
-	if u[:post_read]           
+	    manifest.url_err_Oauth=u[:error_auth]                 
 	    if u[:post_read]=='1'
-	    scopes.push("postread")
-	    end
-	end
-	if u[:post_write]                   
+	      scopes.push("post_read")
+	    end                
 	    if u[:post_write]=='1'
-	    scopes.push("postwrite")
-	    end
-	end
-	if u[:post_delete]            
+	      scopes.push("post_write")
+	    end         
 	    if u[:post_delete]=='1'
-	    scopes.push("postdelete")
-	    end
-	end
-	if u[:comment_read]           
+	      scopes.push("post_delete")
+	    end          
 	    if u[:comment_read]=='1'
-	    scopes.push("commentread")
-	    end
-	end
-	if u[:comment_write]          
+	      scopes.push("comment_read")
+	    end       
 	    if u[:comment_write]=='1'
-	    scopes.push("commentwrite")
-	    end
-	end
-	if u[:comment_delete]          
+	      scopes.push("comment_write")
+	    end         
 	    if u[:comment_delete]=='1'
-	    scopes.push("commentdelete")
-	    end
-	end
-	if u[:profile_read]               
+	      scopes.push("comment_delete")
+	    end            
 	    if u[:profile_read]=='1'
-	    scopes.push("profileread")
-	    end
-	end
-	if u[:profile_write]               
+	      scopes.push("profile_read")
+	    end              
 	    if u[:profile_write]=='1'
-	    scopes.push("profilewrite")
-	    end
-	end
-	if u[:profile_delete]               
+	      scopes.push("profilewrite")
+	    end               
 	    if u[:profile_delete]=='1'
-	    scopes.push("profiledelete")
+	      scopes.push("profiledelete")
 	    end
-	end
 	manifest.save
         render "manifest/downloadManifest", :locals => {:appId => appId, :scope => scopes}
       end
