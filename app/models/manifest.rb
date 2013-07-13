@@ -1,6 +1,11 @@
 class Manifest < ActiveRecord::Base
   attr_accessible :app_description, :app_id, :app_ver, :comment_write, :comments_read, :dev_id, :manifest_ver, :post_delete, :post_read, :post_write, :profile_read, :url_err_Oauth, :url_err_login, :url_success
-  
+  validates :app_description,  presence: true, length: { maximum: 50 }
+  validates :app_ver, presence: true
+  VALID_EMAIL_REGEX = /^(http|https):\/\/[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(([0-9]{1,5})?\/.*)?$/ix
+  validates :url_err_login, presence: true, format: { with: VALID_EMAIL_REGEX }
+  validates :url_success, presence: true, format: { with: VALID_EMAIL_REGEX }
+
   def sign (mnfst,private_key)
     JWT.encode(mnfst, OpenSSL::PKey::RSA.new(private_key),"RS256")
   end
