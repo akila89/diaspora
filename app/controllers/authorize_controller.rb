@@ -1,5 +1,5 @@
 class AuthorizeController < ApplicationController
-  
+  include Authenticator
   before_filter :authenticate_user!, :except => :verify
   
   def show
@@ -38,6 +38,7 @@ class AuthorizeController < ApplicationController
       access_req.app_description = manifest.app_description
       access_req.app_version = manifest.app_version
       access_req.save
+      manifestVerified access_req
       render :status => :ok, :text => "#{access_req.dev_handle} #{manifest.scopes} #{manifest.callback} verified"
     else
       render :text => "error"
