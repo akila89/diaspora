@@ -12,11 +12,6 @@
       = t('authentication.dev_handle')
     %p
       %b= @dev_handle
-  .span-6.last
-    %h3
-      = t('authentication.dev_email')
-    %p
-      %b= @dev_email
   %br
   %br
   %hr
@@ -42,25 +37,31 @@
     = f.error_messages
     
     = f.hidden_field :scopes_ar, :value => @scopes_ar
+    = f.hidden_field :app_id, :value => @app_id
     %h4
       = t('profileDetails._profile')
     %br
     
     %p.checkbox_select
       = f.label :profile_read,t('profileDetails.read')
-      -@scopes_ar.each do |s|
-        -if s== "profile_read"
-          =check_box_tag :profile_read, "1", true, :disabled => true
-        -else
-          = f.check_box :profile_read
+      -if @scopes_ar.include? 'profile_read' 
+        =check_box_tag :profile_read, "1", true, :disabled => true
+      -else
+        = f.check_box :profile_read
     %br
     %p.checkbox_select
       = f.label :profile_write,t('profileDetails.write')
-      = f.check_box :profile_write
+      -if @scopes_ar.include? 'profile_write' 
+        =check_box_tag :profile_write, "1", true, :disabled => true
+      -else
+        = f.check_box :profile_write
     %br
     %p.checkbox_select
       = f.label :profile_delete,t('profileDetails.delete')
-      = f.check_box :profile_delete
+      -if @scopes_ar.include? 'profile_delete' 
+        =check_box_tag :profile_delete, "1", true, :disabled => true
+      -else
+        = f.check_box :profile_delete
     %br
     %br
     %h4
@@ -68,15 +69,24 @@
     %br
     %p.checkbox_select
       = f.label :post_read,t('post.read')
-      = f.check_box :post_read
+      -if @scopes_ar.include? 'post_read' 
+        =check_box_tag :post_read, "1", true, :disabled => true
+      -else
+        = f.check_box :post_read
     %br
     %p.checkbox_select
       = f.label :post_write,t('post.write')
-      = f.check_box :post_write
+      -if @scopes_ar.include? 'post_write' 
+        =check_box_tag :post_write, "1", true, :disabled => true
+      -else
+        = f.check_box :post_write
     %br
     %p.checkbox_select
       = f.label :post_delete,t('post.delete')
-      = f.check_box :post_delete
+      -if @scopes_ar.include? 'post_delete' 
+        =check_box_tag :post_delete, "1", true, :disabled => true
+      -else
+        = f.check_box :post_delete
     %br
     %br
     %h4
@@ -84,15 +94,24 @@
     %br
     %p.checkbox_select
       = f.label :comment_read,t('comment.read')
-      = f.check_box :comment_read
+      -if @scopes_ar.include? 'comment_read' 
+        =check_box_tag :comment_read, "1", true, :disabled => true
+      -else
+        = f.check_box :comment_read
     %br
     %p.checkbox_select
       = f.label :comment_write,t('comment.write')
-      = f.check_box :comment_write
+      -if @scopes_ar.include? 'comment_write' 
+        =check_box_tag :comment_write, "1", true, :disabled => true
+      -else
+        = f.check_box :comment_write
     %br
     %p.checkbox_select
       = f.label :comment_delete,t('comment.delete')
-      = f.check_box :comment_delete
+      -if @scopes_ar.include? 'comment_delete' 
+        =check_box_tag :comment_delete, "1", true, :disabled => true
+      -else
+        = f.check_box :comment_delete
     %br    
     
     = f.submit t('authentication.submit_btn'), :class => 'button'
