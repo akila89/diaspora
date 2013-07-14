@@ -11,7 +11,8 @@ class Manifest < ActiveRecord::Base
                   :signed_jwt,
                   :scopes
 
-  validates :app_description,  presence: true, length: { maximum: 50 }
+  validates :app_description,  presence: true, length: { maximum: 50 } :message => "can't be empty"
+  validates :app_name, presence: true
   validates :app_version, presence: true
   VALID_URL_REGEX = /^(http|https):\/\/.+$/
   validates :callback, presence: true, format: { with: VALID_URL_REGEX }
@@ -57,10 +58,9 @@ class Manifest < ActiveRecord::Base
     self
   end
 
-  # TODO make this function use self as well. so we can remove the manifest parameter.
   def createManifestJson
-	manifest_hash=self.getManifestHash
-	manifest_hash[:signed_jwt]=self.signed_jwt
-	manifest_hash.to_json
-	end
+    manifest_hash=self.getManifestHash
+    manifest_hash[:signed_jwt]=self.signed_jwt
+    manifest_hash.to_json
+  end
 end
