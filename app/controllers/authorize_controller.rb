@@ -4,12 +4,14 @@ class AuthorizeController < ApplicationController
   
   def show
     
-    @auth_token = params[:auth_token] #"903795290a83c880050135b1884127f6" test 
+    @auth_token = "903795290a83c880050135b1884127f6" #params[:auth_token] "903795290a83c880050135b1884127f6" test 
     Rails.logger.info("content of the authentication token #{@auth_token}")
     
     @access_request = Dauth::AccessRequest.find_by_auth_token(@auth_token)
-    
     @dev_handle = @access_request.dev_handle
+    
+    @dev = Webfinger.new(@dev_handle).fetch
+    
     @app_id = @access_request.app_id
     @app_name = @access_request.app_name
     @app_description = @access_request.app_description

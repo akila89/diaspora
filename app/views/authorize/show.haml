@@ -11,7 +11,7 @@
     %h3
       = t('authentication.dev_handle')
     %p
-      %b= @dev_handle
+      %b= link_to @dev_handle, local_or_remote_person_path(@dev)
   %br
   %br
   %hr
