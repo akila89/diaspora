@@ -39,7 +39,8 @@ class ManifestController < ApplicationController
    	random=Random.new.rand(1..60)
     	appId ="#{random}#{stamp}"
 	manifest.app_id= appId
-        if u = params[:developer]
+        if u = params[:manifest]
+            @manifest=manifest.app_name=u[:app_name]
  	    manifest.app_name=u[:app_name]
 	    manifest.app_description=u[:app_discription]
 	    manifest.app_version=u[:app_version]
@@ -82,7 +83,15 @@ class ManifestController < ApplicationController
       		render "manifest/downloadManifest", :locals => {:appId => appId}
     	else
        		redirect_to :back
-       		flash[:notice] = "Missing or incorrect values"
+		message=manifest.errors.full_messages.to_sentence.split(',').first
+       		#flash[:notice] = message
+		flash[:notice] =getCurrentuserDetails
     	end
   end 
+  def getCurrentuserDetails 
+	return current_user.diaspora_handle,current_user.email,current_user.username
+  end
+  def getScopes
+
+  end
 end

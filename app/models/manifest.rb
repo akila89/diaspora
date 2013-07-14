@@ -11,8 +11,8 @@ class Manifest < ActiveRecord::Base
                   :signed_jwt,
                   :scopes
 
-  validates :app_description,  presence: true, length: { maximum: 50 } :message => "can't be empty"
-  validates :app_name, presence: true
+  validates :app_name, presence: true  
+  validates :app_description,  presence: true, length: { maximum: 50 }
   validates :app_version, presence: true
   VALID_URL_REGEX = /^(http|https):\/\/.+$/
   validates :callback, presence: true, format: { with: VALID_URL_REGEX }
