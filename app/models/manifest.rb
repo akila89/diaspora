@@ -58,6 +58,10 @@ class Manifest < ActiveRecord::Base
     self.dev_id = payload["dev_id"]
     self.callback = payload["callback"]
     self.scopes = payload["access"]
+    self.app_id = payload["app_details"]["id"]
+    self.app_name = payload["app_details"]["name"]
+    self.app_description = payload["app_details"]["description"]
+    self.app_version = payload["app_details"]["version"]
     self.signed_jwt = jwt
     self
   end
