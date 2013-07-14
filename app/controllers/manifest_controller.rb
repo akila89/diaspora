@@ -16,7 +16,7 @@ class ManifestController < ApplicationController
     if res
       access_req = Dauth::AccessRequest.new
       access_req.dev_handle = manifest.dev_id
-      access_req.callback = manifest.url_success
+      access_req.callback = manifest.callback
       access_req.scopes = manifest.scopes
       access_req.save
       render :status => :ok, :text => "#{access_req.dev_handle} #{manifest.scopes} verified"
@@ -28,7 +28,6 @@ class ManifestController < ApplicationController
   def download
     appId=params[:appID]
     manifest=Manifest.where(["app_id = ?", appId]).first
-    #app_id=manifest[:app_id]
     res=manifest.createManifestJson
     send_data res, :filename => "#{current_user.username}_app.json", :type => :json
    end
