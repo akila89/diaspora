@@ -2,21 +2,19 @@ class Manifest < ActiveRecord::Base
   serialize :scopes, Array
 
   attr_accessible :app_description,
+                  :app_name,
                   :app_id,
                   :app_version,
                   :dev_id,
-                  :url_success,
-                  :url_err_login,
-                  :url_err_Oauth,
+                  :callback,
                   :manifest_ver,
                   :signed_jwt,
                   :scopes
 
   validates :app_description,  presence: true, length: { maximum: 50 }
   validates :app_version, presence: true
-  VALID_EMAIL_REGEX = /^(http|https):\/\/.+$/
-  validates :url_err_login, presence: true, format: { with: VALID_EMAIL_REGEX }
-  validates :url_success, presence: true, format: { with: VALID_EMAIL_REGEX }
+  VALID_URL_REGEX = /^(http|https):\/\/.+$/
+  validates :callback, presence: true, format: { with: VALID_URL_REGEX }
 
   def sign private_key
     self.signed_jwt = JWT.encode(getManifestHash, OpenSSL::PKey::RSA.new(private_key),"RS256")
@@ -40,14 +38,12 @@ class Manifest < ActiveRecord::Base
 		  :dev_id=>self.dev_id,
       :manifest_version=>"1.0",
 		  :app_details=>{
+              :name=>self.app_name,
 	      :id=> self.app_id,
 	      :description=>self.app_description,
 	      :version=>self.app_version
 	    },
-		  :callbacks=>{
-			  :success=>self.url_success,
-			  :error=>self.url_err_login
-			},
+		  :callback=>self.callback,
 		  :access=>self.scopes,
 	  }
 	  manifest_hash
@@ -67,14 +63,12 @@ class Manifest < ActiveRecord::Base
 		  :dev_id=>manifest.dev_id,
       :manifest_version=>"1.0",
 		  :app_details=>{
+              :name=>manifest.app_name,
 	      :id=> manifest.app_id,
 	      :description=>manifest.app_description,
 	      :version=>manifest.app_version
 	    },
-		  :callbacks=>{
-			  :success=>manifest.url_success,
-			  :error=>manifest.url_err_login
-			},
+		  :callback=>manifest.callback,
 		  :access=>manifest.scopes,
 		  :signed_jwt=>manifest.signed_jwt,
 	  }
