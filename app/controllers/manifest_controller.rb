@@ -31,7 +31,7 @@ class ManifestController < ApplicationController
     appId=params[:appID]
     manifest=Manifest.where(["app_id = ?", appId]).first
     #app_id=manifest[:app_id]
-    res=manifest.createManifestJson manifest
+    res=manifest.createManifestJson
     send_data res, :filename => "#{current_user.username}_app.json", :type => :json
    end
 
