@@ -9,6 +9,7 @@ class AuthorizeController < ApplicationController
     @app_name = 'Sample App'
     @app_description = 'Sample App discription'
     @app_version = 'v1.0'
+    @scopes_ar = ["profile_read","gasdfasdfa"]
     
   end
   
@@ -18,6 +19,10 @@ class AuthorizeController < ApplicationController
     #get scopes
     @scopes = Array.new
     params[:scopes].each do |k,v|
+      if k=="scopes_ar"
+        @sar = v.gsub!(/[\[\"\]]/,'').split(',')
+        @scopes.concat(@sar)
+      end
       @scopes<<k if v=="1" 
     end
     
@@ -28,9 +33,9 @@ class AuthorizeController < ApplicationController
     @authorize.secret = "secret"         #TODO redirect secrets
     
     if @authorize.save
-      flash[:notice] = "refresh token - #{generate_refresh_token}"    
+      flash[:notice] = "#{@scopes.to_s} refresh token - #{generate_refresh_token}"    
     else 
-      flash[:notice] = "Authentication Fail" 
+      flash[:notice] = "#{@scopes.to_s} Authentication Fail" 
     end
     redirect_to action: 'show'                       #TODO redirect back to callback URL
   end

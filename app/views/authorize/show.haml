@@ -41,13 +41,18 @@
   = form_for 'scopes' , :url => {:action => 'update'}, :html => { :method => :put } do |f|
     = f.error_messages
     
+    = f.hidden_field :scopes_ar, :value => @scopes_ar
     %h4
       = t('profileDetails._profile')
     %br
     
     %p.checkbox_select
       = f.label :profile_read,t('profileDetails.read')
-      = f.check_box :profile_read
+      -@scopes_ar.each do |s|
+        -if s== "profile_read"
+          =check_box_tag :profile_read, "1", true, :disabled => true
+        -else
+          = f.check_box :profile_read
     %br
     %p.checkbox_select
       = f.label :profile_write,t('profileDetails.write')
