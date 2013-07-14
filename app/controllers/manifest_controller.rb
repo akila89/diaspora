@@ -8,25 +8,6 @@ class ManifestController < ApplicationController
 
   end
 
-  def verify
-    signed_manifest= params[:signed_manifest]
-    Rails.logger.info("content of the signed manifest #{signed_manifest}")
-    manifest = Manifest.new.bySignedJWT signed_manifest
-    if manifest
-      res = manifest.verify
-    end  
-    if res
-      access_req = Dauth::AccessRequest.new
-      access_req.dev_handle = manifest.dev_id
-      access_req.callback = manifest.callback
-      access_req.scopes = manifest.scopes
-      access_req.save
-      render :status => :ok, :text => "#{access_req.dev_handle} #{manifest.scopes} #{manifest.callback} verified"
-    else
-      render :text => "error"
-    end
-  end
-
   def download
     appId=params[:appID]
     manifest=Manifest.where(["app_id = ?", appId]).first
