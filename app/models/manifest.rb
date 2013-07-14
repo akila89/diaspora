@@ -35,18 +35,18 @@ class Manifest < ActiveRecord::Base
 
   def getManifestHash
     manifest_hash={
-		  :dev_id=>self.dev_id,
-      :manifest_version=>"1.0",
-		  :app_details=>{
+	:dev_id=>self.dev_id,
+        :manifest_version=>"1.0",
+	:app_details=>{
               :name=>self.app_name,
 	      :id=> self.app_id,
 	      :description=>self.app_description,
 	      :version=>self.app_version
-	    },
-		  :callback=>self.callback,
-		  :access=>self.scopes,
-	  }
-	  manifest_hash
+	},
+	:callback=>self.callback,
+	:access=>self.scopes,
+    }
+    manifest_hash
   end
   
   def bySignedJWT jwt
@@ -59,20 +59,9 @@ class Manifest < ActiveRecord::Base
   end
 
   # TODO make this function use self as well. so we can remove the manifest parameter.
-  def createManifestJson manifest
-		manifest_json={
-		  :dev_id=>manifest.dev_id,
-      :manifest_version=>"1.0",
-		  :app_details=>{
-              :name=>manifest.app_name,
-	      :id=> manifest.app_id,
-	      :description=>manifest.app_description,
-	      :version=>manifest.app_version
-	    },
-		  :callback=>manifest.callback,
-		  :access=>manifest.scopes,
-		  :signed_jwt=>manifest.signed_jwt,
-	  }
-	  manifest_json.to_json
+  def createManifestJson
+	manifest_hash=self.getManifestHash
+	manifest_hash[:signed_jwt]=self.signed_jwt
+	manifest_hash.to_json
 	end
 end
