@@ -36,16 +36,16 @@ class Manifest < ActiveRecord::Base
 
   def getManifestHash
     manifest_hash={
-	:dev_id=>self.dev_id,
-        :manifest_version=>"1.0",
-	:app_details=>{
-              :name=>self.app_name,
+	    :dev_id=>self.dev_id,
+      :manifest_version=>"1.0",
+	    :app_details=>{
+        :name=>self.app_name,
 	      :id=> self.app_id,
 	      :description=>self.app_description,
 	      :version=>self.app_version
-	},
-	:callback=>self.callback,
-	:access=>self.scopes,
+	    },
+	    :callback=>self.callback,
+	    :access=>self.scopes,
     }
     manifest_hash
   end
@@ -53,7 +53,8 @@ class Manifest < ActiveRecord::Base
   def bySignedJWT jwt
     payload = JWT.decode(jwt, nil, false)
     self.dev_id = payload["dev_id"]
-    self.url_success = payload["callbacks"]["success"]
+    self.callback = payload["callback"]
+    self.scopes = payload["access"]
     self.signed_jwt = jwt
     self
   end

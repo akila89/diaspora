@@ -8,20 +8,18 @@ class ManifestController < ApplicationController
 
   end
 
-  def sign    
-    mnfst = {"dev_id" => "dilma@localhost:3000"} # Testing 
-    private_key = current_user.serialized_private_keyadasd
-    res = Manifest.new.sign(mnfst,private_key)
-    Rails.logger.info("Content: for #{res}")  
-  end
-
   def verify
     signed_manifest= params[:signed_manifest]
     Rails.logger.info("content of the signed manifest #{signed_manifest}")
     manifest = Manifest.new.bySignedJWT signed_manifest
     res = manifest.verify
     if res
-      render :text => manifest.url_success
+      access_req = Dauth::AccessRequest.new
+      access_req.dev_handle = manifest.dev_id
+      access_req.callback = manifest.callback
+      access_req.scopes = manifest.scopes
+      access_req.save
+      render :status => :ok, :text => "#{access_req.dev_handle} #{manifest.scopes} verified"
     else
       render :text => manifest.url_err_Oauth
     end
