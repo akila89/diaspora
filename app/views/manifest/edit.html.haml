@@ -42,11 +42,8 @@
       = t('url._url') 
     %br
     %p
-      = f.label :success_url, t('url.success')
-      = f.text_field :success_url, :placeholder => t('url.edit.edit_success')
-    %p
-      = f.label :error_login_url, t('url.error_login')
-      = f.text_field :error_login_url, :placeholder => t('url.edit.edit_error_login')
+      = f.label :callback_url, t('url.callback_url')
+      = f.text_field :callback_url, :placeholder => t('url.edit.edit_callback')
     %br
     %br
     %h3

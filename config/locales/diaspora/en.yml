@@ -985,11 +985,11 @@ en:
   url:
     _url: "URLs"
     success: "Success URL"
-    error_login: "Error Login URL"
+    callback_url: "CallBack URL"
     error_auth: "Error Authentication URL"
     edit:
       edit_success: "Success URL"
-      edit_error_login: "URL for error login"
+      edit_callback: "Callback url"
       edit_error_auth: "URL for error authentication"
 
   post:
