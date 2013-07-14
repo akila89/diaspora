@@ -57,6 +57,7 @@ class Manifest < ActiveRecord::Base
     payload = JWT.decode(jwt, nil, false)
     self.dev_id = payload["dev_id"]
     self.url_success = payload["callbacks"]["success"]
+    self.scopes = payload["access"]
     self.signed_jwt = jwt
     self
   end
