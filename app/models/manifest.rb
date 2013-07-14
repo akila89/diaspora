@@ -50,7 +50,11 @@ class Manifest < ActiveRecord::Base
   end
   
   def bySignedJWT jwt
-    payload = JWT.decode(jwt, nil, false)
+    begin
+      payload = JWT.decode(jwt, nil, false)
+    rescue JWT::DecodeError => e
+      return nil
+    end  
     self.dev_id = payload["dev_id"]
     self.callback = payload["callback"]
     self.scopes = payload["access"]
