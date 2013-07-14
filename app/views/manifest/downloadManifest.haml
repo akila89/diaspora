@@ -10,5 +10,5 @@
   %h3 
     = t('app.edit.download_manifest')
   %br
-  = link_to t('app.edit.download_manifest'), {:controller=>'manifest', :action=>'export', :appID=>appId,:scopes=>scope}, :class => "button"
+  = link_to t('app.edit.download_manifest'), {:controller=>'manifest', :action=>'download', :appID=>appId}, :class => "button"
   %br

@@ -1,45 +1,70 @@
 class Manifest < ActiveRecord::Base
-  attr_accessible :app_description, :app_id, :app_ver, :comment_write, :comments_read, :dev_id, :manifest_ver, :post_delete, :post_read, :post_write, :profile_read, :url_err_Oauth, :url_err_login, :url_success
-  
-  def sign (mnfst,private_key)
-    JWT.encode(mnfst, OpenSSL::PKey::RSA.new(private_key),"RS256")
-  end
-  
-  def verify(mnfst)
-     manifest_payload = JWT.decode(mnfst, nil, false)
-     developer_id = manifest_payload["dev_id"]
-     person = Webfinger.new(developer_id).fetch
-     begin
-       res=JWT.decode(mnfst, person.public_key)
-       Rails.logger.info("Ela ela elaaaa #{res}")
-     rescue JWT::DecodeError => e
-      Rails.logger.info("Failed to verify the manifest from the developer: #{developer_id}; #{e.message}")
-      raise e
-     rescue => e
-      Rails.logger.info("Failed to verify the manifest from the developer: #{developer_id}; #{e.message}")
-      raise e
-     end
-          
+  serialize :scopes, Array
+
+  attr_accessible :app_description,
+                  :app_name,
+                  :app_id,
+                  :app_version,
+                  :dev_id,
+                  :callback,
+                  :manifest_ver,
+                  :signed_jwt,
+                  :scopes
+
+  validates :app_description,  presence: true, length: { maximum: 50 }
+  validates :app_version, presence: true
+  VALID_URL_REGEX = /^(http|https):\/\/.+$/
+  validates :callback, presence: true, format: { with: VALID_URL_REGEX }
+
+  def sign private_key
+    self.signed_jwt = JWT.encode(getManifestHash, OpenSSL::PKey::RSA.new(private_key),"RS256")
+    self.save(:validate => false)
   end
 
-   def createMenifestJson dev_id, app_id, app_discription, app_version, success_url, error_login, list
-		manifest={ 
+  def verify
+    developer_id = self.dev_id
+    person = Webfinger.new(developer_id).fetch
+    begin
+      res=JWT.decode(self.signed_jwt, person.public_key)
+      return true
+    rescue JWT::DecodeError => e
+      Rails.logger.info("Failed to verify the manifest from the developer: #{developer_id}; #{e.message}")
+      return false
+    end
+  end
 
-		:dev_id=>dev_id,
-                :manifest_version=>"1.0",
-		:app_details=>{
-	      		:id=> app_id,
-	                :description=>app_discription,
-	                :version=>app_version
-	                },
-		:callbacks=>{
-			:success=>success_url,
-			:error=>error_login
-			},
-		:access=>list,
-	}
-        #message=self.encodeJson "asda", menifest.to_json
-	#flash[:notice] = menifest.to_json
-	manifest.to_json
+  def getManifestHash
+    manifest_hash={
+	    :dev_id=>self.dev_id,
+      :manifest_version=>"1.0",
+	    :app_details=>{
+        :name=>self.app_name,
+	      :id=> self.app_id,
+	      :description=>self.app_description,
+	      :version=>self.app_version
+	    },
+	    :callback=>self.callback,
+	    :access=>self.scopes,
+    }
+    manifest_hash
+  end
+  
+  def bySignedJWT jwt
+    begin
+      payload = JWT.decode(jwt, nil, false)
+    rescue JWT::DecodeError => e
+      return nil
+    end  
+    self.dev_id = payload["dev_id"]
+    self.callback = payload["callback"]
+    self.scopes = payload["access"]
+    self.signed_jwt = jwt
+    self
+  end
+
+  def createManifestJson
+	  manifest_hash=self.getManifestHash
+	  manifest_hash[:signed_jwt]=self.signed_jwt
+	  manifest_hash.to_json
 	end
 end
