@@ -4,7 +4,7 @@ class AuthorizeController < ApplicationController
   
   def show
     
-    @auth_token = "903795290a83c880050135b1884127f6" #params[:auth_token] "903795290a83c880050135b1884127f6" test 
+    @auth_token = params[:auth_token] #"10fa22d536828ee7b3d22833971e5068" test 
     Rails.logger.info("content of the authentication token #{@auth_token}")
     
     @access_request = Dauth::AccessRequest.find_by_auth_token(@auth_token)
@@ -13,6 +13,7 @@ class AuthorizeController < ApplicationController
     @dev = Webfinger.new(@dev_handle).fetch
     
     @app_id = @access_request.app_id
+    @callback = @access_request.callback
     @app_name = @access_request.app_name
     @app_description = @access_request.app_description
     @app_version = @access_request.app_version
@@ -50,10 +51,6 @@ class AuthorizeController < ApplicationController
     #get scopes
     @scopes = Array.new
     params[:scopes].each do |k,v|
-      if k=="scopes_ar"
-        @sar = v.gsub!(/[\[\"\]]/,'').split(',')
-        @scopes.concat(@sar)
-      end
       @scopes<<k if v=="1" 
     end
     
@@ -62,11 +59,13 @@ class AuthorizeController < ApplicationController
     @authorize.user_guid = current_user.guid
     
     if @authorize.save
-      flash[:notice] = "#{@scopes.to_s} Authentication Success"    
+      flash[:notice] = "#{@scopes.to_s} Authentication Success"
+      sendRefreshToken @authorize, params[:scopes][:callback]
+      render :status => :ok, :text => "refresh token send"   
     else 
-      flash[:notice] = "#{@scopes.to_s} Authentication Fail" 
+      flash[:notice] = "#{@scopes.to_s} Authentication Fail"
+      render :text => "error"
     end
-    redirect_to action: 'show'           #TODO redirect back to callback URL
   end
   
 end
