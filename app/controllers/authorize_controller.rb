@@ -38,8 +38,8 @@ class AuthorizeController < ApplicationController
       access_req.app_description = manifest.app_description
       access_req.app_version = manifest.app_version
       access_req.save
-      manifestVerified access_req
-      render :status => :ok, :text => "#{access_req.dev_handle} #{manifest.scopes} #{manifest.callback} verified"
+      #manifestVerified access_req
+      render :status => :ok, :text => "#{access_req.auth_token}%#{access_req.dev_handle}"
     else
       render :text => "error"
     end
