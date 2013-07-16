@@ -13,6 +13,12 @@ Diaspora::Application.routes.draw do
   get "manifest/download"
   put "manifest/generateManifest"
 
+  namespace :api do
+    resources :users, :defaults => { :format => 'json' } do
+      #get :diaspora_handle, :controller => 'users', :action => 'diaspora_handle'
+    end
+  end
+
   if Rails.env.production?
     mount RailsAdmin::Engine => '/admin_panel', :as => 'rails_admin'
   end
@@ -205,12 +211,12 @@ Diaspora::Application.routes.draw do
     get :me
   end
 
-  namespace :api do
-    namespace :v0 do
-      get "/users/:username" => 'users#show', :as => 'user'
-      get "/tags/:name" => 'tags#show', :as => 'tag'
-    end
-  end
+ # namespace :api do
+  #  namespace :v0 do
+   #   get "/users/:username" => 'users#show', :as => 'user'
+    #  get "/tags/:name" => 'tags#show', :as => 'tag'
+    #end
+  #end
 
   get 'community_spotlight' => "contacts#spotlight", :as => 'community_spotlight'
   # Mobile site

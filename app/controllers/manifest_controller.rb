@@ -67,8 +67,7 @@ class ManifestController < ApplicationController
     	else
        		redirect_to :back
 		message=manifest.errors.full_messages.to_sentence.split(',').first
-       		#flash[:notice] = message
-		flash[:notice] =getCurrentuserDetails
+       		flash[:notice] = message
     	end
   end 
   def getCurrentuserDetails 
