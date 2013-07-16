@@ -4,7 +4,7 @@ class AuthorizeController < ApplicationController
   
   def show
     
-    @auth_token = params[:auth_token] #"10fa22d536828ee7b3d22833971e5068" test 
+    @auth_token = params[:auth_token =>"10fa22d536828ee7b3d22833971e5068"] #"10fa22d536828ee7b3d22833971e5068" test 
     Rails.logger.info("content of the authentication token #{@auth_token}")
     
     @access_request = Dauth::AccessRequest.find_by_auth_token(@auth_token)
@@ -38,8 +38,8 @@ class AuthorizeController < ApplicationController
       access_req.app_description = manifest.app_description
       access_req.app_version = manifest.app_version
       access_req.save
-      manifestVerified access_req
-      render :status => :ok, :text => "{:auth_token => #{access_req.auth_token}}"
+      #manifestVerified access_req
+      render :status => :ok, :text => "#{access_req.auth_token}%#{access_req.dev_handle}"
     else
       render :text => "error"
     end
