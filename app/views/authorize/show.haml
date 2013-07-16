@@ -35,9 +35,9 @@
     
   = form_for 'scopes' , :url => {:action => 'update'}, :html => { :method => :put } do |f|
     = f.error_messages
-    
-    = f.hidden_field :scopes_ar, :value => @scopes_ar
+
     = f.hidden_field :app_id, :value => @app_id
+    = f.hidden_field :callback, :value => @callback
     %h4
       = t('profileDetails._profile')
     %br
@@ -45,21 +45,24 @@
     %p.checkbox_select
       = f.label :profile_read,t('profileDetails.read')
       -if @scopes_ar.include? 'profile_read' 
-        =check_box_tag :profile_read, "1", true, :disabled => true
+        = check_box_tag :profile_read, "1", true, :disabled => true
+        = f.hidden_field :profile_read, :value => "1"
       -else
         = f.check_box :profile_read
     %br
     %p.checkbox_select
       = f.label :profile_write,t('profileDetails.write')
       -if @scopes_ar.include? 'profile_write' 
-        =check_box_tag :profile_write, "1", true, :disabled => true
+        = check_box_tag :profile_write, "1", true, :disabled => true
+        = f.hidden_field :profile_write, :value => "1"
       -else
         = f.check_box :profile_write
     %br
     %p.checkbox_select
       = f.label :profile_delete,t('profileDetails.delete')
       -if @scopes_ar.include? 'profile_delete' 
-        =check_box_tag :profile_delete, "1", true, :disabled => true
+        = check_box_tag :profile_delete, "1", true, :disabled => true
+        = f.hidden_field :profile_delete, :value => "1"
       -else
         = f.check_box :profile_delete
     %br
@@ -70,21 +73,24 @@
     %p.checkbox_select
       = f.label :post_read,t('post.read')
       -if @scopes_ar.include? 'post_read' 
-        =check_box_tag :post_read, "1", true, :disabled => true
+        = check_box_tag :post_read, "1", true, :disabled => true
+        = f.hidden_field :post_read, :value => "1"
       -else
         = f.check_box :post_read
     %br
     %p.checkbox_select
       = f.label :post_write,t('post.write')
       -if @scopes_ar.include? 'post_write' 
-        =check_box_tag :post_write, "1", true, :disabled => true
+        = check_box_tag :post_write, "1", true, :disabled => true
+        = f.hidden_field :post_write, :value => "1"
       -else
         = f.check_box :post_write
     %br
     %p.checkbox_select
       = f.label :post_delete,t('post.delete')
       -if @scopes_ar.include? 'post_delete' 
-        =check_box_tag :post_delete, "1", true, :disabled => true
+        = check_box_tag :post_delete, "1", true, :disabled => true
+        = f.hidden_field :post_delete, :value => "1"
       -else
         = f.check_box :post_delete
     %br
@@ -95,21 +101,24 @@
     %p.checkbox_select
       = f.label :comment_read,t('comment.read')
       -if @scopes_ar.include? 'comment_read' 
-        =check_box_tag :comment_read, "1", true, :disabled => true
+        = check_box_tag :comment_read, "1", true, :disabled => true
+        = f.hidden_field :comment_read, :value => "1"
       -else
         = f.check_box :comment_read
     %br
     %p.checkbox_select
       = f.label :comment_write,t('comment.write')
       -if @scopes_ar.include? 'comment_write' 
-        =check_box_tag :comment_write, "1", true, :disabled => true
+        = check_box_tag :comment_write, "1", true, :disabled => true
+        = f.hidden_field :comment_write, :value => "1"
       -else
         = f.check_box :comment_write
     %br
     %p.checkbox_select
       = f.label :comment_delete,t('comment.delete')
       -if @scopes_ar.include? 'comment_delete' 
-        =check_box_tag :comment_delete, "1", true, :disabled => true
+        = check_box_tag :comment_delete, "1", true, :disabled => true
+        = f.hidden_field :comment_delete, :value => "1"
       -else
         = f.check_box :comment_delete
     %br    
