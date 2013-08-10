@@ -40,7 +40,7 @@ class AuthorizeController < ApplicationController
       access_req.save
       #manifestVerified access_req
 
-      render :status => :ok, :json => {:auth_token => "#{access_req.auth_token}}"}
+      render :status => :ok, :json => {:auth_token => "#{access_req.auth_token}"}
     else
       render :text => "error"
     end
