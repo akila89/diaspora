@@ -4,7 +4,7 @@ class AuthorizeController < ApplicationController
 
   def show
     
-    @auth_token = params[:auth_token =>"10fa22d536828ee7b3d22833971e5068"] #"10fa22d536828ee7b3d22833971e5068" test 
+    @auth_token = params[:auth_token] #"10fa22d536828ee7b3d22833971e5068" test 
     Rails.logger.info("content of the authentication token #{@auth_token}")
     
     @access_request = Dauth::AccessRequest.find_by_auth_token(@auth_token)
