@@ -68,4 +68,9 @@ class AuthorizeController < ApplicationController
     end
   end
   
+  def access_token
+    @refresh_token= param[:ref_token]
+    
+  end
+  
 end
