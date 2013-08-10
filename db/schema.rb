@@ -110,12 +110,16 @@ ActiveRecord::Schema.define(:version => 20130630170309) do
   add_index "conversations", ["author_id"], :name => "conversations_author_id_fk"
 
   create_table "dauth_access_requests", :force => true do |t|
-    t.string   "auth_token", :null => false
-    t.string   "dev_handle", :null => false
-    t.string   "callback",   :null => false
+    t.string   "auth_token",      :null => false
+    t.string   "dev_handle",      :null => false
+    t.string   "callback",        :null => false
     t.text     "scopes"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.string   "app_id"
+    t.string   "app_name"
+    t.string   "app_description"
+    t.string   "app_version"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
   end
 
   create_table "dauth_access_tokens", :force => true do |t|

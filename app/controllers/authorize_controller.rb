@@ -1,7 +1,7 @@
 class AuthorizeController < ApplicationController
   include Authenticator
   before_filter :authenticate_user!, :except => :verify
-  
+
   def show
     
     @auth_token = params[:auth_token] #"10fa22d536828ee7b3d22833971e5068" test 
@@ -27,7 +27,7 @@ class AuthorizeController < ApplicationController
     manifest = Manifest.new.bySignedJWT signed_manifest
     if manifest
       res = manifest.verify
-    end  
+    end
     if res
       access_req = Dauth::AccessRequest.new
       access_req.dev_handle = manifest.dev_id
@@ -47,7 +47,7 @@ class AuthorizeController < ApplicationController
 
   def update
     @authorize = Dauth::RefreshToken.new
-    
+
     #get scopes
     @scopes = Array.new
     params[:scopes].each do |k,v|

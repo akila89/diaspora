@@ -22,6 +22,7 @@ class ManifestController < ApplicationController
     random=Random.new.rand(1..60)
     appId  ="#{random}#{stamp}"
 	  manifest.app_id= appId
+
     if u = params[:developer]
  	    manifest.app_name=u[:app_name]
 	    manifest.app_description=u[:app_discription]
@@ -48,7 +49,7 @@ class ManifestController < ApplicationController
 	    end
 	    if u[:profile_read]=='1'
 	      scopes.push("profile_read")
-	    end              
+	    end
 	    if u[:profile_write]=='1'
 	      scopes.push("profilewrite")
 	    end
@@ -67,6 +68,6 @@ class ManifestController < ApplicationController
        redirect_to :back
        flash[:notice] = "Missing or incorrect values"
     end
-  end 
+  end
 
 end
