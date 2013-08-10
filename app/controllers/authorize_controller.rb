@@ -39,7 +39,8 @@ class AuthorizeController < ApplicationController
       access_req.app_version = manifest.app_version
       access_req.save
       #manifestVerified access_req
-      render :status => :ok, :text => "#{access_req.auth_token}%#{access_req.dev_handle}"
+
+      render :status => :ok, :json => {:auth_token => "#{access_req.auth_token}}"}
     else
       render :text => "error"
     end
@@ -60,8 +61,9 @@ class AuthorizeController < ApplicationController
     
     if @authorize.save
       flash[:notice] = "#{@scopes.to_s} Authentication Success"
-      sendRefreshToken @authorize, params[:scopes][:callback]
-      render :status => :ok, :text => "refresh token send"   
+      #sendRefreshToken @authorize, params[:scopes][:callback]   
+      render :status => :ok, :json => {:ref_token => "#{@authorize.token}}"}  
+      
     else 
       flash[:notice] = "#{@scopes.to_s} Authentication Fail"
       render :text => "error"
