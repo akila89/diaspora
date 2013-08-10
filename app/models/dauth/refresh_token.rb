@@ -18,6 +18,10 @@ class Dauth::RefreshToken < ActiveRecord::Base
   before_validation :generateToken, :on => :create
   before_validation :generateSecret, :on => :create
 
+  
+  
+  private
+
   def generateToken
     self.token = Digest::MD5.hexdigest "#{SecureRandom.hex(10)}-#{DateTime.now.to_s}"
   end
