@@ -1,6 +1,6 @@
 class AuthorizeController < ApplicationController
   include Authenticator
-  before_filter :authenticate_user!, :except => :verify
+  #before_filter :authenticate_user!, :except => :verify
 
   def show
     
@@ -71,7 +71,8 @@ class AuthorizeController < ApplicationController
   end
   
   def access_token
-    @refresh_token= param[:ref_token]
+    @refresh_token= param[:refresh_token]
+    
     
   end
   
