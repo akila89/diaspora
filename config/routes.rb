@@ -232,5 +232,6 @@ Diaspora::Application.routes.draw do
   #dauth
   match 'dauth/authorize/authorization_token',    to: 'authorize#show'
   match 'dauth/authorize/update',                 to: 'authorize#update'
+  match 'dauth/authorize/access_token',           to: 'authorize#access_token'
   
 end

@@ -125,6 +125,7 @@ ActiveRecord::Schema.define(:version => 20130630170309) do
   create_table "dauth_access_tokens", :force => true do |t|
     t.string   "refresh_token"
     t.string   "token"
+    t.datetime "expire_at"
     t.string   "secret"
     t.datetime "created_at",    :null => false
     t.datetime "updated_at",    :null => false

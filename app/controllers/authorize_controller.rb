@@ -1,7 +1,7 @@
 class AuthorizeController < ApplicationController
   include Authenticator
-  before_filter :authenticate_user!, :except => :verify
-  
+  #before_filter :authenticate_user!, :except => :verify
+
   def show
     
     @auth_token = params[:auth_token] #"10fa22d536828ee7b3d22833971e5068" test 
@@ -27,7 +27,7 @@ class AuthorizeController < ApplicationController
     manifest = Manifest.new.bySignedJWT signed_manifest
     if manifest
       res = manifest.verify
-    end  
+    end
     if res
       access_req = Dauth::AccessRequest.new
       access_req.dev_handle = manifest.dev_id
@@ -38,8 +38,9 @@ class AuthorizeController < ApplicationController
       access_req.app_description = manifest.app_description
       access_req.app_version = manifest.app_version
       access_req.save
-      manifestVerified access_req
-      render :status => :ok, :text => "{:auth_token => #{access_req.auth_token}}"
+      #manifestVerified access_req
+
+      render :status => :ok, :json => {:auth_token => "#{access_req.auth_token}"}
     else
       render :text => "error"
     end
@@ -47,7 +48,7 @@ class AuthorizeController < ApplicationController
 
   def update
     @authorize = Dauth::RefreshToken.new
-    
+
     #get scopes
     @scopes = Array.new
     params[:scopes].each do |k,v|
@@ -60,12 +61,19 @@ class AuthorizeController < ApplicationController
     
     if @authorize.save
       flash[:notice] = "#{@scopes.to_s} Authentication Success"
-      sendRefreshToken @authorize, params[:scopes][:callback]
-      render :status => :ok, :text => "refresh token send"   
+      #sendRefreshToken @authorize, params[:scopes][:callback]   
+      render :status => :ok, :json => {:ref_token => "#{@authorize.token}}"}  
+      
     else 
       flash[:notice] = "#{@scopes.to_s} Authentication Fail"
       render :text => "error"
     end
+  end
+  
+  def access_token
+    @refresh_token= param[:refresh_token]
+    
+    
   end
   
 end
