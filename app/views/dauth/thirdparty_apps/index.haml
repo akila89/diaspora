@@ -2,10 +2,9 @@
   = t('.title')
 
 #section_header
-  %h2
-    = t('.title')
+  %h2= t('.title')
 
 - @dauth_thirdparty_apps.each do |app|
-  %h3
-    = app.name
-  = app.description
+  %h3= link_to app.name, dauth_thirdparty_app_path(app)
+  %p= app.description
+  %br
