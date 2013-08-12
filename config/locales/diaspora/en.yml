@@ -1118,4 +1118,8 @@ en:
     dev_email: "Developer Email"
     submit_btn: "Authenticate"
     app_permission: "Permission"
-       
+
+  dauth:
+    thirdparty_apps:
+      index:
+        title: "My Apps"
