@@ -26,12 +26,14 @@ class AuthorizeController < ApplicationController
 
     if not signed_manifest
       render :status => :bad_request, :json => {:error => 000}
+    end
 
     Rails.logger.info("content of the signed manifest #{signed_manifest}")
     manifest = Manifest.new.bySignedJWT signed_manifest
 
     if not manifest
       render :status => :bad_request, :json => {:error => 001}
+    end
 
     res = manifest.verify
 
