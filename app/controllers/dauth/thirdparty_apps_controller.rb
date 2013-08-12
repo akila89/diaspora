@@ -13,7 +13,8 @@ class Dauth::ThirdpartyAppsController < ApplicationController
   # GET /dauth/thirdparty_apps/1
   # GET /dauth/thirdparty_apps/1.json
   def show
-    @dauth_thirdparty_app = Dauth::ThirdpartyApp.find(params[:id])
+    @app = Dauth::ThirdpartyApp.find(params[:id])
+    @dev = Webfinger.new(@app.dev_handle).fetch
 
     respond_to do |format|
       format.html # show.html.erb
