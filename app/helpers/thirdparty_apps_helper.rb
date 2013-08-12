@@ -1,0 +1,2 @@
+module ThirdpartyAppsHelper
+end

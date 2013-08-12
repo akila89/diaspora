@@ -1,0 +1,2 @@
+module Dauth::ThirdpartyAppsHelper
+end
