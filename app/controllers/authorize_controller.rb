@@ -67,12 +67,14 @@ class AuthorizeController < ApplicationController
     @authorize.app_id = params[:scopes][:app_id]
     @authorize.user_guid = current_user.guid
 
+
     if @authorize.save     
-      flash[:notice] = "Authentication Success"
-      #sendRefreshToken @authorize, params[:scopes][:callback]   
+      #flash[:notice] = "#{@scopes.to_s} Authentication Success"
+      sendRefreshToken @authorize, params[:scopes][:callback]
+      #TODO show app user page
       render :status => :ok, :json => {:ref_token => "#{@authorize.token}}"}
-    else 
-      flash[:notice] = "Authentication Fail"
+    else
+    #flash[:notice] = "#{@scopes.to_s} Authentication Fail"
       render :text => "error"
     end
     
@@ -85,8 +87,7 @@ class AuthorizeController < ApplicationController
       app.name = access_req.app_name
       app.description = access_req.app_description
       app.dev_handle = access_req.dev_handle
-      app.save
-     
+      app.save     
     end
 
   end
