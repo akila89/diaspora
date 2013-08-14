@@ -1,7 +1,6 @@
 class AuthorizeController < ApplicationController
   include Authenticator
   before_filter :authenticate_user!, :except => :verify
-
   def show
 
     @auth_token = params[:auth_token] #"10fa22d536828ee7b3d22833971e5068" test
@@ -71,7 +70,7 @@ class AuthorizeController < ApplicationController
       #flash[:notice] = "#{@scopes.to_s} Authentication Success"
       sendRefreshToken @authorize, params[:scopes][:callback]
       #TODO show app user page
-    #render :status => :ok, :json => {:ref_token => "#{@authorize.token}}"}
+      render :status => :ok, :json => {:ref_token => "#{@authorize.token}}"}
     else
     #flash[:notice] = "#{@scopes.to_s} Authentication Fail"
       render :text => "error"
@@ -81,11 +80,11 @@ class AuthorizeController < ApplicationController
     app = Dauth::ThirdpartyApp.find_by_app_id(access_req.app_id)
     if not app
       app = Dauth::ThirdpartyApp.new
-      app.app_id = access_req.app_id
-      app.name = access_req.app_name
-      app.description = access_req.app_description
-      app.dev_handle = access_req.dev_handle
-      app.save
+    app.app_id = access_req.app_id
+    app.name = access_req.app_name
+    app.description = access_req.app_description
+    app.dev_handle = access_req.dev_handle
+    app.save
     end
   end
 
