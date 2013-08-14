@@ -3,7 +3,7 @@ class AuthorizeController < ApplicationController
   before_filter :authenticate_user!, :except => :verify
   def show
 
-    @auth_token = params[:auth_token] #"10fa22d536828ee7b3d22833971e5068" test
+    @auth_token = params[:auth_token]
     Rails.logger.info("content of the authentication token #{@auth_token}")
 
     @access_request = Dauth::AccessRequest.find_by_auth_token(@auth_token)
@@ -17,6 +17,7 @@ class AuthorizeController < ApplicationController
     @app_description = @access_request.app_description
     @app_version = @access_request.app_version
     @scopes_ar = @access_request.scopes
+    Rails.logger.info(@access_request.scopes)
 
   end
 
