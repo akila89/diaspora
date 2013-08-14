@@ -14,8 +14,32 @@ Diaspora::Application.routes.draw do
   put "manifest/generateManifest"
 
   namespace :api do
-    resources :users, :defaults => { :format => 'json' } do
-      #get :diaspora_handle, :controller => 'users', :action => 'diaspora_handle'
+     resources :contacts, :defaults => { :format => 'json' } do
+
+    end
+     resources :aspects, :defaults => { :format => 'json' } do
+
+    end
+     resources :users, :defaults => { :format => 'json' } do
+	    collection do
+	      get :getPodPersonList
+	      get 'getUserpersonList/:id' , :action => 'getUserpersonList' 
+	      get 'getUsersAspectsList/:id' , :action => 'getUsersAspectsList'
+	      get 'getUserDetailsUsingHandler/:diaspora_handle' , :action => 'getUserDetailsUsingHandler' 
+	      get 'getUserpersonListUsingHandle/:diaspora_handle' , :action => 'getUserpersonListUsingHandle'
+	end
+    end
+     resources :statusMessages, :defaults => { :format => 'json' } do
+	    collection do
+	      get 'getGivenUserStatusList/:id' , :action => 'getGivenUserStatusList'
+	      get 'getCommentsForStatusMessage/:id' , :action => 'getCommentsForStatusMessage'
+	end
+    end
+    #resources :users, :defaults => { :format => 'json' } do
+     resources :comments, :defaults => { :format => 'json' } do
+	    collection do
+	      get 'getGivenUserCommentList/:id' , :action => 'getGivenUserCommentList'
+	end
     end
   end
 
