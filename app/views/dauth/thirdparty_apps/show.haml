@@ -1,0 +1,9 @@
+#section_header
+  %h2
+    = @app.name
+
+.span-24.last
+  .span-14.append-1
+    %h4= @app.description
+  .span-8.last
+    = render :partial => 'dauth/dev'

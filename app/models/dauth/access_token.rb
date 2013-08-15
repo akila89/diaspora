@@ -12,6 +12,10 @@ class Dauth::AccessToken < ActiveRecord::Base
   before_validation :generateSecret, :on => :create
   before_validation :generateExpireTime, :on => :create
 
+  def expire?
+    self.expire_at<Time.now
+  end
+  
   def generateToken
     self.token = Digest::MD5.hexdigest "#{SecureRandom.hex(10)}-#{DateTime.now.to_s}"
   end

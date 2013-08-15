@@ -257,5 +257,9 @@ Diaspora::Application.routes.draw do
   match 'dauth/authorize/authorization_token',    to: 'authorize#show'
   match 'dauth/authorize/update',                 to: 'authorize#update'
   match 'dauth/authorize/access_token',           to: 'authorize#access_token'
-  
+
+  namespace :dauth do
+    resources :thirdparty_apps
+  end
+
 end

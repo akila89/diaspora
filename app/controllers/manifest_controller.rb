@@ -52,10 +52,10 @@ class ManifestController < ApplicationController
 	      scopes.push("profile_read")
 	    end
 	    if u[:profile_write]=='1'
-	      scopes.push("profilewrite")
+	      scopes.push("profile_write")
 	    end
 	    if u[:profile_delete]=='1'
-	      scopes.push("profiledelete")
+	      scopes.push("profile_delete")
 	    end
 	    manifest.scopes = scopes
         end

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130630170309) do
+ActiveRecord::Schema.define(:version => 20130812091657) do
 
   create_table "account_deletions", :force => true do |t|
     t.string  "diaspora_handle"
@@ -125,7 +125,6 @@ ActiveRecord::Schema.define(:version => 20130630170309) do
   create_table "dauth_access_tokens", :force => true do |t|
     t.string   "refresh_token"
     t.string   "token"
-    t.datetime "expire_at"
     t.string   "secret"
     t.datetime "created_at",    :null => false
     t.datetime "updated_at",    :null => false
@@ -151,6 +150,16 @@ ActiveRecord::Schema.define(:version => 20130630170309) do
     t.text     "scopes"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+  end
+
+  create_table "dauth_thirdparty_apps", :force => true do |t|
+    t.string   "app_id"
+    t.string   "name"
+    t.string   "description"
+    t.string   "homepage_url"
+    t.string   "dev_handle"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
   end
 
   create_table "invitation_codes", :force => true do |t|

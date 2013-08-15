@@ -4,7 +4,6 @@ module Authenticator
   end
   
   def sendRefreshToken refresh_token, callback
-    #TODO send encrypted refresh token and secret
     Workers::PostToApp.perform_async(callback, {:refresh_token => refresh_token.token})
   end
 end  
