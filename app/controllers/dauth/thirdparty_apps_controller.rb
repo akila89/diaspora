@@ -42,5 +42,10 @@ class Dauth::ThirdpartyAppsController < ApplicationController
       end
     end
   end
+  
+  def revoke
+    @dauth_thirdparty_apps = Dauth::ThirdpartyApp.all
+    render :index
+  end  
 
 end
