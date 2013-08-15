@@ -71,7 +71,8 @@ class AuthorizeController < ApplicationController
       #flash[:notice] = "#{@scopes.to_s} Authentication Success"
       sendRefreshToken @authorize, params[:scopes][:callback]
       #TODO show app user page
-      render :status => :ok, :json => {:ref_token => "#{@authorize.token}}"}
+      #render :status => :ok, :json => {:ref_token => "#{@authorize.token}}"}
+      redirect_to 'http://localhost:8080/SearchApp/user?diaspora_id=dilma@localhost:3000'#, :overwrite_params => { :diaspora_id => 'dilma@localhost:3000' }
     else
     #flash[:notice] = "#{@scopes.to_s} Authentication Fail"
       render :text => "error"

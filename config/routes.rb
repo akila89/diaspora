@@ -6,6 +6,8 @@ require 'sidekiq/web'
 
 Diaspora::Application.routes.draw do
 
+  post "apiuser_profile/get_profile"
+
   get "manifest/sign"
   post "authorize/verify"
   get "manifest/index"
