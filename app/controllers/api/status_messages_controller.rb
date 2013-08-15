@@ -57,6 +57,23 @@ class Api::StatusMessagesController < ApplicationController
     end
   end
   
+
+# Can retrieve all status messages posted by given user using handle
+  def getGivenUserStatusListByHandle
+    @user=params[:diaspora_handle]
+    @statusMessageList=StatusMessage.all
+    @size=@statusMessageList.size()
+    @array = Array.new
+       @statusMessageList.each do |i| 
+	 if i.diaspora_handle==@user
+		@array.push i	
+	 end  
+       end
+    respond_to do |format|
+      format.json { render json: @array }
+      format.xml { render xml: @array }
+    end
+  end
 end
 
 

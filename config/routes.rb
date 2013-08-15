@@ -32,7 +32,8 @@ Diaspora::Application.routes.draw do
      resources :statusMessages, :defaults => { :format => 'json' } do
 	    collection do
 	      get 'getGivenUserStatusList/:id' , :action => 'getGivenUserStatusList'
-	      get 'getCommentsForStatusMessage/:id' , :action => 'getCommentsForStatusMessage'
+	      get 'getCommentsForStatusMessage/:id' , :action => 'getCommentsForStatusMessage' 
+	      get 'getGivenUserStatusListByHandle/:diaspora_handle' , :action => 'getGivenUserStatusListByHandle'
 	end
     end
     #resources :users, :defaults => { :format => 'json' } do
