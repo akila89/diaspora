@@ -1,6 +1,7 @@
 class Dauth::ThirdpartyAppsController < ApplicationController
   # GET /dauth/thirdparty_apps
   # GET /dauth/thirdparty_apps.json
+  
   def index
     @dauth_thirdparty_apps = Dauth::ThirdpartyApp.all
 
@@ -42,5 +43,13 @@ class Dauth::ThirdpartyAppsController < ApplicationController
       end
     end
   end
+  
+  def revoke
+    @app = Dauth::ThirdpartyApp.find(params[:id])
+    @refresh_token = Dauth::RefreshToken.find_by_app_id(@app.app_id)
+    @refresh_token.destroy
+    @dauth_thirdparty_apps = Dauth::ThirdpartyApp.all
+    render :index
+  end  
 
 end

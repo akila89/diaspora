@@ -5,5 +5,12 @@
 .span-24.last
   .span-14.append-1
     %h4= @app.description
+    %br
+    %br
+
   .span-8.last
     = render :partial => 'dauth/dev'
+.submit_block
+  %p Revoke this app to disallow it to use your data
+  %form{ :action => dauth_dfs_path(@app), :method => "post" }
+    %input{ :type => "submit", :value => "Revoke" }
