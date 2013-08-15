@@ -1,10 +1,8 @@
-%h3 Developer
+developed by:
 .media
   .profile_photo
     = person_image_link(@dev, :size => :thumb_large, :to => :photos)
 
   .bd
-    =person_link(@dev)
+    %h3= person_link(@dev)
 
-    .info
-      = Diaspora::Taggable.format_tags(@dev.profile.tag_string)
