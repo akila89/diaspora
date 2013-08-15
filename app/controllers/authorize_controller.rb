@@ -1,6 +1,6 @@
 class AuthorizeController < ApplicationController
   include Authenticator
-  #before_filter :authenticate_user!, :except => :verify
+  before_filter :authenticate_user!, :except => :verify
   
   def show
     @auth_token = params[:auth_token]
@@ -98,7 +98,7 @@ class AuthorizeController < ApplicationController
 
     if (Dauth::RefreshToken.find_by_token(@refresh_token).nil?)
       Rails.logger.info("refresh token #{@refresh_token} is illegal")
-      render :status => :bad_request, :json => {:error => "200"} #Illegal Refresh Token
+      render :status => :bad_request, :json => {:error => "200"} #Illegal Refresh Token    
     else
       if not Dauth::AccessToken.find_by_refresh_token(@refresh_token).nil?
         @access_token = Dauth::AccessToken.find_by_refresh_token(@refresh_token)
