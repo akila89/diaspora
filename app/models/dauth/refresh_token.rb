@@ -13,7 +13,6 @@ class Dauth::RefreshToken < ActiveRecord::Base
   validates :scopes,  presence: true
   validates :user_guid,  presence: true
   validates :secret,  presence: true
-  validates_uniqueness_of :app_id, :scope => :user_guid
   
   before_validation :generateToken, :on => :create
   before_validation :generateSecret, :on => :create
