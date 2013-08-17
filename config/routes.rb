@@ -13,6 +13,37 @@ Diaspora::Application.routes.draw do
   get "manifest/download"
   put "manifest/generateManifest"
 
+  namespace :api do
+     resources :contacts, :defaults => { :format => 'json' } do
+
+    end
+     resources :aspects, :defaults => { :format => 'json' } do
+
+    end
+     resources :users, :defaults => { :format => 'json' } do
+	    collection do
+	      get :getPodPersonList
+	      get 'getUserpersonList/:id' , :action => 'getUserpersonList' 
+	      get 'getUsersAspectsList/:id' , :action => 'getUsersAspectsList'
+	      get 'getUserDetailsUsingHandler/:diaspora_handle' , :action => 'getUserDetailsUsingHandler' 
+	      get 'getUserpersonListUsingHandle/:diaspora_handle' , :action => 'getUserpersonListUsingHandle'
+	end
+    end
+     resources :statusMessages, :defaults => { :format => 'json' } do
+	    collection do
+	      get 'getGivenUserStatusList/:id' , :action => 'getGivenUserStatusList'
+	      get 'getCommentsForStatusMessage/:id' , :action => 'getCommentsForStatusMessage' 
+	      get 'getGivenUserStatusListByHandle/:diaspora_handle' , :action => 'getGivenUserStatusListByHandle'
+	end
+    end
+    #resources :users, :defaults => { :format => 'json' } do
+     resources :comments, :defaults => { :format => 'json' } do
+	    collection do
+	      get 'getGivenUserCommentList/:id' , :action => 'getGivenUserCommentList'
+	end
+    end
+  end
+
   if Rails.env.production?
     mount RailsAdmin::Engine => '/admin_panel', :as => 'rails_admin'
   end
@@ -205,12 +236,12 @@ Diaspora::Application.routes.draw do
     get :me
   end
 
-  namespace :api do
-    namespace :v0 do
-      get "/users/:username" => 'users#show', :as => 'user'
-      get "/tags/:name" => 'tags#show', :as => 'tag'
-    end
-  end
+ # namespace :api do
+  #  namespace :v0 do
+   #   get "/users/:username" => 'users#show', :as => 'user'
+    #  get "/tags/:name" => 'tags#show', :as => 'tag'
+    #end
+  #end
 
   get 'community_spotlight' => "contacts#spotlight", :as => 'community_spotlight'
   # Mobile site
@@ -227,8 +258,9 @@ Diaspora::Application.routes.draw do
   match 'dauth/authorize/authorization_token',    to: 'authorize#show'
   match 'dauth/authorize/update',                 to: 'authorize#update'
   match 'dauth/authorize/access_token',           to: 'authorize#access_token'
-
+ 
   namespace :dauth do
+    match 'thirdparty_apps/revoke/:id', to: 'thirdparty_apps#revoke', as: 'dfs'
     resources :thirdparty_apps
   end
 

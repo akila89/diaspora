@@ -11,6 +11,7 @@ class Manifest < ActiveRecord::Base
                   :signed_jwt,
                   :scopes
 
+  validates :app_name, presence: true  
   validates :app_description,  presence: true, length: { maximum: 50 }
   validates :app_version, presence: true
   VALID_URL_REGEX = /^(http|https):\/\/.+$/
@@ -67,8 +68,8 @@ class Manifest < ActiveRecord::Base
   end
 
   def createManifestJson
-	  manifest_hash=self.getManifestHash
-	  manifest_hash[:signed_jwt]=self.signed_jwt
-	  manifest_hash.to_json
-	end
+    manifest_hash=self.getManifestHash
+    manifest_hash[:signed_jwt]=self.signed_jwt
+    manifest_hash.to_json
+  end
 end
