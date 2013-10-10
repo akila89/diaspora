@@ -29,16 +29,32 @@ class Api::CommentsController < ApplicationController
 def getGivenUserCommentList
     @user=User.find_by_id(params[:id]).diaspora_handle
     @commentList=Comment.all
-    @size=@commentList.size()
-    @array = Array.new
+    @comments_array = Array.new
        @commentList.each do |i| 
 	 if i.diaspora_handle==@user
-		@array.push i	
+		@comments_array.push i	
 	 end  
        end
     respond_to do |format|
-      format.json { render json: @array }
-      format.xml { render xml: @array }
+      format.json { render json: @comments_array }
+      format.xml { render xml: @comments_array }
+    end
+  end
+
+
+# Can retrieve all comments posted by given user by handle
+def getGivenUserCommentListByHandle
+    @handle=params[:diaspora_handle]
+    @commentList=Comment.all
+    @comments_array = Array.new
+       @commentList.each do |i| 
+	 if i.diaspora_handle==@handle
+		@comments_array.push i	
+	 end  
+       end
+    respond_to do |format|
+      format.json { render json: @comments_array }
+      format.xml { render xml: @comments_array }
     end
   end
 
