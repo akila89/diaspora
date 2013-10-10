@@ -27,46 +27,78 @@ class Api::UsersController < ApplicationController
 
 # Can retrieve current pod personlist
   def getPodPersonList
-    @personList = User.all
-    @size=@personList.size();
-    @array = Array.new
+    @person_list = User.all
+    @size=@person_list.size();
+    @person_list_array = Array.new
        for i in 0..@size
-         @array.push Person.all[i]
+         @person_list_array.push Person.all[i]
        end
     respond_to do |format|
-      format.json { render json: @array }
-      format.xml { render xml: @array }
+      format.json { render json: @person_list_array }
+      format.xml { render xml: @person_list_array }
     end
   end
   
 # Can retrieve friendlist for a given user
   def getUserpersonList
-    @personList = User.find_by_id(params[:id]).contact_person_ids
-    @size=@personList.length();
-    @array = Array.new
-       @personList.each do |i|
-	 @array.push Person.all[i-1]      
+    @person_list = User.find_by_id(params[:id]).contact_person_ids
+    @person_list_array = Array.new
+       @person_list.each do |i|
+	 @person_list_array.push Person.all[i-1]      
        end
     respond_to do |format|
-      format.json { render json: @array }
-      format.xml { render xml: @array }
+      format.json { render json: @person_list_array }
+      format.xml { render xml: @person_list_array }
     end
   end
 
 # Can retrieve Aspects of a given user
   def getUsersAspectsList
-    @user = User.find_by_id(params[:id]).diaspora_handle
-    @aspects = Aspect.all;
-    @array = Array.new
-       @aspects.each do |i|
-	 if i.user.diaspora_handle==@user
-		@array.push i 
-	 end
-	      
-       end
+    @aspects = User.find_by_id(params[:id]).aspects
     respond_to do |format|
-      format.json { render json: @array }
-      format.xml { render xml: @array }
+      format.json { render json: @aspects }
+      format.xml { render xml: @aspects }
+    end
+  end
+
+# Can retrieve Aspects of a given user using handle
+  def getUsersAspectsListByHandle
+    @handle=params[:diaspora_handle]
+    @users=User.all
+    @aspects_array = Array.new
+    @users.each do |i|
+	 if i.diaspora_handle==@handle
+		@aspects_array.push i.aspects 
+	 end
+    end
+    respond_to do |format|
+      format.json { render json: @aspects_array }
+      format.xml { render xml: @aspects_array }
+    end
+  end
+
+# Can retrieve Followed tags of a given user
+  def getUserFollowedTagsList
+    @tags = User.find_by_id(params[:id]).followed_tags
+    respond_to do |format|
+      format.json { render json: @tags }
+      format.xml { render xml: @tags }
+    end
+  end
+
+# Can retrieve Followed tags of a given user by handle
+  def getUserFollowedTagsListUsingHandle
+    @handle=params[:diaspora_handle]
+    @users=User.all
+    @tags_array = Array.new
+    @users.each do |i|
+	 if i.diaspora_handle==@handle
+		@tags_array.push i.followed_tags 
+	 end
+    end
+    respond_to do |format|
+      format.json { render json: @tags_array }
+      format.xml { render xml: @tags_array }
     end
   end
 
@@ -75,15 +107,15 @@ class Api::UsersController < ApplicationController
   def getUserDetailsUsingHandler
     @handle=params[:diaspora_handle]
     @users=User.all
-    @array = Array.new
+    @detail_array = Array.new
     @users.each do |i|
 	 if i.diaspora_handle==@handle
-		@array.push i 
+		@detail_array.push i 
 	 end
     end
     respond_to do |format|
-      format.json { render json: @array }
-      format.xml { render xml: @array }
+      format.json { render json: @detail_array }
+      format.xml { render xml: @detail_array }
     end
   end
 
@@ -94,7 +126,7 @@ class Api::UsersController < ApplicationController
     @handle=params[:diaspora_handle]
     @users=User.all
     @user
-    @array = Array.new
+    @person_handle_list = Array.new
     @users.each do |i|
 	 if i.diaspora_handle==@handle
 		@user=i
@@ -102,11 +134,11 @@ class Api::UsersController < ApplicationController
     end
        @personList = @user.contact_person_ids
        @personList.each do |i|
-	 @array.push Person.all[i-1]      
+	 @person_handle_list.push Person.all[i-1].diaspora_handle      
        end
     respond_to do |format|
-      format.json { render json: @array }
-      format.xml { render xml: @array }
+      format.json { render json: @person_handle_list }
+      format.xml { render xml: @person_handle_list }
     end
   end
 
