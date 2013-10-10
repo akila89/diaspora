@@ -28,16 +28,15 @@ class Api::StatusMessagesController < ApplicationController
   def getGivenUserStatusList
     @user=User.find_by_id(params[:id]).diaspora_handle
     @statusMessageList=StatusMessage.all
-    @size=@statusMessageList.size()
-    @array = Array.new
+    @status_messages_array = Array.new
        @statusMessageList.each do |i| 
 	 if i.diaspora_handle==@user
-		@array.push i	
-	 end  
+		@status_messages_array.push i	
+	 end 
        end
     respond_to do |format|
-      format.json { render json: @array }
-      format.xml { render xml: @array }
+      format.json { render json: @status_messages_array }
+      format.xml { render xml: @status_messages_array }
     end
   end
 
@@ -45,15 +44,15 @@ class Api::StatusMessagesController < ApplicationController
   def getCommentsForStatusMessage
     @status=StatusMessage.find_by_id(params[:id])
     @commentList=Comment.all
-    @array = Array.new
+    @comment_list_array = Array.new
        @commentList.each do |i| 
 	 if i.commentable_id==@status.id
-		@array.push i	
+		@comment_list_array.push i	
 	 end  
        end
     respond_to do |format|
-      format.json { render json: @array }
-      format.xml { render xml: @array }
+      format.json { render json: @comment_list_array }
+      format.xml { render xml: @comment_list_array }
     end
   end
   
@@ -62,18 +61,34 @@ class Api::StatusMessagesController < ApplicationController
   def getGivenUserStatusListByHandle
     @user=params[:diaspora_handle]
     @statusMessageList=StatusMessage.all
-    @size=@statusMessageList.size()
-    @array = Array.new
+    @status_messages_array = Array.new
        @statusMessageList.each do |i| 
 	 if i.diaspora_handle==@user
-		@array.push i	
+		@status_messages_array.push i	
 	 end  
        end
     respond_to do |format|
-      format.json { render json: @array }
-      format.xml { render xml: @array }
+      format.json { render json: @status_messages_array }
+      format.xml { render xml: @status_messages_array }
     end
   end
+
+# Get number of likes of a given status message
+  def getLikesForStatusMessage
+    @status=StatusMessage.find_by_id(params[:id])
+    @commentList=Comment.all
+    @comment_list_array = Array.new
+       @commentList.each do |i| 
+	 if i.commentable_id==@status.id
+		@comment_list_array.push i	
+	 end  
+       end
+    respond_to do |format|
+      format.json { render json: @comment_list_array }
+      format.xml { render xml: @comment_list_array }
+    end
+  end
+
 end
 
 
