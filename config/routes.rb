@@ -50,6 +50,7 @@ Diaspora::Application.routes.draw do
 	    collection do
 	      get 'getGivenUserCommentList/:id' , :action => 'getGivenUserCommentList'
 	      get 'getGivenUserCommentListByHandle/:diaspora_handle' , :action => 'getGivenUserCommentListByHandle'
+  	      get 'getLikesCount/:id' , :action => 'getLikesCount'
 	end
     end
   end

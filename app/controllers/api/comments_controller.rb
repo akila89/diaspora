@@ -58,6 +58,15 @@ def getGivenUserCommentListByHandle
     end
   end
 
+# Can retrieve likes count for a comment
+  def getLikesCount
+    @likes_count=Comment.find_by_id(params[:id]).likes_count
+    respond_to do |format|
+      format.json { render json: @likes_count }
+      format.xml { render xml: @likes_count }
+    end
+  end
+
 end
 
 
