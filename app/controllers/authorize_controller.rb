@@ -33,6 +33,10 @@ class AuthorizeController < ApplicationController
       access_req.dev_handle = manifest.dev_id
       access_req.callback = manifest.callback
       access_req.scopes = manifest.scopes
+      access_req.app_id = manifest.app_id
+      access_req.app_name = manifest.app_name
+      access_req.app_description = manifest.app_description
+      access_req.app_version = manifest.app_version
       access_req.save
       render :status => :ok, :text => "#{access_req.dev_handle} #{manifest.scopes} #{manifest.callback} verified"
     else
