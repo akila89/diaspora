@@ -75,17 +75,10 @@ class Api::StatusMessagesController < ApplicationController
 
 # Get number of likes of a given status message
   def getLikesForStatusMessage
-    @status=StatusMessage.find_by_id(params[:id])
-    @commentList=Comment.all
-    @comment_list_array = Array.new
-       @commentList.each do |i| 
-	 if i.commentable_id==@status.id
-		@comment_list_array.push i	
-	 end  
-       end
+    @likes_count=StatusMessage.find_by_id(params[:id]).likes_count
     respond_to do |format|
-      format.json { render json: @comment_list_array }
-      format.xml { render xml: @comment_list_array }
+      format.json { render json: @likes_count }
+      format.xml { render xml: @likes_count }
     end
   end
 
