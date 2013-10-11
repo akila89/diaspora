@@ -5,7 +5,6 @@
 require 'sidekiq/web'
 
 Diaspora::Application.routes.draw do
-
   get "manifest/sign"
   post "authorize/verify"
   get "manifest/index"
@@ -25,6 +24,9 @@ Diaspora::Application.routes.draw do
 	      get :getPodPersonList
 	      get 'getUserpersonList/:id' , :action => 'getUserpersonList' 
 	      get 'getUsersAspectsList/:id' , :action => 'getUsersAspectsList'
+	      get 'getUserFollowedTagsList/:id' , :action => 'getUserFollowedTagsList'
+	      get 'getUsersAspectsListByHandle/:diaspora_handle' , :action => 'getUsersAspectsListByHandle'
+	      get 'getUserFollowedTagsListUsingHandle/:diaspora_handle' , :action => 'getUserFollowedTagsListUsingHandle'
 	      get 'getUserDetailsUsingHandler/:diaspora_handle' , :action => 'getUserDetailsUsingHandler' 
 	      get 'getUserpersonListUsingHandle/:diaspora_handle' , :action => 'getUserpersonListUsingHandle'
 	end
@@ -34,12 +36,19 @@ Diaspora::Application.routes.draw do
 	      get 'getGivenUserStatusList/:id' , :action => 'getGivenUserStatusList'
 	      get 'getCommentsForStatusMessage/:id' , :action => 'getCommentsForStatusMessage' 
 	      get 'getGivenUserStatusListByHandle/:diaspora_handle' , :action => 'getGivenUserStatusListByHandle'
+ 	      get 'getLikesForStatusMessage/:id' , :action => 'getLikesForStatusMessage' 
+	end
+    end
+     resources :thirdpartyApps, :defaults => { :format => 'json' } do
+	    collection do
+	      get 'getAppScopes/:id' , :action => 'getAppScopes'
 	end
     end
     #resources :users, :defaults => { :format => 'json' } do
      resources :comments, :defaults => { :format => 'json' } do
 	    collection do
 	      get 'getGivenUserCommentList/:id' , :action => 'getGivenUserCommentList'
+	      get 'getGivenUserCommentListByHandle/:diaspora_handle' , :action => 'getGivenUserCommentListByHandle'
 	end
     end
   end
