@@ -36,7 +36,8 @@ Diaspora::Application.routes.draw do
 	      get 'getGivenUserStatusList/:id' , :action => 'getGivenUserStatusList'
 	      get 'getCommentsForStatusMessage/:id' , :action => 'getCommentsForStatusMessage' 
 	      get 'getGivenUserStatusListByHandle/:diaspora_handle' , :action => 'getGivenUserStatusListByHandle'
- 	      get 'getLikesForStatusMessage/:id' , :action => 'getLikesForStatusMessage' 
+ 	      get 'getLikesForStatusMessage/:id' , :action => 'getLikesForStatusMessage'
+ 	      get 'getNumberOfCommentsForStatusMessage/:id' , :action => 'getNumberOfCommentsForStatusMessage'
 	end
     end
      resources :thirdpartyApps, :defaults => { :format => 'json' } do

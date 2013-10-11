@@ -82,6 +82,15 @@ class Api::StatusMessagesController < ApplicationController
     end
   end
 
+# Get number of comments of a given status message
+  def getNumberOfCommentsForStatusMessage
+    @comments_count=StatusMessage.find_by_id(params[:id]).comments_count
+    respond_to do |format|
+      format.json { render json: @comments_count }
+      format.xml { render xml: @comments_count }
+    end
+  end
+
 end
 
 
