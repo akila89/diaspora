@@ -17,4 +17,21 @@ class Manifest < ActiveRecord::Base
   VALID_URL_REGEX = /^(http|https):\/\/.+$/
   validates :callback, presence: true, format: { with: VALID_URL_REGEX }
 
+  def sign private_key
+    self.signed_jwt = JWT.encode(getManifestHash, OpenSSL::PKey::RSA.new(private_key),"RS256")
+    self.save(:validate => false)
+  end
+
+  def verify
+    developer_id = self.dev_id
+    person = Webfinger.new(developer_id).fetch
+    begin
+      res=JWT.decode(self.signed_jwt, person.public_key)
+      return true
+    rescue JWT::DecodeError => e
+      Rails.logger.info("Failed to verify the manifest from the developer: #{developer_id}; #{e.message}")
+      return false
+    end
+  end
+
 end
