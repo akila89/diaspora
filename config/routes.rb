@@ -29,6 +29,7 @@ Diaspora::Application.routes.draw do
 	      get 'getUserFollowedTagsListUsingHandle/:diaspora_handle' , :action => 'getUserFollowedTagsListUsingHandle'
 	      get 'getUserDetailsUsingHandler/:diaspora_handle' , :action => 'getUserDetailsUsingHandler' 
 	      get 'getUserpersonListUsingHandle/:diaspora_handle' , :action => 'getUserpersonListUsingHandle'
+              get 'getAppScopesOfGivenUser/:id/:diaspora_handle' , :action => 'getAppScopesOfGivenUser'
 	end
     end
      resources :statusMessages, :defaults => { :format => 'json' } do

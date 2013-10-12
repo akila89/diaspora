@@ -142,6 +142,34 @@ class Api::UsersController < ApplicationController
     end
   end
 
+# Can retrieve scopes for a given user using his handle and app Id
+  def  getAppScopesOfGivenUser
+    @appId=Dauth::ThirdpartyApp.find(params[:id]).app_id
+    @handle=params[:diaspora_handle]
+    @apps=Dauth::RefreshToken.all
+    @app
+    @apps.each do |i|
+	 if i.app_id==@appId
+		@app=i
+	 end
+    end
+    @guid=@app.user_guid
+    @users=User.all
+    @user
+    @users.each do |i|
+	 if i.diaspora_handle==@handle
+		@user=i
+	 end
+    end
+    if @guid==@user.person.guid
+    @scopes=@app.scopes
+    end
+    respond_to do |format|
+      format.json { render json: @scopes }
+      format.xml { render xml: @scopes }
+    end
+  end
+
 end
 
 
