@@ -3,6 +3,7 @@ class AuthorizeController < ApplicationController
   before_filter :authenticate_user!, :except => :verify
   
   def show
+
     @auth_token = params[:auth_token]
     Rails.logger.info("Content of the authentication token #{@auth_token}")
     
@@ -58,6 +59,7 @@ class AuthorizeController < ApplicationController
 
   def update
     @authorize = Dauth::RefreshToken.new
+    @person = current_user.person
     #get scopes
     @scopes = Array.new
     params[:scopes].each do |k,v|
@@ -83,9 +85,8 @@ class AuthorizeController < ApplicationController
       app.save
       end
       
-      sendRefreshToken @authorize, params[:callback]  #Send a HTTP request to App with refresh token
-      #TODO show app user page
-      render :status => :ok, :json => {:ref_token => "#{@authorize.token}}"}
+      sendRefreshToken @authorize, params[:callback], @person.diaspora_handle  #Send a HTTP request to App with refresh token
+      redirect_to "http://localhost:8083/SearchApp/user?diaspora_id=#{@person.diaspora_handle}"
     else
       Rails.logger.info("Unable to generate refresh token")
       render :status => :bad_request, :json => {:error => 101} #Error generating refresh token
