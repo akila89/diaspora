@@ -18,16 +18,23 @@ class AuthorizeController < ApplicationController
     @app_description = @access_request.app_description
     @app_version = @access_request.app_version
     @scopes_ar = @access_request.scopes
-    
+
   end
 
   def verify
     signed_manifest= params[:signed_manifest]
+
+    if not signed_manifest
+      render :status => :bad_request, :json => {:error => 000}
+
     Rails.logger.info("content of the signed manifest #{signed_manifest}")
     manifest = Manifest.new.bySignedJWT signed_manifest
-    if manifest
-      res = manifest.verify
-    end
+
+    if not manifest
+      render :status => :bad_request, :json => {:error => 001}
+
+    res = manifest.verify
+
     if res
       access_req = Dauth::AccessRequest.new
       access_req.dev_handle = manifest.dev_id
@@ -38,10 +45,9 @@ class AuthorizeController < ApplicationController
       access_req.app_description = manifest.app_description
       access_req.app_version = manifest.app_version
       access_req.save
-      #manifestVerified access_req
       render :status => :ok, :json => {:auth_token => "#{access_req.auth_token}"}
     else
-      render :text => "error"
+      render :status => :bad_request, :json => {:error => 002}
     end
   end
 
@@ -60,9 +66,10 @@ class AuthorizeController < ApplicationController
     @authorize.user_guid = current_user.guid
     
     if @authorize.save
-      flash[:notice] = "#{@scopes.to_s} Authentication Success"
-      sendRefreshToken @authorize, params[:scopes][:callback]
-      render :status => :ok, :text => "refresh token send"   
+      flash[:notice] = "#Authentication Success"
+      #sendRefreshToken @authorize, params[:scopes][:callback]   
+      render :status => :ok, :json => {:ref_token => "#{@authorize.token}}"}  
+      
     else 
       flash[:notice] = "#{@scopes.to_s} Authentication Fail"
       render :text => "error"
