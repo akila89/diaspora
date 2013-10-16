@@ -44,5 +44,30 @@ class AuthorizeController < ApplicationController
       render :text => "error"
     end
   end
+
+  def update
+
+    @authorize = Dauth::RefreshToken.new
+    
+    #get scopes
+    @scopes = Array.new
+    params[:scopes].each do |k,v|
+      @scopes.push(k) if v=="1" 
+    end
+    
+    @authorize.scopes = @scopes
+    @authorize.app_id = params[:scopes][:app_id]
+    @authorize.user_guid = current_user.guid
+    
+    if @authorize.save
+      flash[:notice] = "#{@scopes.to_s} Authentication Success"
+      sendRefreshToken @authorize, params[:scopes][:callback]
+      render :status => :ok, :text => "refresh token send"   
+    else 
+      flash[:notice] = "#{@scopes.to_s} Authentication Fail"
+      render :text => "error"
+    end
+
+  end
   
 end
