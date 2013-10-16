@@ -3,23 +3,25 @@ class AuthorizeController < ApplicationController
   before_filter :authenticate_user!, :except => :verify
 
   def show
-
     @auth_token = params[:auth_token]
-    Rails.logger.info("content of the authentication token #{@auth_token}")
-
+    Rails.logger.info("Content of the authentication token #{@auth_token}")
+    
+    #TODO user mismatch
+    #if not  <app user>== current_user.diaspora_handle
+    #  Rails.logger.info("Users miss match - #{current_user.diaspora_handle}, <app user>")
+    #  render :status => :bad_request, :json => {:error => 102} #usermismatch
+    #end
+    
     @access_request = Dauth::AccessRequest.find_by_auth_token(@auth_token)
-    @dev_handle = @access_request.dev_handle
-
-    @dev = Webfinger.new(@dev_handle).fetch
-
-    @app_id = @access_request.app_id
-    @callback = @access_request.callback
-    @app_name = @access_request.app_name
-    @app_description = @access_request.app_description
-    @app_version = @access_request.app_version
-    @scopes_ar = @access_request.scopes
-    Rails.logger.info(@access_request.scopes)
-
+    
+    if not @access_request.nil?
+      @dev = Webfinger.new(@access_request.dev_handle).fetch   #developer profile details
+      @scopes_ar = @access_request.scopes 
+      Rails.logger.info("Content of the scopes #{@access_request.scopes}")
+    else
+      Rails.logger.info("Authentication token #{@auth_token} is illegal")
+      render :status => :bad_request, :json => {:error => 100} #illegal authentication token 
+    end
   end
 
   def verify
@@ -57,15 +59,13 @@ class AuthorizeController < ApplicationController
   def update
 
     @authorize = Dauth::RefreshToken.new
-
     #get scopes
     @scopes = Array.new
     params[:scopes].each do |k,v|
       @scopes.push(k) if v=="1" 
     end
-
     @authorize.scopes = @scopes
-    @authorize.app_id = params[:scopes][:app_id]
+    @authorize.app_id = params[:app_id]
     @authorize.user_guid = current_user.guid
 
 
