@@ -18,6 +18,7 @@ class AuthorizeController < ApplicationController
     @app_description = @access_request.app_description
     @app_version = @access_request.app_version
     @scopes_ar = @access_request.scopes
+    Rails.logger.info(@access_request.scopes)
 
   end
 
