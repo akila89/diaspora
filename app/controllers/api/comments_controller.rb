@@ -1,7 +1,6 @@
-class Api::CommentsController < ApplicationController
-  http_basic_authenticate_with :name => "sandaruwan1", :password => "sandaruwan1"
+class Api::CommentsController < Api::ApiController
 
-  skip_before_filter :authenticate_user!
+  before_filter :require_comment_read_permision, :only => [:getGivenUserCommentList]
   before_filter :fetch_user, :except => [:index, :create]
 
   def fetch_user

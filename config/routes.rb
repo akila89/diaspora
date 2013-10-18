@@ -22,24 +22,24 @@ Diaspora::Application.routes.draw do
     end
      resources :users, :defaults => { :format => 'json' } do
 	    collection do
-	      get :getPodPersonList
-	      get 'getUserpersonList/:id' , :action => 'getUserpersonList' 
-	      get 'getUsersAspectsList/:id' , :action => 'getUsersAspectsList'
-	      get 'getUserDetailsUsingHandler/:diaspora_handle' , :action => 'getUserDetailsUsingHandler' 
-	      get 'getUserpersonListUsingHandle/:diaspora_handle' , :action => 'getUserpersonListUsingHandle'
+	      get 'getPodPersonList/:access_token' , :action => 'getPodPersonList'
+	      get 'getUserpersonList/:id/:access_token' , :action => 'getUserpersonList' 
+	      get 'getUsersAspectsList/:id/:access_token' , :action => 'getUsersAspectsList'
+	      get 'getUserDetailsUsingHandler/:diaspora_handle/:access_token' , :action => 'getUserDetailsUsingHandler' 
+	      get 'getUserpersonListUsingHandle/:diaspora_handle/:access_token' , :action => 'getUserpersonListUsingHandle'
 	end
     end
      resources :statusMessages, :defaults => { :format => 'json' } do
 	    collection do
-	      get 'getGivenUserStatusList/:id' , :action => 'getGivenUserStatusList'
-	      get 'getCommentsForStatusMessage/:id' , :action => 'getCommentsForStatusMessage' 
-	      get 'getGivenUserStatusListByHandle/:diaspora_handle' , :action => 'getGivenUserStatusListByHandle'
+	      get 'getGivenUserStatusList/:id/:access_token' , :action => 'getGivenUserStatusList'
+	      get 'getCommentsForStatusMessage/:id/:access_token' , :action => 'getCommentsForStatusMessage' 
+	      get 'getGivenUserStatusListByHandle/:diaspora_handle/:access_token' , :action => 'getGivenUserStatusListByHandle'
 	end
     end
     #resources :users, :defaults => { :format => 'json' } do
      resources :comments, :defaults => { :format => 'json' } do
 	    collection do
-	      get 'getGivenUserCommentList/:id' , :action => 'getGivenUserCommentList'
+	      get 'getGivenUserCommentList/:id/:access_token' , :action => 'getGivenUserCommentList'
 	end
     end
   end
