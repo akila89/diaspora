@@ -11,7 +11,8 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130801063213) do
+
+ActiveRecord::Schema.define(:version => 20130630170309) do
 
   create_table "account_deletions", :force => true do |t|
     t.string  "diaspora_handle"
@@ -158,6 +159,20 @@ ActiveRecord::Schema.define(:version => 20130801063213) do
     t.integer  "status_message_id"
     t.datetime "created_at",        :null => false
     t.datetime "updated_at",        :null => false
+  end
+
+  create_table "manifests", :force => true do |t|
+    t.string   "dev_id"
+    t.string   "app_id"
+    t.string   "app_description"
+    t.string   "app_name"
+    t.string   "app_version"
+    t.string   "manifest_ver"
+    t.string   "callback"
+    t.text     "signed_jwt"
+    t.text     "scopes"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
   end
 
   create_table "mentions", :force => true do |t|
