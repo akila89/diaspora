@@ -34,4 +34,38 @@ class Manifest < ActiveRecord::Base
     end
   end
 
+  def getManifestHash
+    manifest_hash={
+     :dev_id=>self.dev_id,
+     :manifest_version=>"1.0",
+     :app_details=>{
+        :name=>self.app_name,
+       :id=> self.app_id,
+       :description=>self.app_description,
+       :version=>self.app_version
+     },
+     :callback=>self.callback,
+     :access=>self.scopes,
+    }
+    manifest_hash
+  end
+  
+  def bySignedJWT jwt
+    begin
+      payload = JWT.decode(jwt, nil, false)
+    rescue JWT::DecodeError => e
+      return nil
+    end  
+    self.dev_id = payload["dev_id"]
+    self.callback = payload["callback"]
+    self.scopes = payload["access"]
+    self.signed_jwt = jwt
+    self
+  end
+
+  def createManifestJson
+    manifest_hash=self.getManifestHash
+    manifest_hash[:signed_jwt]=self.signed_jwt
+    manifest_hash.to_json
+  end
 end
