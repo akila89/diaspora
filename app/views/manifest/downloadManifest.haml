@@ -1,0 +1,14 @@
+- content_for :page_title do
+  = t('developer')
+
+#section_header
+  %h2
+    = t('developer')
+%br
+%br
+.span-12.prepend-5.last
+  %h3 
+    = t('app.edit.download_manifest')
+  %br
+  = link_to t('app.edit.download_manifest'), {:controller=>'manifest', :action=>'download', :appID=>appId}, :class => "button"
+  %br
