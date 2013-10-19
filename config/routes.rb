@@ -21,24 +21,24 @@ Diaspora::Application.routes.draw do
     end
      resources :users, :defaults => { :format => 'json' } do
 	    collection do
-	      get :getPodPersonList
-	      get 'getUserpersonList/:id' , :action => 'getUserpersonList' 
-	      get 'getUsersAspectsList/:id' , :action => 'getUsersAspectsList'
-	      get 'getUserFollowedTagsList/:id' , :action => 'getUserFollowedTagsList'
-	      get 'getUsersAspectsListByHandle/:diaspora_handle' , :action => 'getUsersAspectsListByHandle'
-	      get 'getUserFollowedTagsListUsingHandle/:diaspora_handle' , :action => 'getUserFollowedTagsListUsingHandle'
-	      get 'getUserDetailsUsingHandler/:diaspora_handle' , :action => 'getUserDetailsUsingHandler' 
-	      get 'getUserpersonListUsingHandle/:diaspora_handle' , :action => 'getUserpersonListUsingHandle'
-              get 'getAppScopesOfGivenUser/:id/:diaspora_handle' , :action => 'getAppScopesOfGivenUser'
+	      get 'getPodPersonList/:access_token' , :action => 'getPodPersonList'
+	      get 'getUserpersonList/:id/:access_token' , :action => 'getUserpersonList' 
+	      get 'getUsersAspectsList/:id/:access_token' , :action => 'getUsersAspectsList'
+	      get 'getUserFollowedTagsList/:id/:access_token' , :action => 'getUserFollowedTagsList'
+	      get 'getUsersAspectsListByHandle/:diaspora_handle/:access_token' , :action => 'getUsersAspectsListByHandle'
+	      get 'getUserFollowedTagsListUsingHandle/:diaspora_handle/:access_token' , :action => 'getUserFollowedTagsListUsingHandle'
+	      get 'getUserDetailsUsingHandler/:diaspora_handle/:access_token' , :action => 'getUserDetailsUsingHandler' 
+	      get 'getUserpersonListUsingHandle/:diaspora_handle/:access_token' , :action => 'getUserpersonListUsingHandle'
+              get 'getAppScopesOfGivenUser/:id/:diaspora_handle/:access_token' , :action => 'getAppScopesOfGivenUser'
 	end
     end
      resources :statusMessages, :defaults => { :format => 'json' } do
 	    collection do
-	      get 'getGivenUserStatusList/:id' , :action => 'getGivenUserStatusList'
-	      get 'getCommentsForStatusMessage/:id' , :action => 'getCommentsForStatusMessage' 
-	      get 'getGivenUserStatusListByHandle/:diaspora_handle' , :action => 'getGivenUserStatusListByHandle'
- 	      get 'getLikesForStatusMessage/:id' , :action => 'getLikesForStatusMessage'
- 	      get 'getNumberOfCommentsForStatusMessage/:id' , :action => 'getNumberOfCommentsForStatusMessage'
+	      get 'getGivenUserStatusList/:id/:access_token' , :action => 'getGivenUserStatusList'
+	      get 'getCommentsForStatusMessage/:id/:access_token' , :action => 'getCommentsForStatusMessage' 
+	      get 'getGivenUserStatusListByHandle/:diaspora_handle/:access_token' , :action => 'getGivenUserStatusListByHandle'
+ 	      get 'getLikesForStatusMessage/:id/:access_token' , :action => 'getLikesForStatusMessage'
+ 	      get 'getNumberOfCommentsForStatusMessage/:id/:access_token' , :action => 'getNumberOfCommentsForStatusMessage'
 	end
     end
      resources :thirdpartyApps, :defaults => { :format => 'json' } do
@@ -49,9 +49,9 @@ Diaspora::Application.routes.draw do
     #resources :users, :defaults => { :format => 'json' } do
      resources :comments, :defaults => { :format => 'json' } do
 	    collection do
-	      get 'getGivenUserCommentList/:id' , :action => 'getGivenUserCommentList'
-	      get 'getGivenUserCommentListByHandle/:diaspora_handle' , :action => 'getGivenUserCommentListByHandle'
-  	      get 'getLikesCount/:id' , :action => 'getLikesCount'
+	      get 'getGivenUserCommentList/:id:access_token' , :action => 'getGivenUserCommentList'
+	      get 'getGivenUserCommentListByHandle/:diaspora_handle:access_token' , :action => 'getGivenUserCommentListByHandle'
+  	      get 'getLikesCount/:id:access_token' , :action => 'getLikesCount'
 	end
     end
   end

@@ -1,7 +1,14 @@
-class Api::UsersController < ApplicationController
-  http_basic_authenticate_with :name => "sandaruwan1", :password => "sandaruwan1"
+class Api::UsersController < Api::ApiController
 
-  skip_before_filter :authenticate_user!
+  before_filter :require_profile_read_permision, :only => [:getPodPersonList,
+                                                           :getUserpersonList,
+                                                           :getUsersAspectsList,
+                                                           :getUserDetailsUsingHandler,
+                                                           :getUserpersonListUsingHandle,
+							   :getUsersAspectsListByHandle,
+							   :getUserFollowedTagsList,
+							   :getUserFollowedTagsListUsingHandle,
+                                                           :getAppScopesOfGivenUser]
   before_filter :fetch_user, :except => [:index, :create]
 
  def fetch_user

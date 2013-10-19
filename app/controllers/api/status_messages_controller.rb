@@ -1,7 +1,10 @@
-class Api::StatusMessagesController < ApplicationController
-  http_basic_authenticate_with :name => "sandaruwan1", :password => "sandaruwan1"
+class Api::StatusMessagesController < Api::ApiController
 
-  #skip_before_filter :authenticate_user!
+  before_filter :require_post_read_permision, :only => [:getGivenUserStatusList,
+                                                        :getCommentsForStatusMessage,
+                                                        :getGivenUserStatusListByHandle,
+							:getLikesForStatusMessage,
+							:getNumberOfCommentsForStatusMessage]
   #before_filter :fetch_user, :except => [:index, :create]
 
   def fetch_user
