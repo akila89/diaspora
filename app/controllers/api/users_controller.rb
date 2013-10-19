@@ -162,18 +162,19 @@ class Api::UsersController < Api::ApiController
     end
     @guid=@app.user_guid
     @users=User.all
-    @user
+    @app_user
+    @app_scopes
     @users.each do |i|
 	 if i.diaspora_handle==@handle
-		@user=i
+		@app_user=i.guid
 	 end
     end
-    if @guid==@user.person.guid
-    @scopes=@app.scopes
+    if @guid==@app_user
+    @app_scopes=@app.scopes
     end
     respond_to do |format|
-      format.json { render json: @scopes }
-      format.xml { render xml: @scopes }
+      format.json { render json: @app_scopes }
+      format.xml { render xml: @app_scopes }
     end
   end
 
