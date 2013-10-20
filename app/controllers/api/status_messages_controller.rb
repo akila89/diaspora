@@ -4,7 +4,8 @@ class Api::StatusMessagesController < Api::ApiController
                                                         :getCommentsForStatusMessage,
                                                         :getGivenUserStatusListByHandle,
 							:getLikesForStatusMessage,
-							:getNumberOfCommentsForStatusMessage]
+							:getNumberOfCommentsForStatusMessage,
+							:index]
   #before_filter :fetch_user, :except => [:index, :create]
 
   def fetch_user

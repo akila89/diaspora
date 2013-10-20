@@ -2,7 +2,9 @@ class Api::CommentsController < Api::ApiController
 
   before_filter :require_comment_read_permision, :only => [:getGivenUserCommentList,
                                                            :getGivenUserCommentListByHandle,
-                                                           :getLikesCount]
+                                                           :getLikesCount,
+							   :index,
+							   :show]
   before_filter :fetch_user, :except => [:index, :create]
 
   def fetch_user

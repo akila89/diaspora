@@ -21,6 +21,8 @@ Diaspora::Application.routes.draw do
     end
      resources :users, :defaults => { :format => 'json' } do
 	    collection do
+              get 'index/:access_token' , :action => 'index'
+              get 'show/:id/:access_token' , :action => 'show'
 	      get 'getPodPersonList/:access_token' , :action => 'getPodPersonList'
 	      get 'getUserpersonList/:id/:access_token' , :action => 'getUserpersonList' 
 	      get 'getUsersAspectsList/:id/:access_token' , :action => 'getUsersAspectsList'
@@ -34,6 +36,7 @@ Diaspora::Application.routes.draw do
     end
      resources :statusMessages, :defaults => { :format => 'json' } do
 	    collection do
+              get 'index/:access_token' , :action => 'index'
 	      get 'getGivenUserStatusList/:id/:access_token' , :action => 'getGivenUserStatusList'
 	      get 'getCommentsForStatusMessage/:id/:access_token' , :action => 'getCommentsForStatusMessage' 
 	      get 'getGivenUserStatusListByHandle/:diaspora_handle/:access_token' , :action => 'getGivenUserStatusListByHandle'
@@ -43,15 +46,18 @@ Diaspora::Application.routes.draw do
     end
      resources :thirdpartyApps, :defaults => { :format => 'json' } do
 	    collection do
-	      get 'getAppScopes/:id' , :action => 'getAppScopes'
+	      get 'index/:access_token' , :action => 'index'
+	      get 'show/:id/:access_token' , :action => 'show'
 	end
     end
     #resources :users, :defaults => { :format => 'json' } do
      resources :comments, :defaults => { :format => 'json' } do
 	    collection do
-	      get 'getGivenUserCommentList/:id:access_token' , :action => 'getGivenUserCommentList'
-	      get 'getGivenUserCommentListByHandle/:diaspora_handle:access_token' , :action => 'getGivenUserCommentListByHandle'
-  	      get 'getLikesCount/:id:access_token' , :action => 'getLikesCount'
+              get 'index/:access_token' , :action => 'index'
+              get 'show/:id/:access_token' , :action => 'show'
+	      get 'getGivenUserCommentList/:id/:access_token' , :action => 'getGivenUserCommentList'
+	      get 'getGivenUserCommentListByHandle/:diaspora_handle/:access_token' , :action => 'getGivenUserCommentListByHandle'
+  	      get 'getLikesCount/:id/:access_token' , :action => 'getLikesCount'
 	end
     end
   end

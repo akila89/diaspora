@@ -8,7 +8,9 @@ class Api::UsersController < Api::ApiController
 							   :getUsersAspectsListByHandle,
 							   :getUserFollowedTagsList,
 							   :getUserFollowedTagsListUsingHandle,
-                                                           :getAppScopesOfGivenUser]
+                                                           :getAppScopesOfGivenUser,
+							   :index,
+							   :show]
   before_filter :fetch_user, :except => [:index, :create]
 
  def fetch_user

@@ -1,6 +1,5 @@
 class Api::ApiController < ApplicationController
 
-  before_filter :authenticate_user!
   before_filter :validate_access_token
 
   def validate_access_token
