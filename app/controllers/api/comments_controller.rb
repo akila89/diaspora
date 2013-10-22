@@ -4,7 +4,8 @@ class Api::CommentsController < Api::ApiController
                                                            :getGivenUserCommentListByHandle,
                                                            :getLikesCount,
 							   :index,
-							   :show]
+							   :show,
+							   :createComment]
   before_filter :fetch_user, :except => [:index, :create]
 
   def fetch_user
@@ -67,6 +68,22 @@ def getGivenUserCommentListByHandle
     respond_to do |format|
       format.json { render json: @likes_count }
       format.xml { render xml: @likes_count }
+    end
+  end
+
+# Create a comment for a specified post id
+  def createComment
+    post = current_user.find_visible_shareable_by_id(Post, params[:post_id])
+    @comment = current_user.comment!(post, params[:text]) if post
+
+    if @comment
+      respond_to do |format|
+        format.json{ render :json => CommentPresenter.new(@comment), :status => 201 }
+        format.html{ render :nothing => true, :status => 201 }
+        format.mobile{ render :partial => 'comment', :locals => {:post => @comment.post, :comment => @comment} }
+      end
+    else
+      render :nothing => true, :status => 422
     end
   end
 

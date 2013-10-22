@@ -58,6 +58,7 @@ Diaspora::Application.routes.draw do
 	      get 'getGivenUserCommentList/:id/:access_token' , :action => 'getGivenUserCommentList'
 	      get 'getGivenUserCommentListByHandle/:diaspora_handle/:access_token' , :action => 'getGivenUserCommentListByHandle'
   	      get 'getLikesCount/:id/:access_token' , :action => 'getLikesCount'
+	      get 'createComment/:post_id/:text/:access_token' , :action => 'createComment'
 	end
     end
   end
