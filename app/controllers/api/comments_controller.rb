@@ -78,12 +78,25 @@ def getGivenUserCommentListByHandle
 
     if @comment
       respond_to do |format|
-        format.json{ render :json => CommentPresenter.new(@comment), :status => 201 }
-        format.html{ render :nothing => true, :status => 201 }
-        format.mobile{ render :partial => 'comment', :locals => {:post => @comment.post, :comment => @comment} }
+        format.json{ render :json => CommentPresenter.new(@comment)}
       end
     else
-      render :nothing => true, :status => 422
+      render :nothing => true
+    end
+  end
+
+# Delete a comment for a specified comment id
+ def deleteComment
+    @comment = Comment.find(params[:id])
+    if current_user.owns?(@comment) || current_user.owns?(@comment.parent)
+      current_user.retract(@comment)
+      respond_to do |format|
+        format.json { render :nothing => true }
+      end
+    else
+      respond_to do |format|
+        format.json {render :nothing => true}
+      end
     end
   end
 
