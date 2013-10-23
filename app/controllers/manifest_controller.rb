@@ -16,14 +16,15 @@ class ManifestController < ApplicationController
    end
 
   def generateManifest
-	  manifest = Manifest.new
-	  manifest.dev_id=current_user.diaspora_handle           
-    stamp=Time.now.to_i
-    random=Random.new.rand(1..60)
-    appId  ="#{random}#{stamp}"
-	  manifest.app_id= appId
 
-    if u = params[:developer]
+	manifest = Manifest.new
+	manifest.dev_id=current_user.diaspora_handle           
+    	stamp=Time.now.to_i
+   	random=Random.new.rand(1..60)
+    	appId ="#{random}#{stamp}"
+	manifest.app_id= appId
+        if u = params[:manifest]
+            @manifest=manifest.app_name=u[:app_name]
  	    manifest.app_name=u[:app_name]
 	    manifest.app_description=u[:app_discription]
 	    manifest.app_version=u[:app_version]
@@ -57,17 +58,24 @@ class ManifestController < ApplicationController
 	      scopes.push("profile_delete")
 	    end
 	    manifest.scopes = scopes
-    end
+        end
 
-    private_key = current_user.serialized_private_key
-    manifest.sign(private_key)
+    	private_key = current_user.serialized_private_key
+    	manifest.sign(private_key)
 
-    if manifest.save
-      render "manifest/downloadManifest", :locals => {:appId => appId}
-    else
-       redirect_to :back
-       flash[:notice] = "Missing or incorrect values"
-    end
+    	if manifest.save
+      		render "manifest/downloadManifest", :locals => {:appId => appId}
+    	else
+       		redirect_to :back
+		message=manifest.errors.full_messages.to_sentence.split(',').first
+       		flash[:notice] = message
+    	end
+  end 
+  def getCurrentuserDetails 
+	return current_user.diaspora_handle,current_user.email,current_user.username
   end
+  def getScopes
 
+
+  end
 end

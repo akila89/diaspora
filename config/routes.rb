@@ -5,15 +5,68 @@
 require 'sidekiq/web'
 
 Diaspora::Application.routes.draw do
+<<<<<<< HEAD
 
   post "apiuser_profile/get_profile"
 
+=======
+>>>>>>> 4de437bf1aec6bfe9805775ffb3f68cf490e5389
   get "manifest/sign"
   post "authorize/verify"
   get "manifest/index"
   get "manifest/edit"
   get "manifest/download"
   put "manifest/generateManifest"
+
+  namespace :api do
+     resources :contacts, :defaults => { :format => 'json' } do
+
+    end
+     resources :aspects, :defaults => { :format => 'json' } do
+
+    end
+     resources :users, :defaults => { :format => 'json' } do
+	    collection do
+              get 'index/:access_token' , :action => 'index'
+              get 'show/:id/:access_token' , :action => 'show'
+	      get 'getPodPersonList/:access_token' , :action => 'getPodPersonList'
+	      get 'getUserpersonList/:id/:access_token' , :action => 'getUserpersonList' 
+	      get 'getUsersAspectsList/:id/:access_token' , :action => 'getUsersAspectsList'
+	      get 'getUserFollowedTagsList/:id/:access_token' , :action => 'getUserFollowedTagsList'
+	      get 'getUsersAspectsListByHandle/:diaspora_handle/:access_token' , :action => 'getUsersAspectsListByHandle'
+	      get 'getUserFollowedTagsListUsingHandle/:diaspora_handle/:access_token' , :action => 'getUserFollowedTagsListUsingHandle'
+	      get 'getUserDetailsUsingHandler/:diaspora_handle/:access_token' , :action => 'getUserDetailsUsingHandler' 
+	      get 'getUserpersonListUsingHandle/:diaspora_handle/:access_token' , :action => 'getUserpersonListUsingHandle'
+              get 'getAppScopesOfGivenUser/:id/:diaspora_handle/:access_token' , :action => 'getAppScopesOfGivenUser'
+	end
+    end
+     resources :statusMessages, :defaults => { :format => 'json' } do
+	    collection do
+              get 'index/:access_token' , :action => 'index'
+	      get 'getGivenUserStatusList/:id/:access_token' , :action => 'getGivenUserStatusList'
+	      get 'getCommentsForStatusMessage/:id/:access_token' , :action => 'getCommentsForStatusMessage' 
+	      get 'getGivenUserStatusListByHandle/:diaspora_handle/:access_token' , :action => 'getGivenUserStatusListByHandle'
+ 	      get 'getLikesForStatusMessage/:id/:access_token' , :action => 'getLikesForStatusMessage'
+ 	      get 'getNumberOfCommentsForStatusMessage/:id/:access_token' , :action => 'getNumberOfCommentsForStatusMessage'
+	end
+    end
+     resources :thirdpartyApps, :defaults => { :format => 'json' } do
+	    collection do
+	      get 'index/:access_token' , :action => 'index'
+	      get 'show/:id/:access_token' , :action => 'show'
+	end
+    end
+    #resources :users, :defaults => { :format => 'json' } do
+     resources :comments, :defaults => { :format => 'json' } do
+	    collection do
+              get 'index/:access_token' , :action => 'index'
+              get 'show/:id/:access_token' , :action => 'show'
+	      get 'getGivenUserCommentList/:id/:access_token' , :action => 'getGivenUserCommentList'
+	      get 'getGivenUserCommentListByHandle/:diaspora_handle/:access_token' , :action => 'getGivenUserCommentListByHandle'
+  	      get 'getLikesCount/:id/:access_token' , :action => 'getLikesCount'
+	end
+    end
+  end
 
   if Rails.env.production?
     mount RailsAdmin::Engine => '/admin_panel', :as => 'rails_admin'
@@ -207,12 +260,12 @@ Diaspora::Application.routes.draw do
     get :me
   end
 
-  namespace :api do
-    namespace :v0 do
-      get "/users/:username" => 'users#show', :as => 'user'
-      get "/tags/:name" => 'tags#show', :as => 'tag'
-    end
-  end
+ # namespace :api do
+  #  namespace :v0 do
+   #   get "/users/:username" => 'users#show', :as => 'user'
+    #  get "/tags/:name" => 'tags#show', :as => 'tag'
+    #end
+  #end
 
   get 'community_spotlight' => "contacts#spotlight", :as => 'community_spotlight'
   # Mobile site
@@ -229,8 +282,9 @@ Diaspora::Application.routes.draw do
   match 'dauth/authorize/authorization_token',    to: 'authorize#show'
   match 'dauth/authorize/update',                 to: 'authorize#update'
   match 'dauth/authorize/access_token',           to: 'authorize#access_token'
-
+ 
   namespace :dauth do
+    match 'thirdparty_apps/revoke/:id', to: 'thirdparty_apps#revoke', as: 'dfs'
     resources :thirdparty_apps
   end
 

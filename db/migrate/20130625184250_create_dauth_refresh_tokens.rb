@@ -9,5 +9,8 @@ class CreateDauthRefreshTokens < ActiveRecord::Migration
 
       t.timestamps
     end
+    
+    add_index :dauth_refresh_tokens, [:app_id, :user_guid], :unique => true
+    
   end
 end
