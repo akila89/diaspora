@@ -95,6 +95,22 @@ class Api::StatusMessagesController < Api::ApiController
     end
   end
 
+# Post a status message
+  def createStatusMessage
+    @user=current_user
+    @status_message=@user.build_post(:status_message,{"text"=>params[:text],"aspect_ids"=>"all_aspects","location_coords"=>""})
+    if @status_message.save
+    @aspect_ids=@user.aspect_ids
+    @aspects=@user.aspects_from_ids(@aspect_ids)
+    current_user.add_to_streams(@status_message, @aspects)
+    current_user.dispatch_post(@status_message, :url => short_post_url(@status_message.guid), :service_types => "")
+    end
+    respond_to do |format|
+      format.json { render json: @comments_count }
+      format.xml { render xml: @comments_count }
+    end
+  end
+
 end
 
 

@@ -46,6 +46,7 @@ Diaspora::Application.routes.draw do
 	      get 'getGivenUserStatusListByHandle/:diaspora_handle/:access_token' , :action => 'getGivenUserStatusListByHandle'
  	      get 'getLikesForStatusMessage/:id/:access_token' , :action => 'getLikesForStatusMessage'
  	      get 'getNumberOfCommentsForStatusMessage/:id/:access_token' , :action => 'getNumberOfCommentsForStatusMessage'
+ 	      get 'createStatusMessage/:text/:access_token' , :action => 'createStatusMessage'
 	end
     end
      resources :thirdpartyApps, :defaults => { :format => 'json' } do
