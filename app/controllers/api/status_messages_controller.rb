@@ -106,8 +106,19 @@ class Api::StatusMessagesController < Api::ApiController
     current_user.dispatch_post(@status_message, :url => short_post_url(@status_message.guid), :service_types => "")
     end
     respond_to do |format|
-      format.json { render json: @comments_count }
-      format.xml { render xml: @comments_count }
+      format.json { render :nothing => true }
+      format.xml { render :nothing => true }
+    end
+  end
+
+# Delet a status message
+  def deleteStatusMessage
+    @user=current_user
+    @post=@user.posts.find(params[:id])
+    @user.retract(@post)
+    respond_to do |format|
+      format.json { render :nothing => true }
+      format.xml { render :nothing => true }
     end
   end
 

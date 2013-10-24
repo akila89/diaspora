@@ -47,6 +47,7 @@ Diaspora::Application.routes.draw do
  	      get 'getLikesForStatusMessage/:id/:access_token' , :action => 'getLikesForStatusMessage'
  	      get 'getNumberOfCommentsForStatusMessage/:id/:access_token' , :action => 'getNumberOfCommentsForStatusMessage'
  	      get 'createStatusMessage/:text/:access_token' , :action => 'createStatusMessage'
+ 	      get 'deleteStatusMessage/:id/:access_token' , :action => 'deleteStatusMessage'
 	end
     end
      resources :thirdpartyApps, :defaults => { :format => 'json' } do
