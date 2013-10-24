@@ -191,6 +191,18 @@ class Api::UsersController < Api::ApiController
     end
   end
 
+# Can update user profile first name
+  def editFirstName
+    @user=current_user
+    @profile=@user.profile
+    @profile.first_name=params[:firat_name]
+    @profile.save
+    respond_to do |format|
+      format.json { render :nothing => true }
+      format.xml { render :nothing => true }
+    end
+  end
+
 end
 
 
