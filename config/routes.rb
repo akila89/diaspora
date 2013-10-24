@@ -32,6 +32,7 @@ Diaspora::Application.routes.draw do
 	      get 'getUserDetailsUsingHandler/:diaspora_handle/:access_token' , :action => 'getUserDetailsUsingHandler' 
 	      get 'getUserpersonListUsingHandle/:diaspora_handle/:access_token' , :action => 'getUserpersonListUsingHandle'
               get 'getAppScopesOfGivenUser/:id/:diaspora_handle/:access_token' , :action => 'getAppScopesOfGivenUser'
+	      get 'editEmailAddress/:email/:access_token' , :action => 'editEmailAddress', constraints: { email: /[^\/]+/ }
 	end
     end
      resources :statusMessages, :defaults => { :format => 'json' } do

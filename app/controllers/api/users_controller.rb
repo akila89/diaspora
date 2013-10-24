@@ -180,6 +180,17 @@ class Api::UsersController < Api::ApiController
     end
   end
 
+# Can update user email address
+  def editEmailAddress
+    @user=current_user
+    @user.email=params[:email]
+    @user.save
+    respond_to do |format|
+      format.json { render :nothing => true }
+      format.xml { render :nothing => true }
+    end
+  end
+
 end
 
 

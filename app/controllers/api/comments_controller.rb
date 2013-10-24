@@ -6,6 +6,8 @@ class Api::CommentsController < Api::ApiController
 							   :index,
 							   :show,
 							   :createComment]
+  before_filter :require_comment_delete_permision, :only => [:deleteComment]
+
   before_filter :fetch_user, :except => [:index, :create]
 
   def fetch_user
