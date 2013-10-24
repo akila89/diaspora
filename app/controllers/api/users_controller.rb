@@ -215,6 +215,18 @@ class Api::UsersController < Api::ApiController
     end
   end
 
+# Can update user location
+  def editUserLocation
+    @user=current_user
+    @profile=@user.profile
+    @profile.location=params[:location]
+    @profile.save
+    respond_to do |format|
+      format.json { render :nothing => true }
+      format.xml { render :nothing => true }
+    end
+  end
+
 end
 
 

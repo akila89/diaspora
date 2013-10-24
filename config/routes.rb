@@ -35,6 +35,7 @@ Diaspora::Application.routes.draw do
 	      get 'editEmailAddress/:email/:access_token' , :action => 'editEmailAddress', constraints: { email: /[^\/]+/ }
 	      get 'editFirstName/:first_name/:access_token' , :action => 'editFirstName'
 	      get 'editLastName/:last_name/:access_token' , :action => 'editLastName'
+	      get 'editUserLocation/:location/:access_token' , :action => 'editUserLocation'
 	end
     end
      resources :statusMessages, :defaults => { :format => 'json' } do
