@@ -111,17 +111,17 @@ class AuthorizeController < ApplicationController
           @new_access_token.refresh_token=@refresh_token
           @new_access_token.save
           Rails.logger.info("New access token - #{@new_access_token}")
-          render :status => :ok, :json => {:access_token => "#{@new_access_token.token}}"}
+          render :status => :ok, :json => {:access_token => "#{@new_access_token.token}"}
         else
           Rails.logger.info("Access token - #{@access_token}")
-          render :status => :ok, :json => {:access_token => "#{@access_token.token}}"} #send current access token
+          render :status => :ok, :json => {:access_token => "#{@access_token.token}"} #send current access token
         end
       else
         @new_access_token= Dauth::AccessToken.new
         @new_access_token.refresh_token=@refresh_token
         @new_access_token.save
         Rails.logger.info("New access token - #{@new_access_token}")
-        render :status => :ok, :json => {:access_token => "#{@new_access_token.token}}"}
+        render :status => :ok, :json => {:access_token => "#{@new_access_token.token}"}
       end
     end
   end
