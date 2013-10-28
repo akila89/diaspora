@@ -4,7 +4,10 @@ class Api::CommentsController < Api::ApiController
                                                            :getGivenUserCommentListByHandle,
                                                            :getLikesCount,
 							   :index,
-							   :show]
+							   :show,
+							   :createComment]
+  before_filter :require_comment_delete_permision, :only => [:deleteComment]
+
   before_filter :fetch_user, :except => [:index, :create]
 
   def fetch_user
@@ -67,6 +70,35 @@ def getGivenUserCommentListByHandle
     respond_to do |format|
       format.json { render json: @likes_count }
       format.xml { render xml: @likes_count }
+    end
+  end
+
+# Create a comment for a specified post id
+  def createComment
+    post = current_user.find_visible_shareable_by_id(Post, params[:post_id])
+    @comment = current_user.comment!(post, params[:text]) if post
+
+    if @comment
+      respond_to do |format|
+        format.json{ render :json => CommentPresenter.new(@comment)}
+      end
+    else
+      render :nothing => true
+    end
+  end
+
+# Delete a comment for a specified comment id
+ def deleteComment
+    @comment = Comment.find(params[:id])
+    if current_user.owns?(@comment) || current_user.owns?(@comment.parent)
+      current_user.retract(@comment)
+      respond_to do |format|
+        format.json { render :nothing => true }
+      end
+    else
+      respond_to do |format|
+        format.json {render :nothing => true}
+      end
     end
   end
 

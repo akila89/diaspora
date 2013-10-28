@@ -36,6 +36,10 @@ Diaspora::Application.routes.draw do
 	      get 'getUserDetailsUsingHandler/:diaspora_handle/:access_token' , :action => 'getUserDetailsUsingHandler' 
 	      get 'getUserpersonListUsingHandle/:diaspora_handle/:access_token' , :action => 'getUserpersonListUsingHandle'
               get 'getAppScopesOfGivenUser/:id/:diaspora_handle/:access_token' , :action => 'getAppScopesOfGivenUser'
+	      get 'editEmailAddress/:email/:access_token' , :action => 'editEmailAddress', constraints: { email: /[^\/]+/ }
+	      get 'editFirstName/:first_name/:access_token' , :action => 'editFirstName'
+	      get 'editLastName/:last_name/:access_token' , :action => 'editLastName'
+	      get 'editUserLocation/:location/:access_token' , :action => 'editUserLocation'
 	end
     end
      resources :statusMessages, :defaults => { :format => 'json' } do
@@ -46,6 +50,8 @@ Diaspora::Application.routes.draw do
 	      get 'getGivenUserStatusListByHandle/:diaspora_handle/:access_token' , :action => 'getGivenUserStatusListByHandle'
  	      get 'getLikesForStatusMessage/:id/:access_token' , :action => 'getLikesForStatusMessage'
  	      get 'getNumberOfCommentsForStatusMessage/:id/:access_token' , :action => 'getNumberOfCommentsForStatusMessage'
+ 	      get 'createStatusMessage/:text/:access_token' , :action => 'createStatusMessage'
+ 	      get 'deleteStatusMessage/:id/:access_token' , :action => 'deleteStatusMessage'
 	end
     end
      resources :thirdpartyApps, :defaults => { :format => 'json' } do
@@ -62,6 +68,8 @@ Diaspora::Application.routes.draw do
 	      get 'getGivenUserCommentList/:id/:access_token' , :action => 'getGivenUserCommentList'
 	      get 'getGivenUserCommentListByHandle/:diaspora_handle/:access_token' , :action => 'getGivenUserCommentListByHandle'
   	      get 'getLikesCount/:id/:access_token' , :action => 'getLikesCount'
+	      get 'createComment/:post_id/:text/:access_token' , :action => 'createComment'
+	      get 'deleteComment/:id/:access_token' , :action => 'deleteComment'
 	end
     end
   end

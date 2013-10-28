@@ -180,6 +180,53 @@ class Api::UsersController < Api::ApiController
     end
   end
 
+# Can update user email address
+  def editEmailAddress
+    @user=current_user
+    @user.email=params[:email]
+    @user.save
+    respond_to do |format|
+      format.json { render :nothing => true }
+      format.xml { render :nothing => true }
+    end
+  end
+
+# Can update user profile first name
+  def editFirstName
+    @user=current_user
+    @profile=@user.profile
+    @profile.first_name=params[:first_name]
+    @profile.save
+    respond_to do |format|
+      format.json { render :nothing => true }
+      format.xml { render :nothing => true }
+    end
+  end
+
+# Can update user profile last name
+  def editLastName
+    @user=current_user
+    @profile=@user.profile
+    @profile.last_name=params[:last_name]
+    @profile.save
+    respond_to do |format|
+      format.json { render :nothing => true }
+      format.xml { render :nothing => true }
+    end
+  end
+
+# Can update user location
+  def editUserLocation
+    @user=current_user
+    @profile=@user.profile
+    @profile.location=params[:location]
+    @profile.save
+    respond_to do |format|
+      format.json { render :nothing => true }
+      format.xml { render :nothing => true }
+    end
+  end
+
 end
 
 
