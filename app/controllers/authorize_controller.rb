@@ -1,6 +1,7 @@
 class AuthorizeController < ApplicationController
   include Authenticator
-  before_filter :authenticate_user!, :except => :verify
+  skip_before_filter  :verify_authenticity_token
+  #before_filter :authenticate_user!, :except => :verify 
   
   def show
 
@@ -84,16 +85,10 @@ class AuthorizeController < ApplicationController
       app.dev_handle = access_req.dev_handle
       app.save
       end
-      
-<<<<<<< HEAD
-      sendRefreshToken @authorize, params[:callback]  #Send a HTTP request to App with refresh token
-      #TODO show app user page
-      #render :status => :ok, :json => {:ref_token => "#{@authorize.token}}"}
-      redirect_to 'http://localhost:8080/SearchApp/user?diaspora_id=dilma@localhost:3000'#, :overwrite_params => { :diaspora_id => 'dilma@localhost:3000' }
-=======
+
       sendRefreshToken @authorize, params[:callback], @person.diaspora_handle  #Send a HTTP request to App with refresh token
-      redirect_to "http://localhost:8083/SearchApp/user?diaspora_id=#{@person.diaspora_handle}"
->>>>>>> 4de437bf1aec6bfe9805775ffb3f68cf490e5389
+      redirect_to "http://localhost:8080/SearchApp/user?diaspora_id=#{@person.diaspora_handle}"
+
     else
       Rails.logger.info("Unable to generate refresh token")
       render :status => :bad_request, :json => {:error => 101} #Error generating refresh token
