@@ -1,6 +1,7 @@
 class AuthorizeController < ApplicationController
   include Authenticator
-  before_filter :authenticate_user!, :except => :verify
+  skip_before_filter  :verify_authenticity_token
+  #before_filter :authenticate_user!, :except => :verify 
   
   def show
 
@@ -84,9 +85,10 @@ class AuthorizeController < ApplicationController
       app.dev_handle = access_req.dev_handle
       app.save
       end
-      
+
       sendRefreshToken @authorize, params[:callback], @person.diaspora_handle  #Send a HTTP request to App with refresh token
-      redirect_to "http://localhost:8083/SearchApp/user?diaspora_id=#{@person.diaspora_handle}"
+      redirect_to "http://localhost:8080/SearchApp/user?diaspora_id=#{@person.diaspora_handle}"
+
     else
       Rails.logger.info("Unable to generate refresh token")
       render :status => :bad_request, :json => {:error => 101} #Error generating refresh token
@@ -109,17 +111,17 @@ class AuthorizeController < ApplicationController
           @new_access_token.refresh_token=@refresh_token
           @new_access_token.save
           Rails.logger.info("New access token - #{@new_access_token}")
-          render :status => :ok, :json => {:access_token => "#{@new_access_token.token}}"}
+          render :status => :ok, :json => {:access_token => "#{@new_access_token.token}"}
         else
           Rails.logger.info("Access token - #{@access_token}")
-          render :status => :ok, :json => {:access_token => "#{@access_token.token}}"} #send current access token
+          render :status => :ok, :json => {:access_token => "#{@access_token.token}"} #send current access token
         end
       else
         @new_access_token= Dauth::AccessToken.new
         @new_access_token.refresh_token=@refresh_token
         @new_access_token.save
         Rails.logger.info("New access token - #{@new_access_token}")
-        render :status => :ok, :json => {:access_token => "#{@new_access_token.token}}"}
+        render :status => :ok, :json => {:access_token => "#{@new_access_token.token}"}
       end
     end
   end
