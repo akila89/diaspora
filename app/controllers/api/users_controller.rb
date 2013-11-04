@@ -50,14 +50,23 @@ class Api::UsersController < Api::ApiController
   
 # Can retrieve friendlist for a given user
   def getUserpersonList
-    @person_list = User.find_by_id(params[:id]).contact_person_ids
+    @person_list = User.find_by_id(params[:id])
+    if @person_list
+    @person_list=User.find_by_id(params[:id]).contact_person_ids   
     @person_list_array = Array.new
        @person_list.each do |i|
-	 @person_list_array.push Person.all[i-1]      
+	 #@person_list_array.push Person.all[i-1]    
+         @fruit = {first_name: Person.all[i-1].first_name, last_name: Person.all[i-1].last_name, diaspora_handle: Person.all[i-1].diaspora_handle, 	        location: Person.all[i-1].location, birthday: Person.all[i-1].birthday, gender: Person.all[i-1].gender}.to_json  
+         @person_list_array.push @fruit
        end
     respond_to do |format|
       format.json { render json: @person_list_array }
       format.xml { render xml: @person_list_array }
+    end
+    else
+    respond_to do |format|
+      format.json { render json: "error='500'"}
+    end
     end
   end
 
