@@ -65,7 +65,7 @@ class Api::UsersController < Api::ApiController
     end
     else
     respond_to do |format|
-      format.json { render json: "error='500'"}
+      format.json { render :status => :bad_request, :json => {:error => 500}}
     end
     end
   end
