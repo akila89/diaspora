@@ -60,7 +60,7 @@ class Api::UsersController < Api::ApiController
          @person_list_array.push @fruit
        end
     respond_to do |format|
-      format.json { render json: @person_list_array }
+      format.json { render :json => { :user_person_list => @person_list_array }}
       format.xml { render xml: @person_list_array }
     end
     else
