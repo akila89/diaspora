@@ -27,7 +27,7 @@ Diaspora::Application.routes.draw do
               get 'index/:access_token' , :action => 'index'
               get 'show/:id/:access_token' , :action => 'show'
 	      get 'getPodPersonList/:access_token' , :action => 'getPodPersonList'
-	      get 'getUserpersonList/:id/:access_token' , :action => 'getUserpersonList' 
+	      get 'getUserpersonList/:diaspora_handle/:access_token' , :action => 'getUserpersonList' 
 	      get 'getUsersAspectsList/:id/:access_token' , :action => 'getUsersAspectsList'
 	      get 'getUserFollowedTagsList/:id/:access_token' , :action => 'getUserFollowedTagsList'
 	      get 'getUsersAspectsListByHandle/:diaspora_handle/:access_token' , :action => 'getUsersAspectsListByHandle'

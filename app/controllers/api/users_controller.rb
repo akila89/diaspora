@@ -48,14 +48,14 @@ class Api::UsersController < Api::ApiController
     end
   end
   
-# Can retrieve friendlist for a given user
+# Can retrieve friendlist for a given user by handle
   def getUserpersonList
-    @person_list = User.find_by_id(params[:id])
+    @person_list = Person.find_by_diaspora_handle(params[:diaspora_handle])
     if @person_list
-    @person_list=User.find_by_id(params[:id]).contact_person_ids   
+    @person_id=@person_list.id
+    @person_list=User.find_by_id(@person_id).contact_person_ids
     @person_list_array = Array.new
-       @person_list.each do |i|
-	 #@person_list_array.push Person.all[i-1]    
+       @person_list.each do |i|  
          @fruit = {first_name: Person.all[i-1].first_name, last_name: Person.all[i-1].last_name, diaspora_handle: Person.all[i-1].diaspora_handle, 	        location: Person.all[i-1].location, birthday: Person.all[i-1].birthday, gender: Person.all[i-1].gender}.to_json  
          @person_list_array.push @fruit
        end
@@ -251,4 +251,26 @@ end
 #  method: GET
 
 
+
+# Can retrieve friendlist for a given user
+#  def getUserpersonList
+#    @person_list = User.find_by_id(params[:id])
+#    if @person_list
+#    @person_list=User.find_by_id(params[:id]).contact_person_ids   
+#    @person_list_array = Array.new
+#       @person_list.each do |i|
+#	 #@person_list_array.push Person.all[i-1]    
+#         @fruit = {first_name: Person.all[i-1].first_name, last_name: Person.all[i-1].last_name, diaspora_handle: Person.all[i-1].diaspora_handle, 	        location: Person.all[i-1].location, birthday: Person.all[i-1].birthday, gender: Person.all[i-1].gender}.to_json  
+#         @person_list_array.push @fruit
+#       end
+#    respond_to do |format|
+#      format.json { render json: @person_list_array }
+#      format.xml { render xml: @person_list_array }
+#    end
+#    else
+#    respond_to do |format|
+#      format.json { render json: "error='500'"}
+#    end
+#    end
+#  end
 
