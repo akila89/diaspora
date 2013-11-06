@@ -10,7 +10,6 @@ Diaspora::Application.routes.draw do
 
   get "manifest/sign"
   post "authorize/verify"
-  post "authorize/access_token"
   get "manifest/index"
   get "manifest/edit"
   get "manifest/download"
@@ -285,9 +284,9 @@ Diaspora::Application.routes.draw do
   root :to => 'home#show'
   
   #dauth
-  match 'dauth/authorize/authorization_token',    to: 'authorize#show'
-  match 'dauth/authorize/update',                 to: 'authorize#update'
-  match 'dauth/authorize/access_token',           to: 'authorize#access_token'
+  get 'dauth/authorize/authorization_token' => 'authorize#show'
+  post 'dauth/authorize/update' => 'authorize#update'
+  post 'dauth/authorize/access_token' => 'authorize#access_token'
  
   namespace :dauth do
     match 'thirdparty_apps/revoke/:id', to: 'thirdparty_apps#revoke', as: 'dfs'
