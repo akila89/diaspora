@@ -39,6 +39,7 @@ Diaspora::Application.routes.draw do
 	      get 'editFirstName/:first_name/:access_token' , :action => 'editFirstName'
 	      get 'editLastName/:last_name/:access_token' , :action => 'editLastName'
 	      get 'editUserLocation/:location/:access_token' , :action => 'editUserLocation'
+	      get 'validateUser/:diaspora_handle/:access_token' , :action => 'validateUser'
 	end
     end
      resources :statusMessages, :defaults => { :format => 'json' } do
