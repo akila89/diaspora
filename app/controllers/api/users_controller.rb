@@ -56,7 +56,9 @@ class Api::UsersController < Api::ApiController
     @person_list=User.find_by_id(@person_id).contact_person_ids
     @person_list_array = Array.new
        @person_list.each do |i|  
-         @fruit = {first_name: Person.all[i-1].first_name, last_name: Person.all[i-1].last_name, diaspora_handle: Person.all[i-1].diaspora_handle, 	        location: Person.all[i-1].location, birthday: Person.all[i-1].birthday, gender: Person.all[i-1].gender}  
+
+         @fruit = {first_name: Person.find_by_id(i).first_name, last_name: Person.find_by_id(i).last_name, diaspora_handle: Person.find_by_id(i).diaspora_handle, 	        location: Person.find_by_id(i).location, birthday: Person.find_by_id(i).birthday, gender: Person.find_by_id(i).gender}.to_json  
+
          @person_list_array.push @fruit
        end
     respond_to do |format|
