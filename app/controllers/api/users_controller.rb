@@ -50,10 +50,11 @@ class Api::UsersController < Api::ApiController
 
 # Can retrieve friendlist for a given user by handle
   def getUserpersonList
-    @person_list = Person.find_by_diaspora_handle(params[:diaspora_handle])
-    if @person_list
-    @person_id=@person_list.id
+    @person = Person.find_by_diaspora_handle(params[:diaspora_handle])
+    if @person
+    @person_id=@person.id
     @person_list=User.find_by_id(@person_id).contact_person_ids
+    if @person_list
     @person_list_array = Array.new
        @person_list.each do |i|  
 
@@ -64,6 +65,7 @@ class Api::UsersController < Api::ApiController
     respond_to do |format|
       format.json { render :json => { :user_person_list => @person_list_array }}
       format.xml { render xml: @person_list_array }
+    end
     end
     else
     respond_to do |format|
