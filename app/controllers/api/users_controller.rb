@@ -58,9 +58,9 @@ class Api::UsersController < Api::ApiController
     @person_list_array = Array.new
        @person_list.each do |i|  
 
-         @fruit = {first_name: Person.find_by_id(i).first_name, last_name: Person.find_by_id(i).last_name, diaspora_handle: Person.find_by_id(i).diaspora_handle, 	        location: Person.find_by_id(i).location, birthday: Person.find_by_id(i).birthday, gender: Person.find_by_id(i).gender}.to_json  
+         @user_details = {first_name: (Person.find_by_id(i).first_name.nil? ? "": Person.find_by_id(i).first_name), last_name: (Person.find_by_id(i).last_name.nil? ? "": Person.find_by_id(i).last_name), diaspora_handle: (Person.find_by_id(i).diaspora_handle.nil? ? "": Person.find_by_id(i).diaspora_handle), location: (Person.find_by_id(i).location.nil? ? "": Person.find_by_id(i).location), birthday: (Person.find_by_id(i).birthday.nil? ? "": Person.find_by_id(i).birthday), gender: (Person.find_by_id(i).gender.nil? ? "": Person.find_by_id(i).gender)}
 
-         @person_list_array.push @fruit
+         @person_list_array.push @user_details
        end
     respond_to do |format|
       format.json { render :json => { :user_person_list => @person_list_array }}
@@ -74,107 +74,90 @@ class Api::UsersController < Api::ApiController
     end
   end
 
-# Can retrieve Aspects of a given user
-  def getUsersAspectsList
-    @aspects = User.find_by_id(params[:id]).aspects
-    respond_to do |format|
-      format.json { render json: @aspects }
-      format.xml { render xml: @aspects }
-    end
-  end
-
 # Can retrieve Aspects of a given user using handle
   def getUsersAspectsListByHandle
-    @handle=params[:diaspora_handle]
-    @users=User.all
-    @aspects_array = Array.new
-    @users.each do |i|
-	 if i.diaspora_handle==@handle
-		@aspects_array.push i.aspects 
-	 end
+    @person = Person.find_by_diaspora_handle(params[:diaspora_handle])
+    if @person
+    @user=@person.owner
+    @aspect_list=@user.aspects
+    @aspect_list_array=Array.new
+    @aspect_list.each do |i|
+	@aspect = {aspect_name: i.name.nil? ? "":i.name, id: i.id.nil? ? "":i.id, user_id: i.user_id.nil? ? "":i.user_id}
+        @aspect_list_array.push @aspect
     end
     respond_to do |format|
-      format.json { render json: @aspects_array }
-      format.xml { render xml: @aspects_array }
+      format.json { render json: @aspect_list_array }
+      format.xml { render xml: @aspect_list_array }
     end
-  end
-
-# Can retrieve Followed tags of a given user
-  def getUserFollowedTagsList
-    @tags = User.find_by_id(params[:id]).followed_tags
+    else
     respond_to do |format|
-      format.json { render json: @tags }
-      format.xml { render xml: @tags }
+      format.json { render :status => :bad_request, :json => {:error => 500}}
+    end
     end
   end
 
 # Can retrieve Followed tags of a given user by handle
   def getUserFollowedTagsListUsingHandle
-    @handle=params[:diaspora_handle]
-    @users=User.all
-    @tags_array = Array.new
-    @users.each do |i|
-	 if i.diaspora_handle==@handle
-		@tags_array.push i.followed_tags 
-	 end
-    end
+    @person = Person.find_by_diaspora_handle(params[:diaspora_handle])
+    if @person
+    @user=@person.owner
+    @tag_list=@user.followed_tags
     respond_to do |format|
-      format.json { render json: @tags_array }
-      format.xml { render xml: @tags_array }
+      format.json { render json: @tag_list }
+      format.xml { render xml: @tag_list }
+    end
+    else
+    respond_to do |format|
+      format.json { render :status => :bad_request, :json => {:error => 500}}
+    end
     end
   end
 
 # Can retrieve user details from his diaspora handle
-# ex: using sandaruwan3@localhost:3000
   def getUserDetailsUsingHandler
-    @handle=params[:diaspora_handle]
-    @users=User.all
-    @detail_array = Array.new
-    @users.each do |i|
-	 if i.diaspora_handle==@handle
-		@detail_array.push i 
-	 end
-    end
+    @person = Person.find_by_diaspora_handle(params[:diaspora_handle])
+    if @person
+    @user_details = {first_name: (@person.first_name.nil? ? "": @person.first_name), last_name: (@person.last_name.nil? ? "": @person.last_name), diaspora_handle: (@person.diaspora_handle.nil? ? "": @person.diaspora_handle), location: (@person.location.nil? ? "": @person.location), birthday: (@person.birthday.nil? ? "": @person.birthday), gender: (@person.gender.nil? ? "": @person.gender), bio: (@person.bio.nil? ? "": @person.bio),  url: (@person.url.nil? ? "": @person.url),  as_json: (@person.as_json.nil? ? "": @person.as_json)}
     respond_to do |format|
-      format.json { render json: @detail_array }
-      format.xml { render xml: @detail_array }
+      format.json { render json: @user_details }
+      format.xml { render xml: @user_details }
+    end
+    else
+    respond_to do |format|
+      format.json { render :status => :bad_request, :json => {:error => 500}}
+    end
     end
   end
 
 
-# Can retrieve friendlist for a given user using his handle
-# ex: using sandaruwan3@localhost:3000
+# Can retrieve person handle list of a given user using his handle
+
   def getUserpersonListUsingHandle
-    @handle=params[:diaspora_handle]
-    @users=User.all
-    @user
-    @person_handle_list = Array.new
-    @users.each do |i|
-	 if i.diaspora_handle==@handle
-		@user=i
-	 end
-    end
-       @personList = @user.contact_person_ids
+    @person = Person.find_by_diaspora_handle(params[:diaspora_handle])
+    if @person
+      @user=@person.owner
+      @person_handle_list = Array.new
+      @personList = @user.contact_person_ids
        @personList.each do |i|
-	 @person_handle_list.push Person.all[i-1].diaspora_handle      
+	 @person_handle_list.push Person.find_by_id(i).diaspora_handle      
        end
     respond_to do |format|
       format.json { render json: @person_handle_list }
       format.xml { render xml: @person_handle_list }
     end
+    else
+    respond_to do |format|
+      format.json { render :status => :bad_request, :json => {:error => 500}}
+    end
+    end
   end
 
 # Can retrieve scopes for a given user using his handle and app Id
   def  getAppScopesOfGivenUser
-    @appId=Dauth::ThirdpartyApp.find(params[:id]).app_id
-    @handle=params[:diaspora_handle]
-    @apps=Dauth::RefreshToken.all
-    @app
-    @apps.each do |i|
-	 if i.app_id==@appId
-		@app=i
-	 end
-    end
+    @person = Person.find_by_diaspora_handle(params[:diaspora_handle])
+    @app=Dauth::RefreshToken.find_by_app_id(params[:id])
+    if @person && @app
+    @handle=params[:diaspora_handle]    
     @guid=@app.user_guid
     @users=User.all
     @app_user
@@ -184,59 +167,124 @@ class Api::UsersController < Api::ApiController
 		@app_user=i.guid
 	 end
     end
-    if @guid==@app_user
-    @app_scopes=@app.scopes
-    end
+      if @guid==@person.guid
+      @app_scopes=@app.scopes
+      respond_to do |format|
+        format.json { render json: @app_scopes }
+        format.xml { render xml: @app_scopes }
+      end
+      else
+      respond_to do |format|
+        format.json { render :status => :bad_request, :json => {:error => 501}}  # incompatible data
+      end	
+      end
+    else
     respond_to do |format|
-      format.json { render json: @app_scopes }
-      format.xml { render xml: @app_scopes }
+      format.json { render :status => :bad_request, :json => {:error => 500}}
+    end
     end
   end
 
 # Can update user email address
-  def editEmailAddress
-    @user=current_user
-    @user.email=params[:email]
-    @user.save
+  def editEmail
+    @person = Person.find_by_diaspora_handle(params[:diaspora_handle])
+    if @person
+    @user=@person.owner
+    @email=params[:email]
+    @user.email=@email
+      if @user.valid?
+        @user.save
+        respond_to do |format|
+      	 format.json { render :nothing => true }
+      	 format.xml { render :nothing => true }
+        end
+      else
+        respond_to do |format|
+          format.json { render :status => :bad_request, :json => {:error => 502}}  # invalid attribute substitution
+        end
+      end
+    else
     respond_to do |format|
-      format.json { render :nothing => true }
-      format.xml { render :nothing => true }
+      format.json { render :status => :bad_request, :json => {:error => 500}}
+    end
     end
   end
 
 # Can update user profile first name
   def editFirstName
-    @user=current_user
+    @person = Person.find_by_diaspora_handle(params[:diaspora_handle])
+    if @person
+    @user=@person.owner
     @profile=@user.profile
-    @profile.first_name=params[:first_name]
-    @profile.save
+    @first_name=params[:first_name]
+    @profile.first_name=@first_name
+      if @profile.valid?
+        @profile.save
+        respond_to do |format|
+      	 format.json { render :nothing => true }
+      	 format.xml { render :nothing => true }
+        end
+      else
+        respond_to do |format|
+          format.json { render :status => :bad_request, :json => {:error => 502}}  # invalid attribute substitution
+        end
+      end
+    else
     respond_to do |format|
-      format.json { render :nothing => true }
-      format.xml { render :nothing => true }
+      format.json { render :status => :bad_request, :json => {:error => 500}}
+    end
     end
   end
 
 # Can update user profile last name
   def editLastName
-    @user=current_user
+    @person = Person.find_by_diaspora_handle(params[:diaspora_handle])
+    if @person
+    @user=@person.owner
     @profile=@user.profile
-    @profile.last_name=params[:last_name]
-    @profile.save
+    @last_name=params[:last_name]
+    @profile.last_name=@last_name
+      if @profile.valid?
+        @profile.save
+        respond_to do |format|
+      	 format.json { render :nothing => true }
+      	 format.xml { render :nothing => true }
+        end
+      else
+        respond_to do |format|
+          format.json { render :status => :bad_request, :json => {:error => 502}}  # invalid attribute substitution
+        end
+      end
+    else
     respond_to do |format|
-      format.json { render :nothing => true }
-      format.xml { render :nothing => true }
+      format.json { render :status => :bad_request, :json => {:error => 500}}
+    end
     end
   end
 
 # Can update user location
   def editUserLocation
-    @user=current_user
+    @person = Person.find_by_diaspora_handle(params[:diaspora_handle])
+    if @person
+    @user=@person.owner
     @profile=@user.profile
-    @profile.location=params[:location]
-    @profile.save
+    @location=params[:location]
+    @profile.location=@location
+      if @profile.valid?
+        @profile.save
+        respond_to do |format|
+      	 format.json { render :nothing => true }
+      	 format.xml { render :nothing => true }
+        end
+      else
+        respond_to do |format|
+          format.json { render :status => :bad_request, :json => {:error => 502}}  # invalid attribute substitution
+        end
+      end
+    else
     respond_to do |format|
-      format.json { render :nothing => true }
-      format.xml { render :nothing => true }
+      format.json { render :status => :bad_request, :json => {:error => 500}}
+    end
     end
   end
 

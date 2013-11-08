@@ -5,6 +5,7 @@ class AuthorizeController < ApplicationController
   def show
 
     @auth_token = params[:auth_token]
+    @diaspora_han = params[:diaspora_handle]
     Rails.logger.info("Content of the authentication token #{@auth_token}")
     
     #TODO user mismatch
@@ -60,6 +61,7 @@ class AuthorizeController < ApplicationController
   def update
     @authorize = Dauth::RefreshToken.new
     @person = current_user.person
+    @diaspora_handle=params[:diaspora_handle]
     #get scopes
     @scopes = Array.new
     params[:scopes].each do |k,v|
@@ -84,9 +86,8 @@ class AuthorizeController < ApplicationController
       app.dev_handle = access_req.dev_handle
       app.save
       end
-
-      sendRefreshToken @authorize, params[:callback], @person.diaspora_handle  #Send a HTTP request to App with refresh token
-      redirect_to "http://localhost:8080/SearchApp/user?diaspora_id=#{@person.diaspora_handle}"
+	sendRefreshToken @authorize, params[:callback], @person.diaspora_handle  #Send a HTTP request to App with refresh token
+	redirect_to "http://localhost:8080/SearchApp/user?diaspora_id=#{@person.diaspora_handle}"
     else
       Rails.logger.info("Unable to generate refresh token")
       render :status => :bad_request, :json => {:error => 101} #Error generating refresh token

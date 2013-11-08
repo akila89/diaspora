@@ -27,7 +27,7 @@ Diaspora::Application.routes.draw do
               get 'index/:access_token' , :action => 'index'
               get 'show/:id/:access_token' , :action => 'show'
 	      get 'getPodPersonList/:access_token' , :action => 'getPodPersonList'
-	      get 'getUserpersonList/:diaspora_handle/:access_token' , :action => 'getUserpersonList' 
+	      get 'getUserpersonList/:diaspora_handle/:access_token' , :action => 'getUserpersonList', constraints: { diaspora_handle: /[^\/]+/ }
 	      get 'getUsersAspectsList/:id/:access_token' , :action => 'getUsersAspectsList'
 	      get 'getUserFollowedTagsList/:id/:access_token' , :action => 'getUserFollowedTagsList'
 	      get 'getUsersAspectsListByHandle/:diaspora_handle/:access_token' , :action => 'getUsersAspectsListByHandle'
@@ -35,10 +35,10 @@ Diaspora::Application.routes.draw do
 	      get 'getUserDetailsUsingHandler/:diaspora_handle/:access_token' , :action => 'getUserDetailsUsingHandler' 
 	      get 'getUserpersonListUsingHandle/:diaspora_handle/:access_token' , :action => 'getUserpersonListUsingHandle'
               get 'getAppScopesOfGivenUser/:id/:diaspora_handle/:access_token' , :action => 'getAppScopesOfGivenUser'
-	      get 'editEmailAddress/:email/:access_token' , :action => 'editEmailAddress', constraints: { email: /[^\/]+/ }
-	      get 'editFirstName/:first_name/:access_token' , :action => 'editFirstName'
-	      get 'editLastName/:last_name/:access_token' , :action => 'editLastName'
-	      get 'editUserLocation/:location/:access_token' , :action => 'editUserLocation'
+	      post 'editEmail/:access_token' , :action => 'editEmail'  #, constraints: { email: /[^\/]+/ }
+	      post 'editFirstName/:access_token' , :action => 'editFirstName'
+	      post 'editLastName/:access_token' , :action => 'editLastName'
+	      post 'editUserLocation/:access_token' , :action => 'editUserLocation'
 	      get 'validateUser/:diaspora_handle/:access_token' , :action => 'validateUser'
 	end
     end

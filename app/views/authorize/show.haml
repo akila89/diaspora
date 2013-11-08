@@ -33,7 +33,7 @@
     = t('authentication.app_permission')
   %br
     
-  = form_for 'scopes' , :url => {:action => 'update' , :app_id => @access_request.app_id , :callback =>@access_request.callback , :token => @auth_token}, :html => { :method => :post } do |f|
+  = form_for 'scopes' , :url => {:action => 'update' , :app_id => @access_request.app_id , :callback =>@access_request.callback ,:diaspora_handle =>@diaspora_han , :token => @auth_token}, :html => { :method => :post } do |f|
     = f.error_messages
     
     %h4
