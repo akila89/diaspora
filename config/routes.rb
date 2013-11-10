@@ -45,13 +45,13 @@ Diaspora::Application.routes.draw do
      resources :statusMessages, :defaults => { :format => 'json' } do
 	    collection do
               get 'index/:access_token' , :action => 'index'
-	      get 'getGivenUserStatusList/:id/:access_token' , :action => 'getGivenUserStatusList'
-	      get 'getCommentsForStatusMessage/:id/:access_token' , :action => 'getCommentsForStatusMessage' 
+	      get 'getGivenUserStatusList/:diaspora_handle/:access_token' , :action => 'getGivenUserStatusList'
+	      get 'getCommentsForStatusMessage/:id/:diaspora_handle/:access_token' , :action => 'getCommentsForStatusMessage' 
 	      get 'getGivenUserStatusListByHandle/:diaspora_handle/:access_token' , :action => 'getGivenUserStatusListByHandle'
- 	      get 'getLikesForStatusMessage/:id/:access_token' , :action => 'getLikesForStatusMessage'
- 	      get 'getNumberOfCommentsForStatusMessage/:id/:access_token' , :action => 'getNumberOfCommentsForStatusMessage'
+ 	      get 'getLikesForStatusMessage/:id/:diaspora_handle/:access_token' , :action => 'getLikesForStatusMessage'
+ 	      get 'getNumberOfCommentsForStatusMessage/:id/:diaspora_handle/:access_token' , :action => 'getNumberOfCommentsForStatusMessage'
  	      get 'createStatusMessage/:text/:access_token' , :action => 'createStatusMessage'
- 	      get 'deleteStatusMessage/:id/:access_token' , :action => 'deleteStatusMessage'
+ 	      get 'deleteStatusMessage/:id/:diaspora_handle/:access_token' , :action => 'deleteStatusMessage'
 	end
     end
      resources :thirdpartyApps, :defaults => { :format => 'json' } do

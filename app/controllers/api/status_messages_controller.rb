@@ -30,68 +30,102 @@ class Api::StatusMessagesController < Api::ApiController
 
 # Can retrieve all status messages posted by given user
   def getGivenUserStatusList
-    @user=User.find_by_id(params[:id]).diaspora_handle
+    @person = Person.find_by_diaspora_handle(params[:diaspora_handle])
+    if @person
+    @user=@person.owner
     @statusMessageList=StatusMessage.all
     @status_messages_array = Array.new
        @statusMessageList.each do |i| 
-	 if i.diaspora_handle==@user
-		@status_messages_array.push i	
+	 if i.diaspora_handle==params[:diaspora_handle]
+	        @status = {author_id: i.author_id.nil? ? "":i.author_id, comments_count: i.comments_count.nil? ? "":i.comments_count, diaspora_handle_of_creator: i.diaspora_handle.nil? ? "":i.diaspora_handle, status_id: i.id.nil? ? "":i.id, likes_count: i.likes_count.nil? ? "":i.likes_count, text: i.text.nil? ? "":i.text}
+        	@status_messages_array.push @status	
 	 end 
        end
     respond_to do |format|
       format.json { render json: @status_messages_array }
       format.xml { render xml: @status_messages_array }
     end
+    else
+    respond_to do |format|
+      format.json { render :status => :bad_request, :json => {:error => 500}}
+    end
+    end
   end
 
 # Can retrieve all comments related to a given status message
   def getCommentsForStatusMessage
+    @person = Person.find_by_diaspora_handle(params[:diaspora_handle])
     @status=StatusMessage.find_by_id(params[:id])
-    @commentList=Comment.all
-    @comment_list_array = Array.new
-       @commentList.each do |i| 
-	 if i.commentable_id==@status.id
-		@comment_list_array.push i	
-	 end  
-       end
+    if @person && @status
+      if @person.diaspora_handle==@status.diaspora_handle
+        @user=@person.owner
+        @commentList=Comment.all
+        @comment_list_array = Array.new
+        @commentList.each do |i| 
+	  if i.commentable_id==@status.id
+	        @comment = {author_id: i.author_id.nil? ? "":i.author_id, commentable_id: i.commentable_id.nil? ? "":i.commentable_id, id: i.id.nil? ? "":i.id, likes_count: i.likes_count.nil? ? "":i.likes_count, text: i.text.nil? ? "":i.text}
+        	@comment_list_array.push @comment	
+	  end  
+        end
+      respond_to do |format|
+        format.json { render json: @comment_list_array }
+        format.xml { render xml: @comment_list_array }
+      end
+      else
+          respond_to do |format|
+            format.json { render :status => :bad_request, :json => {:error => 501}}  # incompatible data
+          end
+      end
+    else
     respond_to do |format|
-      format.json { render json: @comment_list_array }
-      format.xml { render xml: @comment_list_array }
+      format.json { render :status => :bad_request, :json => {:error => 500}}
+    end
     end
   end
   
-
-# Can retrieve all status messages posted by given user using handle
-  def getGivenUserStatusListByHandle
-    @user=params[:diaspora_handle]
-    @statusMessageList=StatusMessage.all
-    @status_messages_array = Array.new
-       @statusMessageList.each do |i| 
-	 if i.diaspora_handle==@user
-		@status_messages_array.push i	
-	 end  
-       end
-    respond_to do |format|
-      format.json { render json: @status_messages_array }
-      format.xml { render xml: @status_messages_array }
-    end
-  end
-
 # Get number of likes of a given status message
   def getLikesForStatusMessage
-    @likes_count=StatusMessage.find_by_id(params[:id]).likes_count
+    @person = Person.find_by_diaspora_handle(params[:diaspora_handle])
+    @status=StatusMessage.find_by_id(params[:id])
+    if @person && @status
+      if @person.diaspora_handle==@status.diaspora_handle
+	        @likes_count = {likes_count: @status.likes_count.nil? ? "": @status.likes_count}.to_json	
+      respond_to do |format|
+        format.json { render json: @likes_count }
+        format.xml { render xml: @likes_count }
+      end
+      else
+          respond_to do |format|
+            format.json { render :status => :bad_request, :json => {:error => 501}}  # incompatible data
+          end
+      end
+    else
     respond_to do |format|
-      format.json { render json: @likes_count }
-      format.xml { render xml: @likes_count }
+      format.json { render :status => :bad_request, :json => {:error => 500}}
+    end
     end
   end
 
 # Get number of comments of a given status message
   def getNumberOfCommentsForStatusMessage
-    @comments_count=StatusMessage.find_by_id(params[:id]).comments_count
+    @person = Person.find_by_diaspora_handle(params[:diaspora_handle])
+    @status=StatusMessage.find_by_id(params[:id])
+    if @person && @status
+      if @person.diaspora_handle==@status.diaspora_handle
+	        @comments_count = {comments_count: @status.comments_count.nil? ? "": @status.comments_count}.to_json	
+      respond_to do |format|
+        format.json { render json: @comments_count }
+        format.xml { render xml: @comments_count }
+      end
+      else
+          respond_to do |format|
+            format.json { render :status => :bad_request, :json => {:error => 501}}  # incompatible data
+          end
+      end
+    else
     respond_to do |format|
-      format.json { render json: @comments_count }
-      format.xml { render xml: @comments_count }
+      format.json { render :status => :bad_request, :json => {:error => 500}}
+    end
     end
   end
 
@@ -111,14 +145,28 @@ class Api::StatusMessagesController < Api::ApiController
     end
   end
 
-# Delet a status message
+# Delete a status message
   def deleteStatusMessage
-    @user=current_user
-    @post=@user.posts.find(params[:id])
-    @user.retract(@post)
+    @person = Person.find_by_diaspora_handle(params[:diaspora_handle])
+    @user=@person.owner
+    @status=StatusMessage.find_by_id(params[:id])
+    if @person && @status
+      if @person.diaspora_handle==@status.diaspora_handle
+        @post=@user.posts.find(params[:id])
+        @user.retract(@post)
+        respond_to do |format|
+          format.json { render :nothing => true }
+          format.xml { render :nothing => true }
+        end
+      else
+          respond_to do |format|
+            format.json { render :status => :bad_request, :json => {:error => 501}}  # incompatible data
+          end
+      end
+    else
     respond_to do |format|
-      format.json { render :nothing => true }
-      format.xml { render :nothing => true }
+      format.json { render :status => :bad_request, :json => {:error => 500}}
+    end
     end
   end
 
