@@ -6,7 +6,7 @@ class Api::CommentsController < Api::ApiController
 							   :index,
 							   :show,
 							   :createComment]
-  before_filter :require_comment_delete_permision, :only => [:deleteComment]
+  #before_filter :require_comment_delete_permision, :only => [:deleteComment]
 
   before_filter :fetch_user, :except => [:index, :create]
 
@@ -33,72 +33,92 @@ class Api::CommentsController < Api::ApiController
 
 # Can retrieve all comments posted by given user
 def getGivenUserCommentList
-    @user=User.find_by_id(params[:id]).diaspora_handle
+    @person = Person.find_by_diaspora_handle(params[:diaspora_handle])
+    if @person
     @commentList=Comment.all
     @comments_array = Array.new
        @commentList.each do |i| 
-	 if i.diaspora_handle==@user
-		@comments_array.push i	
+	 if i.diaspora_handle==params[:diaspora_handle]
+	        @comment = {author_id: i.author_id.nil? ? "":i.author_id, commentable_id: i.commentable_id.nil? ? "":i.commentable_id, id: i.id.nil? ? "":i.id, likes_count: i.likes_count.nil? ? "":i.likes_count, text: i.text.nil? ? "":i.text}
+        	@comments_array.push @comment	
 	 end  
        end
     respond_to do |format|
       format.json { render json: @comments_array }
       format.xml { render xml: @comments_array }
     end
-  end
-
-
-# Can retrieve all comments posted by given user by handle
-def getGivenUserCommentListByHandle
-    @handle=params[:diaspora_handle]
-    @commentList=Comment.all
-    @comments_array = Array.new
-       @commentList.each do |i| 
-	 if i.diaspora_handle==@handle
-		@comments_array.push i	
-	 end  
-       end
+    else
     respond_to do |format|
-      format.json { render json: @comments_array }
-      format.xml { render xml: @comments_array }
+      format.json { render :status => :bad_request, :json => {:error => 500}}
+    end
     end
   end
 
 # Can retrieve likes count for a comment
   def getLikesCount
-    @likes_count=Comment.find_by_id(params[:id]).likes_count
+    @person = Person.find_by_diaspora_handle(params[:diaspora_handle])
+    @comment=Comment.find_by_id(params[:id])
+    if @person && @comment
+      if @person.diaspora_handle==@comment.diaspora_handle
+	        @likes_count = {likes_count: @comment.likes_count.nil? ? "": @comment.likes_count}.to_json	
+      respond_to do |format|
+        format.json { render json: @likes_count }
+        format.xml { render xml: @likes_count }
+      end
+      else
+          respond_to do |format|
+            format.json { render :status => :bad_request, :json => {:error => 501}}  # incompatible data
+          end
+      end
+    else
     respond_to do |format|
-      format.json { render json: @likes_count }
-      format.xml { render xml: @likes_count }
+      format.json { render :status => :bad_request, :json => {:error => 500}}
+    end
     end
   end
 
 # Create a comment for a specified post id
   def createComment
-    post = current_user.find_visible_shareable_by_id(Post, params[:post_id])
-    @comment = current_user.comment!(post, params[:text]) if post
-
-    if @comment
-      respond_to do |format|
-        format.json{ render :json => CommentPresenter.new(@comment)}
+    @person = Person.find_by_diaspora_handle(params[:diaspora_handle])
+    @user=@person.owner
+    post = @user.find_visible_shareable_by_id(Post, params[:post_id])
+    if @person && post
+    @comment = @user.comment!(post, params[:text]) if post
+      if @comment
+        respond_to do |format|
+          format.json{ render :json => CommentPresenter.new(@comment)}
+        end
+      else
+        render :nothing => true
       end
     else
-      render :nothing => true
+    respond_to do |format|
+      format.json { render :status => :bad_request, :json => {:error => 500}}
+    end
     end
   end
 
 # Delete a comment for a specified comment id
  def deleteComment
+    @person = Person.find_by_diaspora_handle(params[:diaspora_handle])
+    @comment=Comment.find_by_id(params[:id])
+    if @person && @comment
+    @user=@person.owner
     @comment = Comment.find(params[:id])
-    if current_user.owns?(@comment) || current_user.owns?(@comment.parent)
-      current_user.retract(@comment)
+    if @user.owns?(@comment) || @user.owns?(@comment.parent)
+      @user.retract(@comment)
       respond_to do |format|
         format.json { render :nothing => true }
       end
     else
-      respond_to do |format|
-        format.json {render :nothing => true}
-      end
+          respond_to do |format|
+            format.json { render :status => :bad_request, :json => {:error => 501}}  # incompatible data
+          end
+    end
+    else
+    respond_to do |format|
+      format.json { render :status => :bad_request, :json => {:error => 500}}
+    end
     end
   end
 

@@ -28,12 +28,10 @@ Diaspora::Application.routes.draw do
               get 'show/:id/:access_token' , :action => 'show'
 	      get 'getPodPersonList/:access_token' , :action => 'getPodPersonList'
 	      get 'getUserpersonList/:diaspora_handle/:access_token' , :action => 'getUserpersonList', constraints: { diaspora_handle: /[^\/]+/ }
-	      get 'getUsersAspectsList/:id/:access_token' , :action => 'getUsersAspectsList'
-	      get 'getUserFollowedTagsList/:id/:access_token' , :action => 'getUserFollowedTagsList'
-	      get 'getUsersAspectsListByHandle/:diaspora_handle/:access_token' , :action => 'getUsersAspectsListByHandle'
-	      get 'getUserFollowedTagsListUsingHandle/:diaspora_handle/:access_token' , :action => 'getUserFollowedTagsListUsingHandle'
-	      get 'getUserDetailsUsingHandler/:diaspora_handle/:access_token' , :action => 'getUserDetailsUsingHandler' 
-	      get 'getUserpersonListUsingHandle/:diaspora_handle/:access_token' , :action => 'getUserpersonListUsingHandle'
+	      get 'getUsersAspectsList/:diaspora_handle/:access_token' , :action => 'getUsersAspectsList'
+	      get 'getUserFollowedTagsList/:diaspora_handle/:access_token' , :action => 'getUserFollowedTagsList'
+	      get 'getUserDetails/:diaspora_handle/:access_token' , :action => 'getUserDetails' 
+	      get 'getUserpersonHandleList/:diaspora_handle/:access_token' , :action => 'getUserpersonHandleList'
               get 'getAppScopesOfGivenUser/:id/:diaspora_handle/:access_token' , :action => 'getAppScopesOfGivenUser'
 	      post 'editEmail/:access_token' , :action => 'editEmail'  #, constraints: { email: /[^\/]+/ }
 	      post 'editFirstName/:access_token' , :action => 'editFirstName'
@@ -50,8 +48,8 @@ Diaspora::Application.routes.draw do
 	      get 'getGivenUserStatusListByHandle/:diaspora_handle/:access_token' , :action => 'getGivenUserStatusListByHandle'
  	      get 'getLikesForStatusMessage/:id/:diaspora_handle/:access_token' , :action => 'getLikesForStatusMessage'
  	      get 'getNumberOfCommentsForStatusMessage/:id/:diaspora_handle/:access_token' , :action => 'getNumberOfCommentsForStatusMessage'
- 	      get 'createStatusMessage/:text/:access_token' , :action => 'createStatusMessage'
- 	      get 'deleteStatusMessage/:id/:diaspora_handle/:access_token' , :action => 'deleteStatusMessage'
+ 	      post 'createStatusMessage/:access_token' , :action => 'createStatusMessage'
+ 	      delete 'deleteStatusMessage/:access_token' , :action => 'deleteStatusMessage'
 	end
     end
      resources :thirdpartyApps, :defaults => { :format => 'json' } do
@@ -65,11 +63,11 @@ Diaspora::Application.routes.draw do
 	    collection do
               get 'index/:access_token' , :action => 'index'
               get 'show/:id/:access_token' , :action => 'show'
-	      get 'getGivenUserCommentList/:id/:access_token' , :action => 'getGivenUserCommentList'
+	      get 'getGivenUserCommentList/:diaspora_handle/:access_token' , :action => 'getGivenUserCommentList'
 	      get 'getGivenUserCommentListByHandle/:diaspora_handle/:access_token' , :action => 'getGivenUserCommentListByHandle'
-  	      get 'getLikesCount/:id/:access_token' , :action => 'getLikesCount'
-	      get 'createComment/:post_id/:text/:access_token' , :action => 'createComment'
-	      get 'deleteComment/:id/:access_token' , :action => 'deleteComment'
+  	      get 'getLikesCount/:id/:diaspora_handle/:access_token' , :action => 'getLikesCount'
+	      post 'createComment/:access_token' , :action => 'createComment'
+	      delete 'deleteComment/:access_token' , :action => 'deleteComment'
 	end
     end
   end

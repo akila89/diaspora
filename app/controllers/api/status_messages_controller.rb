@@ -131,17 +131,24 @@ class Api::StatusMessagesController < Api::ApiController
 
 # Post a status message
   def createStatusMessage
-    @user=current_user
+    @person = Person.find_by_diaspora_handle(params[:diaspora_handle])
+    if @person
+    @user=@person.owner
     @status_message=@user.build_post(:status_message,{"text"=>params[:text],"aspect_ids"=>"all_aspects","location_coords"=>""})
-    if @status_message.save
-    @aspect_ids=@user.aspect_ids
-    @aspects=@user.aspects_from_ids(@aspect_ids)
-    current_user.add_to_streams(@status_message, @aspects)
-    current_user.dispatch_post(@status_message, :url => short_post_url(@status_message.guid), :service_types => "")
-    end
+      if @status_message.save
+        @aspect_ids=@user.aspect_ids
+        @aspects=@user.aspects_from_ids(@aspect_ids)
+        @user.add_to_streams(@status_message, @aspects)
+        @user.dispatch_post(@status_message, :url => short_post_url(@status_message.guid), :service_types => "")
+      end
     respond_to do |format|
       format.json { render :nothing => true }
       format.xml { render :nothing => true }
+    end
+    else
+    respond_to do |format|
+      format.json { render :status => :bad_request, :json => {:error => 500}}
+    end
     end
   end
 

@@ -75,7 +75,7 @@ class Api::UsersController < Api::ApiController
   end
 
 # Can retrieve Aspects of a given user using handle
-  def getUsersAspectsListByHandle
+  def getUsersAspectsList
     @person = Person.find_by_diaspora_handle(params[:diaspora_handle])
     if @person
     @user=@person.owner
@@ -97,7 +97,7 @@ class Api::UsersController < Api::ApiController
   end
 
 # Can retrieve Followed tags of a given user by handle
-  def getUserFollowedTagsListUsingHandle
+  def getUserFollowedTagsList
     @person = Person.find_by_diaspora_handle(params[:diaspora_handle])
     if @person
     @user=@person.owner
@@ -114,12 +114,12 @@ class Api::UsersController < Api::ApiController
   end
 
 # Can retrieve user details from his diaspora handle
-  def getUserDetailsUsingHandler
+  def getUserDetails
     @person = Person.find_by_diaspora_handle(params[:diaspora_handle])
     if @person
     @user_details = {first_name: (@person.first_name.nil? ? "": @person.first_name), last_name: (@person.last_name.nil? ? "": @person.last_name), diaspora_handle: (@person.diaspora_handle.nil? ? "": @person.diaspora_handle), location: (@person.location.nil? ? "": @person.location), birthday: (@person.birthday.nil? ? "": @person.birthday), gender: (@person.gender.nil? ? "": @person.gender), bio: (@person.bio.nil? ? "": @person.bio),  url: (@person.url.nil? ? "": @person.url),  as_json: (@person.as_json.nil? ? "": @person.as_json)}
     respond_to do |format|
-      format.json { render json: @user_details }
+      format.json { render json: @user_details.to_json }
       format.xml { render xml: @user_details }
     end
     else
@@ -132,14 +132,15 @@ class Api::UsersController < Api::ApiController
 
 # Can retrieve person handle list of a given user using his handle
 
-  def getUserpersonListUsingHandle
+  def getUserpersonHandleList
     @person = Person.find_by_diaspora_handle(params[:diaspora_handle])
     if @person
       @user=@person.owner
       @person_handle_list = Array.new
       @personList = @user.contact_person_ids
        @personList.each do |i|
-	 @person_handle_list.push Person.find_by_id(i).diaspora_handle      
+         @person_handle={handle: Person.find_by_id(i).diaspora_handle.nil? ? "": Person.find_by_id(i).diaspora_handle}
+	 @person_handle_list.push @person_handle    
        end
     respond_to do |format|
       format.json { render json: @person_handle_list }
