@@ -221,6 +221,14 @@ FactoryGirl.define do
     scopes [ "post_read", "post_delete", "post_write" ]
   end
 
+  factory :access_token2, {:class=>Dauth::AccessToken} do
+
+  end
+
+  factory :refresh_token2, {:class=>Dauth::RefreshToken} do
+    app_id "2"
+    scopes [ "profile_read", "profile_delete", "profile_write" ]
+  end
 
   #templates
   factory(:status_with_photo_backdrop, :parent => :status_message_with_photo)

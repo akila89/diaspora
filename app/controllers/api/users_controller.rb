@@ -52,8 +52,8 @@ class Api::UsersController < Api::ApiController
   def get_user_person_list
     @person = Person.find_by_diaspora_handle(params[:diaspora_handle])
     if @person
-    @person_id=@person.id
-    @person_list=User.find_by_id(@person_id).contact_person_ids
+    @user=@person.owner.id
+    @person_list=User.find_by_id(@user).contact_person_ids
     if @person_list
     @person_list_array = Array.new
        @person_list.each do |i|  
@@ -62,15 +62,10 @@ class Api::UsersController < Api::ApiController
 
          @person_list_array.push @user_details
        end
-    respond_to do |format|
-      format.json { render :json => { :user_person_list => @person_list_array }}
-      format.xml { render xml: @person_list_array }
-    end
+	render :status => :bad_request, :json => {:user_person_list => @person_list_array}
     end
     else
-    respond_to do |format|
-      format.json { render :status => :bad_request, :json => {:error => 500}}
-    end
+       render :status => :bad_request, :json => {:error => "400"}
     end
   end
 
