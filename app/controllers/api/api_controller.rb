@@ -1,6 +1,6 @@
 class Api::ApiController < ApplicationController
 
-  before_filter :validate_access_token
+  before_filter :validate_access_token, :validateUser
 
   def validate_access_token
     @token = params[:access_token]
@@ -17,6 +17,17 @@ class Api::ApiController < ApplicationController
     end
   end
   
+  # validate user
+  def validateUser
+    @diaspora_handle=params[:diaspora_handle]
+    @access_token_tuple=Dauth::AccessToken.find_by_token(params[:access_token])
+    @guid=Dauth::RefreshToken.find_by_token(@access_token_tuple.refresh_token).user_guid
+    @handle=Person.find_by_guid(@guid).diaspora_handle
+    if @handle!=@diaspora_handle
+	render :status => :bad_request, :json => {:error => "403"} #Access denied
+    end
+  end
+
   # Profile related user permissions
   
   def require_profile_read_permision
@@ -112,5 +123,6 @@ class Api::ApiController < ApplicationController
     
     return @scopes
   end
+
 
 end

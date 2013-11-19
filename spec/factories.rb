@@ -213,17 +213,15 @@ FactoryGirl.define do
   end
 
   factory :access_token, {:class=>Dauth::AccessToken} do
-    refresh_token "12344"
-    token "123456"
+
   end
 
   factory :refresh_token, {:class=>Dauth::RefreshToken} do
     app_id "1"
-    user_guid "49ba12753b3f498c"
     scopes [ "post_read", "post_delete", "post_write" ]
-    
   end
-  
+
+
   #templates
   factory(:status_with_photo_backdrop, :parent => :status_message_with_photo)
 

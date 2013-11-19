@@ -23,11 +23,20 @@ describe Api::UsersController do
 
     it "without profile read permission" do
         @expected = {:error => "310"}.to_json
-        @rt = FactoryGirl.create(:refresh_token)
+        @rt = FactoryGirl.create(:refresh_token, :user_guid=> Person.first.guid)
         @at = FactoryGirl.create(:access_token, :refresh_token => @rt.token)
-        get 'getUserpersonList' ,{ 'access_token' => @at.token }
+        get 'getUserpersonList' ,{ 'access_token' => @at.token, 'diaspora_handle' => 'alice@localhost:9887' }
         response.body.should == @expected
     end
+
+    it "without registered app" do
+        @expected = {:error => "403"}.to_json
+        @rt = FactoryGirl.create(:refresh_token, :user_guid=> Person.first.guid)
+        @at = FactoryGirl.create(:access_token, :refresh_token => @rt.token)
+        get 'getUserpersonList' ,{ 'access_token' => @at.token, 'diaspora_handle' => 'eve@localhost:9887' }
+        response.body.should == @expected
+    end    
+
   end
  
 #  describe "Call for api methods without access token" do

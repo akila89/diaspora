@@ -289,21 +289,6 @@ class Api::UsersController < Api::ApiController
     end
   end
 
-# validate user
-  def validateUser
-    @diaspora_handle=params[:diaspora_handle]
-    @access_token_tuple=Dauth::AccessToken.find_by_token(params[:access_token])
-    @guid=Dauth::RefreshToken.find_by_token(@access_token_tuple.refresh_token).user_guid
-    @handle=Person.find_by_guid(@guid).diaspora_handle
-    if @handle==@diaspora_handle
-	@handle="jj"
-    end
-    respond_to do |format|
-      format.json { render json: @handle }
-      format.xml { render :nothing => true }
-    end
-  end
-
 
 end
 
