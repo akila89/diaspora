@@ -1,10 +1,10 @@
 class Api::StatusMessagesController < Api::ApiController
 
-  before_filter :require_post_read_permision, :only => [:getGivenUserStatusList,
-                                                        :getCommentsForStatusMessage,
-                                                        :getGivenUserStatusListByHandle,
-							:getLikesForStatusMessage,
-							:getNumberOfCommentsForStatusMessage,
+  before_filter :require_post_read_permision, :only => [:get_given_user_status_list,
+                                                        :get_comments_for_status_message,
+                                                        :get_given_user_status_list_by_handle,
+							:get_likes_for_status_message,
+							:get_number_of_comments_for_status_message,
 							:index]
   #before_filter :fetch_user, :except => [:index, :create]
 
@@ -29,7 +29,7 @@ class Api::StatusMessagesController < Api::ApiController
   end
 
 # Can retrieve all status messages posted by given user
-  def getGivenUserStatusList
+  def get_given_user_status_list
     @person = Person.find_by_diaspora_handle(params[:diaspora_handle])
     if @person
     @user=@person.owner
@@ -53,7 +53,7 @@ class Api::StatusMessagesController < Api::ApiController
   end
 
 # Can retrieve all comments related to a given status message
-  def getCommentsForStatusMessage
+  def get_comments_for_status_message
     @person = Person.find_by_diaspora_handle(params[:diaspora_handle])
     @status=StatusMessage.find_by_id(params[:id])
     if @person && @status
@@ -84,7 +84,7 @@ class Api::StatusMessagesController < Api::ApiController
   end
   
 # Get number of likes of a given status message
-  def getLikesForStatusMessage
+  def get_likes_for_status_message
     @person = Person.find_by_diaspora_handle(params[:diaspora_handle])
     @status=StatusMessage.find_by_id(params[:id])
     if @person && @status
@@ -107,7 +107,7 @@ class Api::StatusMessagesController < Api::ApiController
   end
 
 # Get number of comments of a given status message
-  def getNumberOfCommentsForStatusMessage
+  def get_number_of_comments_for_status_message
     @person = Person.find_by_diaspora_handle(params[:diaspora_handle])
     @status=StatusMessage.find_by_id(params[:id])
     if @person && @status
@@ -130,7 +130,7 @@ class Api::StatusMessagesController < Api::ApiController
   end
 
 # Post a status message
-  def createStatusMessage
+  def create_status_message
     @person = Person.find_by_diaspora_handle(params[:diaspora_handle])
     if @person
     @user=@person.owner
@@ -153,7 +153,7 @@ class Api::StatusMessagesController < Api::ApiController
   end
 
 # Delete a status message
-  def deleteStatusMessage
+  def delete_status_message
     @person = Person.find_by_diaspora_handle(params[:diaspora_handle])
     @user=@person.owner
     @status=StatusMessage.find_by_id(params[:id])

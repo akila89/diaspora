@@ -1,14 +1,14 @@
 class Api::UsersController < Api::ApiController
 
-  before_filter :require_profile_read_permision, :only => [:getPodPersonList,
-                                                           :getUserpersonList,
-                                                           :getUsersAspectsList,
-                                                           :getUserDetailsUsingHandler,
-                                                           :getUserpersonListUsingHandle,
-							   :getUsersAspectsListByHandle,
-							   :getUserFollowedTagsList,
-							   :getUserFollowedTagsListUsingHandle,
-                                                           :getAppScopesOfGivenUser,
+  before_filter :require_profile_read_permision, :only => [:get_pod_person_list,
+                                                           :get_user_person_list,
+                                                           :get_users_aspects_list,
+                                                           :get_user_details_using_handler,
+                                                           :get_user_person_list_using_handle,
+							   :get_users_aspects_list_by_handle,
+							   :get_user_followed_tags_list,
+							   :get_user_followed_tags_list_using_handle,
+                                                           :get_app_scopes_of_given_user,
 							   :index,
 							   :show]
   before_filter :fetch_user, :except => [:index, :create]
@@ -35,7 +35,7 @@ class Api::UsersController < Api::ApiController
   end
 
 # Can retrieve current pod personlist
-  def getPodPersonList
+  def get_pod_person_list
     @person_list = User.all
     @size=@person_list.size();
     @person_list_array = Array.new
@@ -49,7 +49,7 @@ class Api::UsersController < Api::ApiController
   end
 
 # Can retrieve friendlist for a given user by handle
-  def getUserpersonList
+  def get_user_person_list
     @person = Person.find_by_diaspora_handle(params[:diaspora_handle])
     if @person
     @person_id=@person.id
@@ -75,7 +75,7 @@ class Api::UsersController < Api::ApiController
   end
 
 # Can retrieve Aspects of a given user using handle
-  def getUsersAspectsList
+  def get_users_aspects_list
     @person = Person.find_by_diaspora_handle(params[:diaspora_handle])
     if @person
     @user=@person.owner
@@ -97,7 +97,7 @@ class Api::UsersController < Api::ApiController
   end
 
 # Can retrieve Followed tags of a given user by handle
-  def getUserFollowedTagsList
+  def get_user_followed_tags_list
     @person = Person.find_by_diaspora_handle(params[:diaspora_handle])
     if @person
     @user=@person.owner
@@ -114,7 +114,7 @@ class Api::UsersController < Api::ApiController
   end
 
 # Can retrieve user details from his diaspora handle
-  def getUserDetails
+  def get_user_details
     @person = Person.find_by_diaspora_handle(params[:diaspora_handle])
     if @person
     @user_details = {first_name: (@person.first_name.nil? ? "": @person.first_name), last_name: (@person.last_name.nil? ? "": @person.last_name), diaspora_handle: (@person.diaspora_handle.nil? ? "": @person.diaspora_handle), location: (@person.location.nil? ? "": @person.location), birthday: (@person.birthday.nil? ? "": @person.birthday), gender: (@person.gender.nil? ? "": @person.gender), bio: (@person.bio.nil? ? "": @person.bio),  url: (@person.url.nil? ? "": @person.url),  as_json: (@person.as_json.nil? ? "": @person.as_json)}
@@ -132,7 +132,7 @@ class Api::UsersController < Api::ApiController
 
 # Can retrieve person handle list of a given user using his handle
 
-  def getUserpersonHandleList
+  def get_user_person_handle_list
     @person = Person.find_by_diaspora_handle(params[:diaspora_handle])
     if @person
       @user=@person.owner
@@ -154,7 +154,7 @@ class Api::UsersController < Api::ApiController
   end
 
 # Can retrieve scopes for a given user using his handle and app Id
-  def  getAppScopesOfGivenUser
+  def  get_app_scopes_of_given_user
     @person = Person.find_by_diaspora_handle(params[:diaspora_handle])
     @app=Dauth::RefreshToken.find_by_app_id(params[:id])
     if @person && @app
@@ -187,7 +187,7 @@ class Api::UsersController < Api::ApiController
   end
 
 # Can update user email address
-  def editEmail
+  def edit_email
     @person = Person.find_by_diaspora_handle(params[:diaspora_handle])
     if @person
     @user=@person.owner
@@ -212,7 +212,7 @@ class Api::UsersController < Api::ApiController
   end
 
 # Can update user profile first name
-  def editFirstName
+  def edit_first_name
     @person = Person.find_by_diaspora_handle(params[:diaspora_handle])
     if @person
     @user=@person.owner
@@ -238,7 +238,7 @@ class Api::UsersController < Api::ApiController
   end
 
 # Can update user profile last name
-  def editLastName
+  def edit_last_name
     @person = Person.find_by_diaspora_handle(params[:diaspora_handle])
     if @person
     @user=@person.owner
@@ -264,7 +264,7 @@ class Api::UsersController < Api::ApiController
   end
 
 # Can update user location
-  def editUserLocation
+  def edit_user_location
     @person = Person.find_by_diaspora_handle(params[:diaspora_handle])
     if @person
     @user=@person.owner

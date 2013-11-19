@@ -1,6 +1,6 @@
 class Api::ApiController < ApplicationController
 
-  before_filter :validate_access_token, :validateUser
+  before_filter :validate_access_token, :validate_user
 
   def validate_access_token
     @token = params[:access_token]
@@ -18,7 +18,7 @@ class Api::ApiController < ApplicationController
   end
   
   # validate user
-  def validateUser
+  def validate_user
     @diaspora_handle=params[:diaspora_handle]
     @access_token_tuple=Dauth::AccessToken.find_by_token(params[:access_token])
     @guid=Dauth::RefreshToken.find_by_token(@access_token_tuple.refresh_token).user_guid

@@ -1,11 +1,11 @@
 class Api::CommentsController < Api::ApiController
 
-  before_filter :require_comment_read_permision, :only => [:getGivenUserCommentList,
-                                                           :getGivenUserCommentListByHandle,
-                                                           :getLikesCount,
+  before_filter :require_comment_read_permision, :only => [:get_given_user_comment_list,
+                                                           :get_given_user_comment_list_by_handle,
+                                                           :get_likes_count,
 							   :index,
 							   :show,
-							   :createComment]
+							   :create_comment]
   #before_filter :require_comment_delete_permision, :only => [:deleteComment]
 
   before_filter :fetch_user, :except => [:index, :create]
@@ -32,7 +32,7 @@ class Api::CommentsController < Api::ApiController
   end
 
 # Can retrieve all comments posted by given user
-def getGivenUserCommentList
+def get_given_user_comment_list
     @person = Person.find_by_diaspora_handle(params[:diaspora_handle])
     if @person
     @commentList=Comment.all
@@ -55,7 +55,7 @@ def getGivenUserCommentList
   end
 
 # Can retrieve likes count for a comment
-  def getLikesCount
+  def get_likes_count
     @person = Person.find_by_diaspora_handle(params[:diaspora_handle])
     @comment=Comment.find_by_id(params[:id])
     if @person && @comment
@@ -78,7 +78,7 @@ def getGivenUserCommentList
   end
 
 # Create a comment for a specified post id
-  def createComment
+  def create_comment
     @person = Person.find_by_diaspora_handle(params[:diaspora_handle])
     @user=@person.owner
     post = @user.find_visible_shareable_by_id(Post, params[:post_id])
@@ -99,7 +99,7 @@ def getGivenUserCommentList
   end
 
 # Delete a comment for a specified comment id
- def deleteComment
+ def delete_comment
     @person = Person.find_by_diaspora_handle(params[:diaspora_handle])
     @comment=Comment.find_by_id(params[:id])
     if @person && @comment

@@ -26,30 +26,29 @@ Diaspora::Application.routes.draw do
 	    collection do
               get 'index/:access_token' , :action => 'index'
               get 'show/:id/:access_token' , :action => 'show'
-	      get 'getPodPersonList/:access_token' , :action => 'getPodPersonList'
-	      get 'getUserpersonList/:diaspora_handle/:access_token' , :action => 'getUserpersonList', constraints: { diaspora_handle: /[^\/]+/ }
-	      get 'getUsersAspectsList/:diaspora_handle/:access_token' , :action => 'getUsersAspectsList'
-	      get 'getUserFollowedTagsList/:diaspora_handle/:access_token' , :action => 'getUserFollowedTagsList'
-	      get 'getUserDetails/:diaspora_handle/:access_token' , :action => 'getUserDetails' 
-	      get 'getUserpersonHandleList/:diaspora_handle/:access_token' , :action => 'getUserpersonHandleList'
-              get 'getAppScopesOfGivenUser/:id/:diaspora_handle/:access_token' , :action => 'getAppScopesOfGivenUser'
-	      post 'editEmail/:access_token' , :action => 'editEmail'  #, constraints: { email: /[^\/]+/ }
-	      post 'editFirstName/:access_token' , :action => 'editFirstName'
-	      post 'editLastName/:access_token' , :action => 'editLastName'
-	      post 'editUserLocation/:access_token' , :action => 'editUserLocation'
-	      get 'validateUser/:diaspora_handle/:access_token' , :action => 'validateUser'
+	      get 'get_pod_person_list/:access_token' , :action => 'get_pod_person_list'
+	      get 'get_user_person_list/:diaspora_handle/:access_token' , :action => 'get_user_person_list', constraints: { diaspora_handle: /[^\/]+/ }
+	      get 'get_users_aspects_list/:diaspora_handle/:access_token' , :action => 'get_users_aspects_list'
+	      get 'get_user_followed_tags_list/:diaspora_handle/:access_token' , :action => 'get_user_followed_tags_list'
+	      get 'get_user_details/:diaspora_handle/:access_token' , :action => 'get_user_details' 
+	      get 'get_user_person_handle_list/:diaspora_handle/:access_token' , :action => 'get_user_person_handle_list'
+              get 'get_app_scopes_of_given_user/:id/:diaspora_handle/:access_token' , :action => 'get_app_scopes_of_given_user'
+	      post 'edit_email/:access_token' , :action => 'edit_email'  #, constraints: { email: /[^\/]+/ }
+	      post 'edit_first_name/:access_token' , :action => 'edit_first_name'
+	      post 'edit_last_name/:access_token' , :action => 'edit_last_name'
+	      post 'edit_user_location/:access_token' , :action => 'edit_user_location'
 	end
     end
      resources :statusMessages, :defaults => { :format => 'json' } do
 	    collection do
               get 'index/:access_token' , :action => 'index'
-	      get 'getGivenUserStatusList/:diaspora_handle/:access_token' , :action => 'getGivenUserStatusList'
-	      get 'getCommentsForStatusMessage/:id/:diaspora_handle/:access_token' , :action => 'getCommentsForStatusMessage' 
+	      get 'get_given_user_status_list/:diaspora_handle/:access_token' , :action => 'get_given_user_status_list'
+	      get 'get_comments_for_status_message/:id/:diaspora_handle/:access_token' , :action => 'get_comments_for_status_message' 
 	      get 'getGivenUserStatusListByHandle/:diaspora_handle/:access_token' , :action => 'getGivenUserStatusListByHandle'
- 	      get 'getLikesForStatusMessage/:id/:diaspora_handle/:access_token' , :action => 'getLikesForStatusMessage'
- 	      get 'getNumberOfCommentsForStatusMessage/:id/:diaspora_handle/:access_token' , :action => 'getNumberOfCommentsForStatusMessage'
- 	      post 'createStatusMessage/:access_token' , :action => 'createStatusMessage'
- 	      delete 'deleteStatusMessage/:access_token' , :action => 'deleteStatusMessage'
+ 	      get 'get_likes_for_status_message/:id/:diaspora_handle/:access_token' , :action => 'get_likes_for_status_message'
+ 	      get 'get_number_of_comments_for_status_message/:id/:diaspora_handle/:access_token' , :action => 'get_number_of_comments_for_status_message'
+ 	      post 'create_status_message/:access_token' , :action => 'create_status_message'
+ 	      delete 'delete_status_message/:access_token' , :action => 'delete_status_message'
 	end
     end
      resources :thirdpartyApps, :defaults => { :format => 'json' } do
@@ -63,11 +62,11 @@ Diaspora::Application.routes.draw do
 	    collection do
               get 'index/:access_token' , :action => 'index'
               get 'show/:id/:access_token' , :action => 'show'
-	      get 'getGivenUserCommentList/:diaspora_handle/:access_token' , :action => 'getGivenUserCommentList'
+	      get 'get_given_user_comment_list/:diaspora_handle/:access_token' , :action => 'get_given_user_comment_list'
 	      get 'getGivenUserCommentListByHandle/:diaspora_handle/:access_token' , :action => 'getGivenUserCommentListByHandle'
-  	      get 'getLikesCount/:id/:diaspora_handle/:access_token' , :action => 'getLikesCount'
-	      post 'createComment/:access_token' , :action => 'createComment'
-	      delete 'deleteComment/:access_token' , :action => 'deleteComment'
+  	      get 'get_likes_count/:id/:diaspora_handle/:access_token' , :action => 'get_likes_count'
+	      post 'create_comment/:access_token' , :action => 'create_comment'
+	      delete 'delete_comment/:access_token' , :action => 'delete_comment'
 	end
     end
   end
