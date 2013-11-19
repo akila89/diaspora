@@ -151,4 +151,15 @@ describe Api::UsersController do
     end
   end
 
+  describe "#edit_last_name" do
+
+    it "update last name with given last name" do
+        @rt2 = FactoryGirl.create(:refresh_token2, :user_guid=> Person.first.guid)
+        @at2 = FactoryGirl.create(:access_token2, :refresh_token => @rt2.token)
+	@expected=User.first.last_name
+        put 'edit_last_name' ,{ 'access_token' => @at2.token, 'last_name' => 'alice-last', 'diaspora_handle' => 'alice@localhost:9887' }
+        User.first.last_name.should_not == @expected
+    end
+  end
+
 end

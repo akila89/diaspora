@@ -201,19 +201,12 @@ class Api::UsersController < Api::ApiController
     @profile.last_name=@last_name
       if @profile.valid?
         @profile.save
-        respond_to do |format|
-      	 format.json { render :nothing => true }
-      	 format.xml { render :nothing => true }
-        end
+	render :nothing => true
       else
-        respond_to do |format|
-          format.json { render :status => :bad_request, :json => {:error => 502}}  # invalid attribute substitution
-        end
+	render :status => :bad_request, :json => {:error => "409"}
       end
     else
-    respond_to do |format|
-      format.json { render :status => :bad_request, :json => {:error => 500}}
-    end
+	render :status => :bad_request, :json => {:error => "400"}
     end
   end
 
