@@ -113,4 +113,20 @@ describe Api::UsersController do
     end
   end
 
+  describe "#get_app_scopes_of_given_user" do
+
+    it "display user person handle list" do
+        @rt2 = FactoryGirl.create(:refresh_token2, :user_guid=> Person.first.guid)
+        @at2 = FactoryGirl.create(:access_token2, :refresh_token => @rt2.token)
+	        @expected=[
+	         "profile_read",
+       		 "profile_delete",
+        	 "profile_write"
+	].to_json
+
+        get 'get_app_scopes_of_given_user' ,{ 'access_token' => @at2.token, 'id' => '2', 'diaspora_handle' => 'alice@localhost:9887' }
+        response.body.should include(@expected)
+    end
+  end
+
 end

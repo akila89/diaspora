@@ -145,19 +145,12 @@ class Api::UsersController < Api::ApiController
     end
       if @guid==@person.guid
       @app_scopes=@app.scopes
-      respond_to do |format|
-        format.json { render json: @app_scopes }
-        format.xml { render xml: @app_scopes }
-      end
+	render :status => :response, :json => {:user_person_handle_list => @app_scopes}
       else
-      respond_to do |format|
-        format.json { render :status => :bad_request, :json => {:error => 501}}  # incompatible data
-      end	
+	render :status => :bad_request, :json => {:error => "403"}	
       end
     else
-    respond_to do |format|
-      format.json { render :status => :bad_request, :json => {:error => 500}}
-    end
+	render :status => :bad_request, :json => {:error => "400"}
     end
   end
 
