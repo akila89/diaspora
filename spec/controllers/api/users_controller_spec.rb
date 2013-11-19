@@ -99,4 +99,18 @@ describe Api::UsersController do
     end
   end
 
+  describe "#get_user_person_handle_list" do
+
+    it "display user person handle list" do
+        @rt2 = FactoryGirl.create(:refresh_token2, :user_guid=> Person.first.guid)
+        @at2 = FactoryGirl.create(:access_token2, :refresh_token => @rt2.token)
+	        @expected={
+	     :handle  => "bob@localhost:9887"
+	}.to_json
+
+        get 'get_user_person_handle_list' ,{ 'access_token' => @at2.token, 'diaspora_handle' => 'alice@localhost:9887' }
+        response.body.should include(@expected)
+    end
+  end
+
 end
