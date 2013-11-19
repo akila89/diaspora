@@ -103,14 +103,9 @@ class Api::UsersController < Api::ApiController
     @person = Person.find_by_diaspora_handle(params[:diaspora_handle])
     if @person
     @user_details = {first_name: (@person.first_name.nil? ? "": @person.first_name), last_name: (@person.last_name.nil? ? "": @person.last_name), diaspora_handle: (@person.diaspora_handle.nil? ? "": @person.diaspora_handle), location: (@person.location.nil? ? "": @person.location), birthday: (@person.birthday.nil? ? "": @person.birthday), gender: (@person.gender.nil? ? "": @person.gender), bio: (@person.bio.nil? ? "": @person.bio),  url: (@person.url.nil? ? "": @person.url),  as_json: (@person.as_json.nil? ? "": @person.as_json)}
-    respond_to do |format|
-      format.json { render json: @user_details.to_json }
-      format.xml { render xml: @user_details }
-    end
+	render :status => :response, :json => {:users_followed_tag_list => @user_details}
     else
-    respond_to do |format|
-      format.json { render :status => :bad_request, :json => {:error => 500}}
-    end
+	render :status => :bad_request, :json => {:error => "400"}
     end
   end
 
