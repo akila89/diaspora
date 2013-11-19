@@ -57,5 +57,35 @@ describe Api::UsersController do
         response.body.should include(@expected)
     end
   end
- 
+
+  describe "#get_users_aspects_list" do
+
+    it "display aspects list" do
+        @rt2 = FactoryGirl.create(:refresh_token2, :user_guid=> Person.first.guid)
+        @at2 = FactoryGirl.create(:access_token2, :refresh_token => @rt2.token)
+	        @expected={
+            :aspect_name  => User.first.aspects.first.name,
+            :id           => User.first.aspects.first.id,
+            :user_id      => User.first.aspects.first.user_id
+        }.to_json
+
+        get 'get_users_aspects_list' ,{ 'access_token' => @at2.token, 'diaspora_handle' => 'alice@localhost:9887' }
+        response.body.should include(@expected)
+    end
+  end
+
+  describe "#get_user_followed_tags_list" do
+
+    it "display tag list" do
+        @as=FactoryGirl.create(:tag_following)
+        @rt2 = FactoryGirl.create(:refresh_token2, :user_guid=> Person.last.guid)
+        @at2 = FactoryGirl.create(:access_token2, :refresh_token => @rt2.token)
+	        @expected=User.last.followed_tags.to_json
+
+        get 'get_user_followed_tags_list' ,{ 'access_token' => @at2.token, 'diaspora_handle' => User.last.diaspora_handle }
+        response.body.should include(@expected)
+    end
+  end
+
+
 end

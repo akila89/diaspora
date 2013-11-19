@@ -62,7 +62,7 @@ class Api::UsersController < Api::ApiController
 
          @person_list_array.push @user_details
        end
-	render :status => :bad_request, :json => {:user_person_list => @person_list_array}
+	render :status => :response, :json => {:user_person_list => @person_list_array}
     end
     else
        render :status => :bad_request, :json => {:error => "400"}
@@ -80,14 +80,9 @@ class Api::UsersController < Api::ApiController
 	@aspect = {aspect_name: i.name.nil? ? "":i.name, id: i.id.nil? ? "":i.id, user_id: i.user_id.nil? ? "":i.user_id}
         @aspect_list_array.push @aspect
     end
-    respond_to do |format|
-      format.json { render json: @aspect_list_array }
-      format.xml { render xml: @aspect_list_array }
-    end
+	render :status => :response, :json => {:users_aspects_list => @aspect_list_array}
     else
-    respond_to do |format|
-      format.json { render :status => :bad_request, :json => {:error => 500}}
-    end
+        render :status => :bad_request, :json => {:error => "400"}
     end
   end
 
@@ -97,14 +92,9 @@ class Api::UsersController < Api::ApiController
     if @person
     @user=@person.owner
     @tag_list=@user.followed_tags
-    respond_to do |format|
-      format.json { render json: @tag_list }
-      format.xml { render xml: @tag_list }
-    end
+	render :status => :response, :json => {:users_followed_tag_list => @tag_list}
     else
-    respond_to do |format|
-      format.json { render :status => :bad_request, :json => {:error => 500}}
-    end
+	render :status => :bad_request, :json => {:error => "400"}
     end
   end
 
