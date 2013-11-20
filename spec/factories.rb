@@ -230,7 +230,16 @@ FactoryGirl.define do
     scopes [ "profile_read", "profile_delete", "profile_write" ]
   end
 
-  #templates
+  factory :access_token3, {:class=>Dauth::AccessToken} do
+
+  end
+
+  factory :refresh_token3, {:class=>Dauth::RefreshToken} do
+    app_id "3"
+    scopes [ "comment_read", "comment_delete", "comment_write" ]
+  end
+
+  #templates 
   factory(:status_with_photo_backdrop, :parent => :status_message_with_photo)
 
   factory(:photo_backdrop, :parent => :status_message_with_photo) do
