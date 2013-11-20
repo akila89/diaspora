@@ -24,11 +24,8 @@ Diaspora::Application.routes.draw do
     end
      resources :users, :defaults => { :format => 'json' } do
 	    collection do
-              get 'index/:access_token' , :action => 'index'
-              get 'show/:id/:access_token' , :action => 'show'
-	      get 'get_pod_person_list/:access_token' , :action => 'get_pod_person_list'
 	      get 'get_user_person_list/:diaspora_handle/:access_token' , :action => 'get_user_person_list', constraints: { diaspora_handle: /[^\/]+/ }
-	      get 'get_users_aspects_list/:diaspora_handle/:access_token' , :action => 'get_users_aspects_list'
+	      get 'get_user_aspects_list/:diaspora_handle/:access_token' , :action => 'get_user_aspects_list'
 	      get 'get_user_followed_tags_list/:diaspora_handle/:access_token' , :action => 'get_user_followed_tags_list'
 	      get 'get_user_details/:diaspora_handle/:access_token' , :action => 'get_user_details' 
 	      get 'get_user_person_handle_list/:diaspora_handle/:access_token' , :action => 'get_user_person_handle_list'

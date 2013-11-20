@@ -1,53 +1,18 @@
 class Api::UsersController < Api::ApiController
 
-  before_filter :require_profile_read_permision, :only => [:get_pod_person_list,
-                                                           :get_user_person_list,
-                                                           :get_users_aspects_list,
-                                                           :get_user_details_using_handler,
-                                                           :get_user_person_list_using_handle,
-							   :get_users_aspects_list_by_handle,
+  before_filter :require_profile_read_permision, :only => [:get_user_person_list,
+                                                           :get_user_aspects_list,
 							   :get_user_followed_tags_list,
-							   :get_user_followed_tags_list_using_handle,
+							   :get_user_details,
+							   :get_user_person_handle_list,
                                                            :get_app_scopes_of_given_user,
-							   :index,
-							   :show]
-  before_filter :fetch_user, :except => [:index, :create]
+							   ]
 
- def fetch_user
-    @user = User.find_by_id(params[:id])
-  end
-
-# Can retrieve pod user list
-  def index
-    @users = User.all
-    respond_to do |format|
-      format.json { render json: @users }
-      format.xml { render xml: @users }
-    end
-  end
-
-# Can retrieve user specified by the id
-  def show
-    respond_to do |format|
-      format.json { render json: @user }
-      format.xml { render xml: @user }
-    end
-  end
-
-# Can retrieve current pod personlist
-  def get_pod_person_list
-    @person_list = User.all
-    @size=@person_list.size();
-    @person_list_array = Array.new
-       for i in 0..@size
-         @person_list_array.push Person.all[i]
-       end
-    respond_to do |format|
-      format.json { render json: @person_list_array }
-      format.xml { render xml: @person_list_array }
-    end
-  end
-
+  before_filter :require_profile_write_permision, :only => [:edit_email,
+                                                            :edit_first_name,
+							    :edit_last_name,
+							    :edit_user_location
+							   ]
 # Can retrieve friendlist for a given user by handle
   def get_user_person_list
     @person = Person.find_by_diaspora_handle(params[:diaspora_handle])
@@ -70,7 +35,7 @@ class Api::UsersController < Api::ApiController
   end
 
 # Can retrieve Aspects of a given user using handle
-  def get_users_aspects_list
+  def get_user_aspects_list
     @person = Person.find_by_diaspora_handle(params[:diaspora_handle])
     if @person
     @user=@person.owner
@@ -111,7 +76,6 @@ class Api::UsersController < Api::ApiController
 
 
 # Can retrieve person handle list of a given user using his handle
-
   def get_user_person_handle_list
     @person = Person.find_by_diaspora_handle(params[:diaspora_handle])
     if @person
@@ -147,7 +111,7 @@ class Api::UsersController < Api::ApiController
       @app_scopes=@app.scopes
 	render :status => :response, :json => {:user_person_handle_list => @app_scopes}
       else
-	render :status => :bad_request, :json => {:error => "403"}	
+	render :status => :bad_request, :json => {:error => "403"}	# Access denied
       end
     else
 	render :status => :bad_request, :json => {:error => "400"}
@@ -231,40 +195,4 @@ class Api::UsersController < Api::ApiController
 
 
 end
-
-
-#API Requests:
-
-#=> listing users
-#   url: http://localhost:3000/api/users
-#   method: GET
-
-
-#=> Retrieving User detail
-#  url: http://localhost:3000/api/users/:id 
-#  method: GET
-
-
-
-# Can retrieve friendlist for a given user
-#  def getUserpersonList
-#    @person_list = User.find_by_id(params[:id])
-#    if @person_list
-#    @person_list=User.find_by_id(params[:id]).contact_person_ids   
-#    @person_list_array = Array.new
-#       @person_list.each do |i|
-#	 #@person_list_array.push Person.all[i-1]    
-#         @fruit = {first_name: Person.all[i-1].first_name, last_name: Person.all[i-1].last_name, diaspora_handle: Person.all[i-1].diaspora_handle, 	        location: Person.all[i-1].location, birthday: Person.all[i-1].birthday, gender: Person.all[i-1].gender}.to_json  
-#         @person_list_array.push @fruit
-#       end
-#    respond_to do |format|
-#      format.json { render json: @person_list_array }
-#      format.xml { render xml: @person_list_array }
-#    end
-#    else
-#    respond_to do |format|
-#      format.json { render json: "error='500'"}
-#    end
-#    end
-#  end
 

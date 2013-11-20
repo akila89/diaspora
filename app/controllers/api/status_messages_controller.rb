@@ -40,15 +40,10 @@ class Api::StatusMessagesController < Api::ApiController
 	        @status = {author_id: i.author_id.nil? ? "":i.author_id, comments_count: i.comments_count.nil? ? "":i.comments_count, diaspora_handle_of_creator: i.diaspora_handle.nil? ? "":i.diaspora_handle, status_id: i.id.nil? ? "":i.id, likes_count: i.likes_count.nil? ? "":i.likes_count, text: i.text.nil? ? "":i.text}
         	@status_messages_array.push @status	
 	 end 
-       end
-    respond_to do |format|
-      format.json { render json: @status_messages_array }
-      format.xml { render xml: @status_messages_array }
-    end
+       end	
+	render :status => :response, :json => {:users_status_messages_list => @status_messages_array}
     else
-    respond_to do |format|
-      format.json { render :status => :bad_request, :json => {:error => 500}}
-    end
+	render :status => :bad_request, :json => {:error => "400"}
     end
   end
 
