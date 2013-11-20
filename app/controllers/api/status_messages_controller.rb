@@ -2,31 +2,15 @@ class Api::StatusMessagesController < Api::ApiController
 
   before_filter :require_post_read_permision, :only => [:get_given_user_status_list,
                                                         :get_comments_for_status_message,
-                                                        :get_given_user_status_list_by_handle,
 							:get_likes_for_status_message,
-							:get_number_of_comments_for_status_message,
-							:index]
-  #before_filter :fetch_user, :except => [:index, :create]
+							:get_number_of_comments_for_status_message
+							]
+  
+  before_filter :require_post_write_permision, :only => [:create_status_message
+							]
 
-  def fetch_user
-    @statusMessage = StatusMessage.find_by_id(params[:id])
-  end
-
-# Can retrieve pod's statusmessage list
-  def index
-    @statusMessages = StatusMessage.all
-    respond_to do |format|
-      format.json { render json: @statusMessages }
-      format.xml { render xml: @statusMessages }
-    end
-  end
-
-  def show
-    respond_to do |format|
-      format.json { render json: @statusMessage }
-      format.xml { render xml: @statusMessage }
-    end
-  end
+  before_filter :require_post_delete_permision, :only => [:delete_status_message
+							]
 
 # Can retrieve all status messages posted by given user
   def get_given_user_status_list
@@ -62,19 +46,12 @@ class Api::StatusMessagesController < Api::ApiController
         	@comment_list_array.push @comment	
 	  end  
         end
-      respond_to do |format|
-        format.json { render json: @comment_list_array }
-        format.xml { render xml: @comment_list_array }
-      end
+	render :status => :response, :json => {:comment_list => @comment_list_array}
       else
-          respond_to do |format|
-            format.json { render :status => :bad_request, :json => {:error => 501}}  # incompatible data
-          end
+	render :status => :bad_request, :json => {:error => "403"}
       end
     else
-    respond_to do |format|
-      format.json { render :status => :bad_request, :json => {:error => 500}}
-    end
+	render :status => :bad_request, :json => {:error => "400"}
     end
   end
   
@@ -85,19 +62,12 @@ class Api::StatusMessagesController < Api::ApiController
     if @person && @status
       if @person.diaspora_handle==@status.diaspora_handle
 	        @likes_count = {likes_count: @status.likes_count.nil? ? "": @status.likes_count}.to_json	
-      respond_to do |format|
-        format.json { render json: @likes_count }
-        format.xml { render xml: @likes_count }
-      end
+	render :status => :response, :json => {:likes_count => @likes_count}
       else
-          respond_to do |format|
-            format.json { render :status => :bad_request, :json => {:error => 501}}  # incompatible data
-          end
+	render :status => :bad_request, :json => {:error => "403"}
       end
     else
-    respond_to do |format|
-      format.json { render :status => :bad_request, :json => {:error => 500}}
-    end
+	render :status => :bad_request, :json => {:error => "400"}
     end
   end
 
@@ -108,19 +78,12 @@ class Api::StatusMessagesController < Api::ApiController
     if @person && @status
       if @person.diaspora_handle==@status.diaspora_handle
 	        @comments_count = {comments_count: @status.comments_count.nil? ? "": @status.comments_count}.to_json	
-      respond_to do |format|
-        format.json { render json: @comments_count }
-        format.xml { render xml: @comments_count }
-      end
+	render :status => :response, :json => {:comments_count => @comments_count}
       else
-          respond_to do |format|
-            format.json { render :status => :bad_request, :json => {:error => 501}}  # incompatible data
-          end
+	render :status => :bad_request, :json => {:error => "403"}
       end
     else
-    respond_to do |format|
-      format.json { render :status => :bad_request, :json => {:error => 500}}
-    end
+	render :status => :bad_request, :json => {:error => "400"}
     end
   end
 
@@ -136,14 +99,9 @@ class Api::StatusMessagesController < Api::ApiController
         @user.add_to_streams(@status_message, @aspects)
         @user.dispatch_post(@status_message, :url => short_post_url(@status_message.guid), :service_types => "")
       end
-    respond_to do |format|
-      format.json { render :nothing => true }
-      format.xml { render :nothing => true }
-    end
+	render :nothing => true
     else
-    respond_to do |format|
-      format.json { render :status => :bad_request, :json => {:error => 500}}
-    end
+	render :status => :bad_request, :json => {:error => "400"}
     end
   end
 
@@ -156,31 +114,15 @@ class Api::StatusMessagesController < Api::ApiController
       if @person.diaspora_handle==@status.diaspora_handle
         @post=@user.posts.find(params[:id])
         @user.retract(@post)
-        respond_to do |format|
-          format.json { render :nothing => true }
-          format.xml { render :nothing => true }
-        end
+	render :nothing => true
       else
-          respond_to do |format|
-            format.json { render :status => :bad_request, :json => {:error => 501}}  # incompatible data
-          end
+	render :status => :bad_request, :json => {:error => "403"}
       end
     else
-    respond_to do |format|
-      format.json { render :status => :bad_request, :json => {:error => 500}}
-    end
+	render :status => :bad_request, :json => {:error => "400"}
     end
   end
 
 end
-
-
-#API Requests:
-
-#=> listing statusmessages
-#   url: http://localhost:3000/api/statusmessages
-#   method: GET
-
-
 
 

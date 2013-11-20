@@ -38,10 +38,8 @@ Diaspora::Application.routes.draw do
     end
      resources :statusMessages, :defaults => { :format => 'json' } do
 	    collection do
-              get 'index/:access_token' , :action => 'index'
 	      get 'get_given_user_status_list/:diaspora_handle/:access_token' , :action => 'get_given_user_status_list'
 	      get 'get_comments_for_status_message/:id/:diaspora_handle/:access_token' , :action => 'get_comments_for_status_message' 
-	      get 'getGivenUserStatusListByHandle/:diaspora_handle/:access_token' , :action => 'getGivenUserStatusListByHandle'
  	      get 'get_likes_for_status_message/:id/:diaspora_handle/:access_token' , :action => 'get_likes_for_status_message'
  	      get 'get_number_of_comments_for_status_message/:id/:diaspora_handle/:access_token' , :action => 'get_number_of_comments_for_status_message'
  	      post 'create_status_message/:access_token' , :action => 'create_status_message'
@@ -57,10 +55,7 @@ Diaspora::Application.routes.draw do
     #resources :users, :defaults => { :format => 'json' } do
      resources :comments, :defaults => { :format => 'json' } do
 	    collection do
-              get 'index/:access_token' , :action => 'index'
-              get 'show/:id/:access_token' , :action => 'show'
 	      get 'get_given_user_comment_list/:diaspora_handle/:access_token' , :action => 'get_given_user_comment_list'
-	      get 'getGivenUserCommentListByHandle/:diaspora_handle/:access_token' , :action => 'getGivenUserCommentListByHandle'
   	      get 'get_likes_count/:id/:diaspora_handle/:access_token' , :action => 'get_likes_count'
 	      post 'create_comment/:access_token' , :action => 'create_comment'
 	      delete 'delete_comment/:access_token' , :action => 'delete_comment'
