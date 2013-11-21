@@ -31,7 +31,7 @@ class Api::UsersController < Api::ApiController
          if @person_avatar=="/assets/user/default.png"
 		@person_avatar = @pod_url + @person_avatar[1..-1]
          end
-         @user_details = {first_name: (Person.find_by_id(i).first_name.nil? ? "": Person.find_by_id(i).first_name), last_name: (Person.find_by_id(i).last_name.nil? ? "": Person.find_by_id(i).last_name), diaspora_handle: (Person.find_by_id(i).diaspora_handle.nil? ? "": Person.find_by_id(i).diaspora_handle), location: (Person.find_by_id(i).location.nil? ? "": Person.find_by_id(i).location), birthday: (Person.find_by_id(i).birthday.nil? ? "": Person.find_by_id(i).birthday), gender: (Person.find_by_id(i).gender.nil? ? "": Person.find_by_id(i).gender), url: (@contact_url.nil? ? "": @contact_url), avatar: (@person_avatar.nil? ? "": @person_avatar)}
+         @user_details = {first_name: (Person.find_by_id(i).first_name.nil? ? "": Person.find_by_id(i).first_name), last_name: (Person.find_by_id(i).last_name.nil? ? "": Person.find_by_id(i).last_name), diaspora_handle: (Person.find_by_id(i).diaspora_handle.nil? ? "": Person.find_by_id(i).diaspora_handle), location: (Person.find_by_id(i).location.nil? ? "": Person.find_by_id(i).location), birthday: (Person.find_by_id(i).birthday.nil? ? "": Person.find_by_id(i).birthday), gender: (Person.find_by_id(i).gender.nil? ? "": Person.find_by_id(i).gender), bio: (Person.find_by_id(i).bio.nil? ? "": Person.find_by_id(i).bio), url: (@contact_url.nil? ? "": @contact_url), avatar: (@person_avatar.nil? ? "": @person_avatar)}
 
          @person_list_array.push @user_details
        end
@@ -75,7 +75,16 @@ class Api::UsersController < Api::ApiController
   def get_user_details
     @person = Person.find_by_diaspora_handle(params[:diaspora_handle])
     if @person
-    @user_details = {first_name: (@person.first_name.nil? ? "": @person.first_name), last_name: (@person.last_name.nil? ? "": @person.last_name), diaspora_handle: (@person.diaspora_handle.nil? ? "": @person.diaspora_handle), location: (@person.location.nil? ? "": @person.location), birthday: (@person.birthday.nil? ? "": @person.birthday), gender: (@person.gender.nil? ? "": @person.gender), bio: (@person.bio.nil? ? "": @person.bio),  url: (@person.url.nil? ? "": @person.url),  as_json: (@person.as_json.nil? ? "": @person.as_json)}
+    	 @person_as_json = @person.as_json
+	 @person_url = @person_as_json[:url]
+	 @person_url = @person_url[1..-1]
+         @pod_url = @person.url
+	 @contact_url = @pod_url + @person_url
+         @person_avatar = @person_as_json[:avatar]
+         if @person_avatar=="/assets/user/default.png"
+		@person_avatar = @pod_url + @person_avatar[1..-1]
+         end
+    @user_details = {first_name: (@person.first_name.nil? ? "": @person.first_name), last_name: (@person.last_name.nil? ? "": @person.last_name), diaspora_handle: (@person.diaspora_handle.nil? ? "": @person.diaspora_handle), location: (@person.location.nil? ? "": @person.location), birthday: (@person.birthday.nil? ? "": @person.birthday), gender: (@person.gender.nil? ? "": @person.gender), bio: (@person.bio.nil? ? "": @person.bio),  url: (@person.url.nil? ? "": @person.url),  url: (@contact_url.nil? ? "": @contact_url),  avatar: (@person_avatar.nil? ? "": @person_avatar)}
 	render :status => :ok, :json => {:user_details => @user_details}
     else
 	render :status => :bad_request, :json => {:error => "400"}
