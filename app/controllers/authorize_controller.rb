@@ -86,6 +86,8 @@ class AuthorizeController < ApplicationController
       app.dev_handle = access_req.dev_handle
       app.save
       end
+	@URL=params[:callback]
+	Rails.logger.info("CALLBACH URL : #{@URL}")
 	sendRefreshToken @authorize, params[:callback], @person.diaspora_handle  #Send a HTTP request to App with refresh token
 	redirect_to "http://localhost:8080/SearchApp/user?diaspora_id=#{@person.diaspora_handle}"
     else
