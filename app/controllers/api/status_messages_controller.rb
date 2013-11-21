@@ -25,7 +25,7 @@ class Api::StatusMessagesController < Api::ApiController
         	@status_messages_array.push @status	
 	 end 
        end	
-	render :status => :response, :json => {:users_status_messages_list => @status_messages_array}
+	render :status => :ok, :json => {:users_status_messages_list => @status_messages_array}
     else
 	render :status => :bad_request, :json => {:error => "400"}
     end
@@ -46,7 +46,7 @@ class Api::StatusMessagesController < Api::ApiController
         	@comment_list_array.push @comment	
 	  end  
         end
-	render :status => :response, :json => {:comment_list => @comment_list_array}
+	render :status => :ok, :json => {:comment_list => @comment_list_array}
       else
 	render :status => :bad_request, :json => {:error => "403"}
       end
@@ -62,7 +62,7 @@ class Api::StatusMessagesController < Api::ApiController
     if @person && @status
       if @person.diaspora_handle==@status.diaspora_handle
 	        @likes_count = {likes_count: @status.likes_count.nil? ? "": @status.likes_count}.to_json	
-	render :status => :response, :json => {:likes_count => @likes_count}
+	render :status => :ok, :json => {:likes_count => @likes_count}
       else
 	render :status => :bad_request, :json => {:error => "403"}
       end
@@ -78,7 +78,7 @@ class Api::StatusMessagesController < Api::ApiController
     if @person && @status
       if @person.diaspora_handle==@status.diaspora_handle
 	        @comments_count = {comments_count: @status.comments_count.nil? ? "": @status.comments_count}.to_json	
-	render :status => :response, :json => {:comments_count => @comments_count}
+	render :status => :ok, :json => {:comments_count => @comments_count}
       else
 	render :status => :bad_request, :json => {:error => "403"}
       end

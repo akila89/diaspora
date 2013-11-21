@@ -31,7 +31,7 @@ class Api::UsersController < Api::ApiController
 
          @person_list_array.push @user_details
        end
-	render :status => :response, :json => {:user_person_list => @person_list_array}
+	render :status => :ok, :json => {:user_person_list => @person_list_array}
     end
     else
        render :status => :bad_request, :json => {:error => "400"}
@@ -49,7 +49,7 @@ class Api::UsersController < Api::ApiController
 	@aspect = {aspect_name: i.name.nil? ? "":i.name, id: i.id.nil? ? "":i.id, user_id: i.user_id.nil? ? "":i.user_id}
         @aspect_list_array.push @aspect
     end
-	render :status => :response, :json => {:users_aspects_list => @aspect_list_array}
+	render :status => :ok, :json => {:users_aspects_list => @aspect_list_array}
     else
         render :status => :bad_request, :json => {:error => "400"}
     end
@@ -61,7 +61,7 @@ class Api::UsersController < Api::ApiController
     if @person
     @user=@person.owner
     @tag_list=@user.followed_tags
-	render :status => :response, :json => {:users_followed_tag_list => @tag_list}
+	render :status => :ok, :json => {:users_followed_tag_list => @tag_list}
     else
 	render :status => :bad_request, :json => {:error => "400"}
     end
@@ -72,7 +72,7 @@ class Api::UsersController < Api::ApiController
     @person = Person.find_by_diaspora_handle(params[:diaspora_handle])
     if @person
     @user_details = {first_name: (@person.first_name.nil? ? "": @person.first_name), last_name: (@person.last_name.nil? ? "": @person.last_name), diaspora_handle: (@person.diaspora_handle.nil? ? "": @person.diaspora_handle), location: (@person.location.nil? ? "": @person.location), birthday: (@person.birthday.nil? ? "": @person.birthday), gender: (@person.gender.nil? ? "": @person.gender), bio: (@person.bio.nil? ? "": @person.bio),  url: (@person.url.nil? ? "": @person.url),  as_json: (@person.as_json.nil? ? "": @person.as_json)}
-	render :status => :response, :json => {:user_details => @user_details}
+	render :status => :ok, :json => {:user_details => @user_details}
     else
 	render :status => :bad_request, :json => {:error => "400"}
     end
@@ -90,7 +90,7 @@ class Api::UsersController < Api::ApiController
          @person_handle={handle: Person.find_by_id(i).diaspora_handle.nil? ? "": Person.find_by_id(i).diaspora_handle}
 	 @person_handle_list.push @person_handle    
        end
-	render :status => :response, :json => {:user_person_handle_list => @person_handle_list}
+	render :status => :ok, :json => {:user_person_handle_list => @person_handle_list}
     else
 	render :status => :bad_request, :json => {:error => "400"}
     end
@@ -113,7 +113,7 @@ class Api::UsersController < Api::ApiController
     end
       if @guid==@person.guid
       @app_scopes=@app.scopes
-	render :status => :response, :json => {:user_person_handle_list => @app_scopes}
+	render :status => :ok, :json => {:user_person_handle_list => @app_scopes}
       else
 	render :status => :bad_request, :json => {:error => "403"}	# Access denied
       end

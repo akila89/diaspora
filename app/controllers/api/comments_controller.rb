@@ -21,7 +21,7 @@ def get_given_user_comment_list
         	@comments_array.push @comment	
 	 end  
        end
-	render :status => :response, :json => {:user_comment_list => @comments_array}
+	render :status => :ok, :json => {:user_comment_list => @comments_array}
     else
 	render :status => :bad_request, :json => {:error => "400"}
     end
@@ -34,7 +34,7 @@ def get_given_user_comment_list
     if @person && @comment
       if @person.diaspora_handle==@comment.diaspora_handle
 	        @likes_count = {likes_count: @comment.likes_count.nil? ? "": @comment.likes_count}.to_json	
-	render :status => :response, :json => {:likes_count => @likes_count}
+	render :status => :ok, :json => {:likes_count => @likes_count}
       else
 	render :status => :bad_request, :json => {:error => "403"}
       end
