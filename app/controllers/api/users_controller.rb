@@ -24,9 +24,13 @@ class Api::UsersController < Api::ApiController
        @person_list.each do |i|  
 	 @person_as_json = Person.find_by_id(i).as_json
          @person_url = @person_as_json[:url]
+	 @person_url = @person_url[1..-1]
          @pod_url = Person.find_by_id(i).url
 	 @contact_url = @pod_url + @person_url
          @person_avatar = @person_as_json[:avatar]
+         if @person_avatar=="/assets/user/default.png"
+		@person_avatar = @pod_url + @person_avatar[1..-1]
+         end
          @user_details = {first_name: (Person.find_by_id(i).first_name.nil? ? "": Person.find_by_id(i).first_name), last_name: (Person.find_by_id(i).last_name.nil? ? "": Person.find_by_id(i).last_name), diaspora_handle: (Person.find_by_id(i).diaspora_handle.nil? ? "": Person.find_by_id(i).diaspora_handle), location: (Person.find_by_id(i).location.nil? ? "": Person.find_by_id(i).location), birthday: (Person.find_by_id(i).birthday.nil? ? "": Person.find_by_id(i).birthday), gender: (Person.find_by_id(i).gender.nil? ? "": Person.find_by_id(i).gender), url: (@contact_url.nil? ? "": @contact_url), avatar: (@person_avatar.nil? ? "": @person_avatar)}
 
          @person_list_array.push @user_details
