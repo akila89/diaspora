@@ -25,7 +25,7 @@ describe Api::UsersController do
         @expected = {:error => "310"}.to_json
         @rt = FactoryGirl.create(:refresh_token, :user_guid=> Person.first.guid)
         @at = FactoryGirl.create(:access_token, :refresh_token => @rt.token)
-        get 'get_user_person_list' ,{ 'access_token' => @at.token, 'diaspora_handle' => 'alice@localhost:9887' }
+        get 'get_user_person_list' ,{ 'access_token' => @at.token, 'diaspora_handle' => 'alice@192.168.1.3:3000' }
         response.body.should == @expected
     end
 
@@ -33,7 +33,7 @@ describe Api::UsersController do
         @expected = {:error => "403"}.to_json
         @rt = FactoryGirl.create(:refresh_token, :user_guid=> Person.first.guid)
         @at = FactoryGirl.create(:access_token, :refresh_token => @rt.token)
-        get 'get_user_person_list' ,{ 'access_token' => @at.token, 'diaspora_handle' => 'bob@localhost:9887' }
+        get 'get_user_person_list' ,{ 'access_token' => @at.token, 'diaspora_handle' => 'bob@192.168.1.3:3000' }
         response.body.should == @expected
     end    
 
@@ -44,21 +44,26 @@ describe Api::UsersController do
     it "display person list" do
         @rt2 = FactoryGirl.create(:refresh_token2, :user_guid=> Person.first.guid)
         @at2 = FactoryGirl.create(:access_token2, :refresh_token => @rt2.token)
+		@person_url = Person.all[2].url + "people/" + Person.all[2].guid
+		@avatar = Person.all[2].url + "assets/user/default.png"
 	        @expected={
-            :first_name      => Profile.all[2].first_name,
-            :last_name       => Profile.all[2].last_name,
-            :diaspora_handle => "bob@localhost:9887",
-            :location        => Profile.all[2].location,
-            :birthday        => Profile.all[2].birthday,
-            :gender          => Profile.all[2].gender
+            :first_name      => Person.all[2].first_name,
+            :last_name       => Person.all[2].last_name,
+            :diaspora_handle => "bob@192.168.1.3:3000",
+            :location        => Person.all[2].location,
+            :birthday        => Person.all[2].birthday,
+            :gender          => Person.all[2].gender,
+	    :bio	     => Person.all[2].bio,
+	    :url	     => @person_url,
+	    :avatar	     => @avatar
         }.to_json
 
-        get 'get_user_person_list' ,{ 'access_token' => @at2.token, 'diaspora_handle' => 'alice@localhost:9887' }
+        get 'get_user_person_list' ,{ 'access_token' => @at2.token, 'diaspora_handle' => 'alice@192.168.1.3:3000' }
         response.body.should include(@expected)
     end
   end
 
-  describe "#get_users_aspects_list" do
+  describe "#get_user_aspects_list" do
 
     it "display aspects list" do
         @rt2 = FactoryGirl.create(:refresh_token2, :user_guid=> Person.first.guid)
@@ -69,7 +74,7 @@ describe Api::UsersController do
             :user_id      => User.first.aspects.first.user_id
         }.to_json
 
-        get 'get_users_aspects_list' ,{ 'access_token' => @at2.token, 'diaspora_handle' => 'alice@localhost:9887' }
+        get 'get_user_aspects_list' ,{ 'access_token' => @at2.token, 'diaspora_handle' => 'alice@192.168.1.3:3000' }
         response.body.should include(@expected)
     end
   end
@@ -92,9 +97,22 @@ describe Api::UsersController do
     it "display user details" do
         @rt2 = FactoryGirl.create(:refresh_token2, :user_guid=> Person.first.guid)
         @at2 = FactoryGirl.create(:access_token2, :refresh_token => @rt2.token)
-	        @expected=Person.first.as_json.to_json
+		@person_url = Person.first.url + "people/" + Person.first.guid
+		@avatar = Person.first.url + "assets/user/default.png"
+	        @expected={
+            :first_name      => Person.first.first_name,
+            :last_name       => Person.first.last_name,
+            :diaspora_handle => "alice@192.168.1.3:3000",
+            :location        => Person.first.location,
+            :birthday        => Person.first.birthday,
+            :gender          => Person.first.gender,
+	    :bio	     => Person.first.bio,
+	    :url	     => @person_url,
+	    :avatar	     => @avatar
+        }.to_json
 
-        get 'get_user_details' ,{ 'access_token' => @at2.token, 'diaspora_handle' => 'alice@localhost:9887' }
+
+        get 'get_user_details' ,{ 'access_token' => @at2.token, 'diaspora_handle' => 'alice@192.168.1.3:3000' }
         response.body.should include(@expected)
     end
   end
@@ -105,17 +123,17 @@ describe Api::UsersController do
         @rt2 = FactoryGirl.create(:refresh_token2, :user_guid=> Person.first.guid)
         @at2 = FactoryGirl.create(:access_token2, :refresh_token => @rt2.token)
 	        @expected={
-	     :handle  => "bob@localhost:9887"
+	     :handle  => "bob@192.168.1.3:3000"
 	}.to_json
 
-        get 'get_user_person_handle_list' ,{ 'access_token' => @at2.token, 'diaspora_handle' => 'alice@localhost:9887' }
+        get 'get_user_person_handle_list' ,{ 'access_token' => @at2.token, 'diaspora_handle' => 'alice@192.168.1.3:3000' }
         response.body.should include(@expected)
     end
   end
 
   describe "#get_app_scopes_of_given_user" do
 
-    it "display user person handle list" do
+    it "display user app scopes" do
         @rt2 = FactoryGirl.create(:refresh_token2, :user_guid=> Person.first.guid)
         @at2 = FactoryGirl.create(:access_token2, :refresh_token => @rt2.token)
 	        @expected=[
@@ -124,7 +142,7 @@ describe Api::UsersController do
         	 "profile_write"
 	].to_json
 
-        get 'get_app_scopes_of_given_user' ,{ 'access_token' => @at2.token, 'id' => '2', 'diaspora_handle' => 'alice@localhost:9887' }
+        get 'get_app_scopes_of_given_user' ,{ 'access_token' => @at2.token, 'id' => '2', 'diaspora_handle' => 'alice@192.168.1.3:3000' }
         response.body.should include(@expected)
     end
   end
@@ -135,7 +153,7 @@ describe Api::UsersController do
         @rt2 = FactoryGirl.create(:refresh_token2, :user_guid=> Person.first.guid)
         @at2 = FactoryGirl.create(:access_token2, :refresh_token => @rt2.token)
 	@expected=User.first.email
-        put 'edit_email' ,{ 'access_token' => @at2.token, 'email' => 'alice@gmail.com', 'diaspora_handle' => 'alice@localhost:9887' }
+        put 'edit_email' ,{ 'access_token' => @at2.token, 'email' => 'alice@gmail.com', 'diaspora_handle' => 'alice@192.168.1.3:3000' }
         User.first.email.should_not == @expected
     end
   end
@@ -146,7 +164,7 @@ describe Api::UsersController do
         @rt2 = FactoryGirl.create(:refresh_token2, :user_guid=> Person.first.guid)
         @at2 = FactoryGirl.create(:access_token2, :refresh_token => @rt2.token)
 	@expected=User.first.first_name
-        put 'edit_first_name' ,{ 'access_token' => @at2.token, 'first_name' => 'alice-test', 'diaspora_handle' => 'alice@localhost:9887' }
+        put 'edit_first_name' ,{ 'access_token' => @at2.token, 'first_name' => 'alice-test', 'diaspora_handle' => 'alice@192.168.1.3:3000' }
         User.first.first_name.should_not == @expected
     end
   end
@@ -157,7 +175,7 @@ describe Api::UsersController do
         @rt2 = FactoryGirl.create(:refresh_token2, :user_guid=> Person.first.guid)
         @at2 = FactoryGirl.create(:access_token2, :refresh_token => @rt2.token)
 	@expected=User.first.last_name
-        put 'edit_last_name' ,{ 'access_token' => @at2.token, 'last_name' => 'alice-last', 'diaspora_handle' => 'alice@localhost:9887' }
+        put 'edit_last_name' ,{ 'access_token' => @at2.token, 'last_name' => 'alice-last', 'diaspora_handle' => 'alice@192.168.1.3:3000' }
         User.first.last_name.should_not == @expected
     end
   end
@@ -168,7 +186,7 @@ describe Api::UsersController do
         @rt2 = FactoryGirl.create(:refresh_token2, :user_guid=> Person.first.guid)
         @at2 = FactoryGirl.create(:access_token2, :refresh_token => @rt2.token)
 	@expected=Person.first.location
-        put 'edit_user_location' ,{ 'access_token' => @at2.token, 'location' => 'Moon', 'diaspora_handle' => 'alice@localhost:9887' }
+        put 'edit_user_location' ,{ 'access_token' => @at2.token, 'location' => 'Moon', 'diaspora_handle' => 'alice@192.168.1.3:3000' }
         Person.first.location.should_not == @expected
     end
   end

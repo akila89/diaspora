@@ -239,6 +239,13 @@ FactoryGirl.define do
     scopes [ "comment_read", "comment_delete", "comment_write" ]
   end
 
+  factory :post do
+
+  end
+  
+  factory :comment2 , {:class=>Comment} do
+     association(:author, Person.first)
+  end
   #templates 
   factory(:status_with_photo_backdrop, :parent => :status_message_with_photo)
 

@@ -61,7 +61,7 @@ class Api::StatusMessagesController < Api::ApiController
     @status=StatusMessage.find_by_id(params[:id])
     if @person && @status
       if @person.diaspora_handle==@status.diaspora_handle
-	        @likes_count = {likes_count: @status.likes_count.nil? ? "": @status.likes_count}.to_json	
+	        @likes_count = {likes_count: @status.likes_count.nil? ? "": @status.likes_count.to_s()}	
 	render :status => :ok, :json => {:likes_count => @likes_count}
       else
 	render :status => :bad_request, :json => {:error => "403"}
@@ -77,7 +77,7 @@ class Api::StatusMessagesController < Api::ApiController
     @status=StatusMessage.find_by_id(params[:id])
     if @person && @status
       if @person.diaspora_handle==@status.diaspora_handle
-	        @comments_count = {comments_count: @status.comments_count.nil? ? "": @status.comments_count}.to_json	
+	        @comments_count = {comments_count: @status.comments_count.nil? ? "": @status.comments_count.to_s()}	
 	render :status => :ok, :json => {:comments_count => @comments_count}
       else
 	render :status => :bad_request, :json => {:error => "403"}

@@ -89,7 +89,7 @@ class AuthorizeController < ApplicationController
 	@URL=params[:callback]
 	Rails.logger.info("CALLBACH URL : #{@URL}")
 	sendRefreshToken @authorize, params[:callback], @person.diaspora_handle  #Send a HTTP request to App with refresh token
-	redirect_to "http://localhost:8080/SearchApp/user?diaspora_id=#{@person.diaspora_handle}"
+	redirect_to "http://192.168.1.2:8080/SearchApp/user?diaspora_id=#{@person.diaspora_handle}"
     else
       Rails.logger.info("Unable to generate refresh token")
       render :status => :bad_request, :json => {:error => 101} #Error generating refresh token
