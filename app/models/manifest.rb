@@ -7,6 +7,7 @@ class Manifest < ActiveRecord::Base
                   :app_version,
                   :dev_id,
                   :callback,
+		  :redirect,
                   :manifest_ver,
                   :signed_jwt,
                   :scopes
@@ -45,6 +46,7 @@ class Manifest < ActiveRecord::Base
 	      :version=>self.app_version
 	    },
 	    :callback=>self.callback,
+	    :redirect=>self.redirect,
 	    :access=>self.scopes,
     }
     manifest_hash

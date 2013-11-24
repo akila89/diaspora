@@ -29,6 +29,7 @@ class ManifestController < ApplicationController
 	    manifest.app_description=u[:app_discription]
 	    manifest.app_version=u[:app_version]
 	    manifest.callback=u[:callback_url]
+	    manifest.redirect=u[:redirect_url]
 	    scopes = Array.new
 	    if u[:post_read]=='1'
 	      scopes.push("post_read")

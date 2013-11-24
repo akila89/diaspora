@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130812091657) do
+ActiveRecord::Schema.define(:version => 20131124060333) do
 
   create_table "account_deletions", :force => true do |t|
     t.string  "diaspora_handle"
@@ -228,6 +228,7 @@ ActiveRecord::Schema.define(:version => 20130812091657) do
     t.text     "scopes"
     t.datetime "created_at",      :null => false
     t.datetime "updated_at",      :null => false
+    t.string   "redirect"
   end
 
   create_table "mentions", :force => true do |t|
@@ -284,6 +285,14 @@ ActiveRecord::Schema.define(:version => 20130812091657) do
   end
 
   add_index "o_embed_caches", ["url"], :name => "index_o_embed_caches_on_url", :length => {"url"=>255}
+
+  create_table "open_graph_caches", :force => true do |t|
+    t.string "title"
+    t.string "ob_type"
+    t.string "image"
+    t.string "url"
+    t.text   "description"
+  end
 
   create_table "participations", :force => true do |t|
     t.string   "guid"

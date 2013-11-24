@@ -987,10 +987,12 @@ en:
     _url: "URLs"
     success: "Success URL"
     callback_url: "CallBack URL"
+    redirect_url: "Redirect URL"
     error_auth: "Error Authentication URL"
     edit:
       edit_success: "Success URL"
       edit_callback: "Callback url"
+      edit_redirect: "Redirect url"
       edit_error_auth: "URL for error authentication"
 
   post:
