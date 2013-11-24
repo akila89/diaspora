@@ -11,8 +11,9 @@ describe Api::StatusMessagesController do
   describe "#get_given_user_status_list" do
 
     it "display given user status list" do
+	@scopes = Array  [ "post_read", "post_delete", "post_write" ]
 	@status= FactoryGirl.create(:status_message,:author=>@user.person)
-        @rt   = FactoryGirl.create(:refresh_token, :user_guid=> @user.guid)
+        @rt   = FactoryGirl.create(:refresh_token, :user_guid=> @user.guid, :scopes=> @scopes)
         @at   = FactoryGirl.create(:access_token, :refresh_token => @rt.token)
 	        @expected={
             :author_id      		=> @status.author_id,
@@ -31,9 +32,10 @@ describe Api::StatusMessagesController do
   describe "#get_comments_for_status_message" do
 
     it "display given status comments" do
+	@scopes = Array  [ "post_read", "post_delete", "post_write" ]
 	@status= FactoryGirl.create(:status_message,:author=>@user.person)
         @comment = FactoryGirl.create(:comment,:post=>@status)
-        @rt   = FactoryGirl.create(:refresh_token, :user_guid=> @user.guid)
+        @rt   = FactoryGirl.create(:refresh_token, :user_guid=> @user.guid, :scopes=> @scopes)
         @at   = FactoryGirl.create(:access_token, :refresh_token => @rt.token)
 	        @expected={
             :author_id      		=> @comment.author_id,
@@ -51,9 +53,10 @@ describe Api::StatusMessagesController do
   describe "#get_likes_for_status_message" do
 
     it "display given status message likes" do
+	@scopes = Array  [ "post_read", "post_delete", "post_write" ]
 	@status= FactoryGirl.create(:status_message,:author=>@user.person)
 	FactoryGirl.create(:like,:author=> @user.person, :target=> @status)
-        @rt   = FactoryGirl.create(:refresh_token, :user_guid=> @user.guid)
+        @rt   = FactoryGirl.create(:refresh_token, :user_guid=> @user.guid, :scopes=> @scopes)
         @at   = FactoryGirl.create(:access_token, :refresh_token => @rt.token)
 	        @expected={
 	     :likes_count => "1"
@@ -67,10 +70,11 @@ describe Api::StatusMessagesController do
   describe "#get_number_of_comments_for_status_message" do
 
     it "display given status message comments" do
+	@scopes = Array  [ "post_read", "post_delete", "post_write" ]
 	@status= FactoryGirl.create(:status_message,:author=>@user.person)
         @comment = FactoryGirl.create(:comment,:post=>@status)
 	FactoryGirl.create(:like,:author=> @user.person, :target=> @status)
-        @rt   = FactoryGirl.create(:refresh_token, :user_guid=> @user.guid)
+        @rt   = FactoryGirl.create(:refresh_token, :user_guid=> @user.guid, :scopes=> @scopes)
         @at   = FactoryGirl.create(:access_token, :refresh_token => @rt.token)
 	        @expected={
 	     :comments_count => "1"
@@ -84,8 +88,9 @@ describe Api::StatusMessagesController do
   describe "#create_status_message" do
 
     it "display ok status after creating new status" do
+	@scopes = Array  [ "post_read", "post_delete", "post_write" ]
 	@text = "Test Status"
-        @rt   = FactoryGirl.create(:refresh_token, :user_guid=> @user.guid)
+        @rt   = FactoryGirl.create(:refresh_token, :user_guid=> @user.guid, :scopes=> @scopes)
         @at   = FactoryGirl.create(:access_token, :refresh_token => @rt.token)
 
         get 'create_status_message' ,{ 'access_token' => @at.token,'text' => @text, 'diaspora_handle' => @user.diaspora_handle }
@@ -96,8 +101,9 @@ describe Api::StatusMessagesController do
   describe "#delete_status_message" do
 
     it "display ok status after deleting given status" do
+	@scopes = Array  [ "post_read", "post_delete", "post_write" ]
 	@status= FactoryGirl.create(:status_message,:author=>@user.person)
-        @rt   = FactoryGirl.create(:refresh_token, :user_guid=> @user.guid)
+        @rt   = FactoryGirl.create(:refresh_token, :user_guid=> @user.guid, :scopes=> @scopes)
         @at   = FactoryGirl.create(:access_token, :refresh_token => @rt.token)
 
         get 'delete_status_message' ,{ 'access_token' => @at.token,'id' => @status.id, 'diaspora_handle' => @user.diaspora_handle }

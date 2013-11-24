@@ -217,26 +217,7 @@ FactoryGirl.define do
   end
 
   factory :refresh_token, {:class=>Dauth::RefreshToken} do
-    app_id "1"
-    scopes [ "post_read", "post_delete", "post_write" ]
-  end
-
-  factory :access_token2, {:class=>Dauth::AccessToken} do
-
-  end
-
-  factory :refresh_token2, {:class=>Dauth::RefreshToken} do
-    app_id "2"
-    scopes [ "profile_read", "profile_delete", "profile_write" ]
-  end
-
-  factory :access_token3, {:class=>Dauth::AccessToken} do
-
-  end
-
-  factory :refresh_token3, {:class=>Dauth::RefreshToken} do
-    app_id "3"
-    scopes [ "comment_read", "comment_delete", "comment_write" ]
+    sequence(:app_id) { |n| "#{n}" }
   end
 
   factory :post do
