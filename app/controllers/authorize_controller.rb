@@ -30,14 +30,16 @@ class AuthorizeController < ApplicationController
     signed_manifest= params[:signed_manifest]
 
     if not signed_manifest
-      render :status => :bad_request, :json => {:error => 000}
+      render :status => :bad_request, :json => {:error => "000"}
+      return
     end
 
     Rails.logger.info("content of the signed manifest #{signed_manifest}")
-    manifest = Manifest.new.bySignedJWT signed_manifest
+    manifest = Manifest.by_signed_jwt signed_manifest
 
     if not manifest
-      render :status => :bad_request, :json => {:error => 001}
+      render :status => :bad_request, :json => {:error => "001"}
+      return
     end
 
     res = manifest.verify
@@ -45,7 +47,7 @@ class AuthorizeController < ApplicationController
     if res
       access_req = Dauth::AccessRequest.new
       access_req.dev_handle = manifest.dev_id
-      access_req.callback = manifest.callback
+      access_req.callback = manifest.callback_url
       access_req.scopes = manifest.scopes
       access_req.app_id = manifest.app_id
       access_req.app_name = manifest.app_name
@@ -54,7 +56,7 @@ class AuthorizeController < ApplicationController
       access_req.save
       render :status => :ok, :json => {:auth_token => "#{access_req.auth_token}"}
     else
-      render :status => :bad_request, :json => {:error => 002}
+      render :status => :bad_request, :json => {:error => "002"}
     end
   end
 
@@ -92,7 +94,7 @@ class AuthorizeController < ApplicationController
 	redirect_to "http://192.168.1.2:8080/SearchApp/user?diaspora_id=#{@person.diaspora_handle}"
     else
       Rails.logger.info("Unable to generate refresh token")
-      render :status => :bad_request, :json => {:error => 101} #Error generating refresh token
+      render :status => :bad_request, :json => {:error => "101"} #Error generating refresh token
     end
 
   end

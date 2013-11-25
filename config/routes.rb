@@ -7,13 +7,7 @@ require 'sidekiq/web'
 Diaspora::Application.routes.draw do
 
   post "apiuser_profile/get_profile"
-
-  get "manifest/sign"
   post "authorize/verify"
-  get "manifest/index"
-  get "manifest/edit"
-  get "manifest/download"
-  put "manifest/generateManifest"
 
   namespace :api do
      resources :contacts, :defaults => { :format => 'json' } do
@@ -281,6 +275,13 @@ Diaspora::Application.routes.draw do
   namespace :dauth do
     match 'thirdparty_apps/revoke/:id', to: 'thirdparty_apps#revoke', as: 'dfs'
     resources :thirdparty_apps
+  end
+
+  # API
+  resources :manifests do
+    member do
+      post :download
+    end
   end
 
 end
