@@ -7,7 +7,7 @@ class CreateManifests < ActiveRecord::Migration
       t.string :app_name
       t.string :app_version
       t.string :manifest_ver
-      t.string :callback
+      t.string :callback_url
       t.string :redirect
       t.text :signed_jwt
       t.text :scopes
