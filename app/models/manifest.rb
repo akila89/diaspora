@@ -8,7 +8,7 @@ class Manifest < ActiveRecord::Base
   :app_verson
   :dev_id
   :callback_url
-	:redirect
+  :redirect_url
   :manifest_ver
   :signed_jwt
   :scopes
@@ -17,6 +17,7 @@ class Manifest < ActiveRecord::Base
   validates :app_description, length: { maximum: 500 }
   VALID_URL_REGEX = /^(http|https):\/\/.+$/
   validates :callback_url, presence: true, format: { with: VALID_URL_REGEX }
+  validates :redirect_url, presence: true, format: { with: VALID_URL_REGEX }
 
   def sign private_key
     self.signed_jwt = JWT.encode(get_manifest_hash, OpenSSL::PKey::RSA.new(private_key), "RS256")
@@ -40,7 +41,7 @@ class Manifest < ActiveRecord::Base
         :version => self.app_version
       },
       :callback => self.callback_url,
-	    :redirect=>self.redirect,
+	    :redirect=>self.redirect_url,
       :access => self.scopes,
     }
   end

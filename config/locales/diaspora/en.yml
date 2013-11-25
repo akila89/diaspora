@@ -991,6 +991,7 @@ en:
       app_description: "App Description"
       app_version: "App Vesion"
       callback_url: "Callback URL"
+      redirect_url: "URL your users will be redirected to"
       your_app_name: "Your Application Name"
       your_app_discription: "A short discription of your app"
       your_app_version: "Version of your app"

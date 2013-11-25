@@ -24,13 +24,22 @@ describe Manifest do
       it "requires presence" do
         FactoryGirl.build(:manifest, callback_url: "").should_not be_valid
       end
-    end
 
-    describe "of callback_url" do
       it "requires format of a valid url" do
         FactoryGirl.build(:manifest, callback_url: "not a valid url").should_not be_valid
       end
     end
+
+    describe "of redirect_url" do
+      it "requires presence" do
+        FactoryGirl.build(:manifest, redirect_url: "").should_not be_valid
+      end
+
+      it "requires format of a valid url" do
+        FactoryGirl.build(:manifest, redirect_url: "not a valid url").should_not be_valid
+      end
+    end
+
   end
 
   describe "get manifest hash" do
@@ -41,6 +50,7 @@ describe Manifest do
           :app_version => "1.0",
           :app_description => "This is a description of a test app",
           :callback_url => "http://examplecallback.com",
+          :redirect_url => "http://examplecallback.com",
           :scopes => ["post_write", "comment_write", "friend_list_read"]
       }
  
@@ -51,6 +61,7 @@ describe Manifest do
           :app_details => { :name=>"A Test App", :id=>"test_app_id", :description=>"This is a description of a test app", :version=>"1.0" },
           :callback => "http://examplecallback.com",
           :dev_id => nil,
+          :redirect => "http://examplecallback.com",
           :manifest_version => "1.0"
       }
 

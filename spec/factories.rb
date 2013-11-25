@@ -233,6 +233,7 @@ FactoryGirl.define do
     app_description "Birds in this app are cool!"
     app_version "1"
     callback_url "http://coolbirds.com/diasporaapp"
+    redirect_url "http://coolbirds.com/welcome"
     scopes ["post_write", "friend_list_read"]
   end
 
