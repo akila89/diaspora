@@ -117,18 +117,11 @@ class Api::UsersController < Api::ApiController
     @handle=params[:diaspora_handle]    
     @guid=@app.user_guid
     @users=User.all
-    @app_user
-    @app_scopes
-    @users.each do |i|
-	 if i.diaspora_handle==@handle
-		@app_user=i.guid
-	 end
-    end
       if @guid==@person.guid
       @app_scopes=@app.scopes
 	render :status => :ok, :json => {:user_person_handle_list => @app_scopes}
       else
-	render :status => :bad_request, :json => {:error => "403"}	# Access denied
+	render :status => :bad_request, :json => {:error => "401"}	# Unautherized
       end
     else
 	render :status => :bad_request, :json => {:error => "400"}
@@ -146,7 +139,7 @@ class Api::UsersController < Api::ApiController
         @user.save
 	render :nothing => true
       else
-	render :status => :bad_request, :json => {:error => "409"}
+	render :status => :bad_request, :json => {:error => "402"}	#402 unsuported type
       end
     else
 	render :status => :bad_request, :json => {:error => "400"}
@@ -165,7 +158,7 @@ class Api::UsersController < Api::ApiController
         @profile.save
 	render :nothing => true
       else
-	render :status => :bad_request, :json => {:error => "409"}
+	render :status => :bad_request, :json => {:error => "402"}
       end
     else
 	render :status => :bad_request, :json => {:error => "400"}
@@ -184,7 +177,7 @@ class Api::UsersController < Api::ApiController
         @profile.save
 	render :nothing => true
       else
-	render :status => :bad_request, :json => {:error => "409"}
+	render :status => :bad_request, :json => {:error => "402"}
       end
     else
 	render :status => :bad_request, :json => {:error => "400"}
@@ -203,7 +196,7 @@ class Api::UsersController < Api::ApiController
         @profile.save
 	render :nothing => true
       else
-	render :status => :bad_request, :json => {:error => "409"}
+	render :status => :bad_request, :json => {:error => "402"}
       end
     else
 	render :status => :bad_request, :json => {:error => "400"}

@@ -36,7 +36,7 @@ def get_given_user_comment_list
 	        @likes_count = {likes_count: @comment.likes_count.nil? ? "": @comment.likes_count.to_s()}	
 	render :status => :ok, :json => {:likes_count => @likes_count}
       else
-	render :status => :bad_request, :json => {:error => "403"}
+	render :status => :bad_request, :json => {:error => "401"}		#unauthorized
       end
     else
 	render :status => :bad_request, :json => {:error => "400"}
@@ -73,7 +73,7 @@ def get_given_user_comment_list
       @user.retract(@comment)
 	render :nothing => true
     else
-	render :status => :bad_request, :json => {:error => "403"}
+	render :status => :bad_request, :json => {:error => "401"}
     end
     else
 	render :status => :bad_request, :json => {:error => "400"}
