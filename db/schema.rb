@@ -223,12 +223,12 @@ ActiveRecord::Schema.define(:version => 20131124060333) do
     t.string   "app_name"
     t.string   "app_version"
     t.string   "manifest_ver"
-    t.string   "callback"
+    t.string   "callback_url"
+    t.string   "redirect_url"
     t.text     "signed_jwt"
     t.text     "scopes"
     t.datetime "created_at",      :null => false
     t.datetime "updated_at",      :null => false
-    t.string   "redirect"
   end
 
   create_table "mentions", :force => true do |t|
