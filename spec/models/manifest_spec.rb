@@ -45,6 +45,7 @@ describe Manifest do
   describe "get manifest hash" do
     it "should return a hash correctly describing the manifest" do
       test_params = {
+          :dev_id => "test@example.net",
           :app_id => "test_app_id",
           :app_name => "A Test App",
           :app_version => "1.0",
@@ -60,7 +61,7 @@ describe Manifest do
           :access => ["post_write", "comment_write", "friend_list_read"],
           :app_details => { :name=>"A Test App", :id=>"test_app_id", :description=>"This is a description of a test app", :version=>"1.0" },
           :callback => "http://examplecallback.com",
-          :dev_id => nil,
+          :dev_id => "test@example.net",
           :redirect => "http://examplecallback.com",
           :manifest_version => "1.0"
       }

@@ -1,19 +1,18 @@
 require 'spec_helper'
 
-describe ManifestController do
+describe ManifestsController do
 
-  describe "GET 'sign'" do
-    it "returns http success" do
-      get 'sign'
-      response.should be_success
-    end
+  before do
+    @user = alice
+    sign_in :user, @user
+    @controller.stub(:current_user).and_return(@user)
   end
 
-  describe "GET 'verify'" do
-    it "returns http success" do
-      get 'verify'
-      response.should be_success
+  describe '#download' do
+    it "downlods a 'json' file" do
+      manifest = FactoryGirl.create(:manifest, :dev => @user)
+      get :download, :id => manifest.id
+      response.header['Content-Type'].should eql 'application/json'
     end
   end
-
 end

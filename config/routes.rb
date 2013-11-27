@@ -280,7 +280,7 @@ Diaspora::Application.routes.draw do
   # API
   resources :manifests do
     member do
-      post :download
+      get :download
     end
   end
 
