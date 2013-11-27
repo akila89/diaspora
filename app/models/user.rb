@@ -63,6 +63,7 @@ class User < ActiveRecord::Base
 
   has_many :notifications, :foreign_key => :recipient_id
 
+  has_many :manifests, :foreign_key => :dev_id
 
   before_save :guard_unconfirmed_email,
               :save_person!

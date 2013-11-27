@@ -229,6 +229,7 @@ FactoryGirl.define do
   end
 
   factory(:manifest) do
+    association(:dev, :factory => :user)
     app_name "cool birds"
     app_description "Birds in this app are cool!"
     app_version "1"

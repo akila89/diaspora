@@ -2,11 +2,12 @@ class Manifest < ActiveRecord::Base
 
   serialize :scopes, Array
 
+  belongs_to :dev, :class_name => 'User'
+  
   :app_description
   :app_name
   :app_id
   :app_verson
-  :dev_id
   :callback_url
   :redirect_url
   :manifest_ver

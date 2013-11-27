@@ -3,7 +3,7 @@ class ManifestsController < ApplicationController
   ALL_SCOPES = ["post_write", "post_read", "post_delete", "comment_write", "comment_read", "profile_read", "friend_list_read"]
 
   def index
-    @manifests = Manifest.where(dev_id:current_user.diaspora_handle)
+    @manifests = current_user.manifests
   end
 
   def show
@@ -19,9 +19,9 @@ class ManifestsController < ApplicationController
   def create
     @scopes = ALL_SCOPES
     @manifest = Manifest.new(params[:manifest])
-    @manifest.dev_id = current_user.diaspora_handle
+    @manifest.dev = current_user
     @manifest.app_id = get_app_id
-    if @manifest.save   
+    if @manifest.save
       render "show"
     else
       render "new"
