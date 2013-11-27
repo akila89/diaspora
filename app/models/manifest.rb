@@ -33,7 +33,7 @@ class Manifest < ActiveRecord::Base
 
   def get_manifest_hash
     {
-      :dev_id => self.dev_id,
+      :dev_id => self.dev.diaspora_handle,
       :manifest_version => "1.0",
       :app_details => {
         :name => self.app_name,
