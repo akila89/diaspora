@@ -64,6 +64,7 @@ class User < ActiveRecord::Base
   has_many :notifications, :foreign_key => :recipient_id
 
   has_many :manifests, :foreign_key => :dev_id
+  has_many :thirdparty_apps, class_name: 'Dauth::ThirdpartyApp'
 
   before_save :guard_unconfirmed_email,
               :save_person!

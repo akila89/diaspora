@@ -16,7 +16,7 @@ class AuthorizeController < ApplicationController
     
     @access_request = Dauth::AccessRequest.find_by_auth_token(@auth_token)
     
-    if not @access_request.nil?
+    if @access_request
       @dev = Webfinger.new(@access_request.dev_handle).fetch   #developer profile details
       @scopes_ar = @access_request.scopes 
       Rails.logger.info("Content of the scopes #{@access_request.scopes}")
@@ -62,42 +62,22 @@ class AuthorizeController < ApplicationController
   end
 
   def update
-    @authorize = Dauth::RefreshToken.new
-    @person = current_user.person
-    @diaspora_handle=params[:diaspora_handle]
-    #get scopes
-    @scopes = Array.new
-    params[:scopes].each do |k,v|
-      @scopes.push(k) if v=="1"
-    end
-    @authorize.scopes = @scopes
-    @authorize.app_id = params[:app_id]
-    @authorize.user_guid = current_user.guid
-     
-    if @authorize.save
-      Rails.logger.info("Generated refresh token - #{@authorize.token}")
-      
-      #save new third party app details
-      token = params[:token]
-      access_req = Dauth::AccessRequest.find_by_auth_token(token)
-      app = Dauth::ThirdpartyApp.find_by_app_id(access_req.app_id)
-      if not app
-        app = Dauth::ThirdpartyApp.new
-      app.app_id = access_req.app_id
-      app.name = access_req.app_name
-      app.description = access_req.app_description
-      app.dev_handle = access_req.dev_handle
+    access_request = Dauth::AccessRequest.where(:auth_token => params[:auth_token])
+    refresh_token = Dauth::RefreshToken.create_for_access_request_for_user access_request current_user
+
+    if refresh_token.save
+      app = current_user.thirdparty_apps.find_or_create_by_app_id(access_request.app_id)
+      app.app_id = access_request.app_id
+      app.name = access_request.app_name
+      app.description = access_request.app_description
+      app.dev_handle = access_request.dev_handle
       app.save
-      end
-	@URL=params[:callback]
-	Rails.logger.info("CALLBACH URL : #{@URL}")
-	sendRefreshToken @authorize, params[:callback], @person.diaspora_handle  #Send a HTTP request to App with refresh token
-	redirect_to "http://192.168.1.2:8080/SearchApp/user?diaspora_id=#{@person.diaspora_handle}"
     else
       Rails.logger.info("Unable to generate refresh token")
       render :status => :bad_request, :json => {:error => "101"} #Error generating refresh token
     end
-
+	  sendRefreshToken refresh_token, access_request.callback, @person.diaspora_handle  #Send a HTTP request to App with refresh token
+	  redirect_to access_request.redirect_url
   end
 
   def access_token

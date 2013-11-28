@@ -1,6 +1,7 @@
 class CreateDauthThirdpartyApps < ActiveRecord::Migration
   def change
     create_table :dauth_thirdparty_apps do |t|
+      t.string :user_id
       t.string :app_id
       t.string :name
       t.string :description
