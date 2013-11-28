@@ -53,6 +53,7 @@ class AuthorizeController < ApplicationController
       access_req.app_name = manifest.app_name
       access_req.app_description = manifest.app_description
       access_req.app_version = manifest.app_version
+      access_req.redirect_url = manifest.redirect_url
       access_req.save
       render :status => :ok, :json => {:auth_token => "#{access_req.auth_token}"}
     else

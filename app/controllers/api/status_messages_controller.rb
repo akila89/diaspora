@@ -14,39 +14,37 @@ class Api::StatusMessagesController < Api::ApiController
 
 # Can retrieve all status messages posted by given user
   def get_given_user_status_list
-    @person = Person.find_by_diaspora_handle(params[:diaspora_handle])
-    if @person
-    @user=@person.owner
-    @statusMessageList=StatusMessage.all
-    @status_messages_array = Array.new
-       @statusMessageList.each do |i| 
+    user = Person.find_by_diaspora_handle(params[:diaspora_handle]).owner
+    if user
+    statusMessageList=StatusMessage.all
+    status_messages_array = Array.new
+       statusMessageList.each do |i| 
 	 if i.diaspora_handle==params[:diaspora_handle]
-	        @status = {author_id: i.author_id.nil? ? "":i.author_id, comments_count: i.comments_count.nil? ? "":i.comments_count, diaspora_handle_of_creator: i.diaspora_handle.nil? ? "":i.diaspora_handle, status_id: i.id.nil? ? "":i.id, likes_count: i.likes_count.nil? ? "":i.likes_count, text: i.text.nil? ? "":i.text}
-        	@status_messages_array.push @status	
+	        status = {author_id: i.author_id.nil? ? "":i.author_id, comments_count: i.comments_count.nil? ? "":i.comments_count, diaspora_handle_of_creator: i.diaspora_handle.nil? ? "":i.diaspora_handle, status_id: i.id.nil? ? "":i.id, likes_count: i.likes_count.nil? ? "":i.likes_count, text: i.text.nil? ? "":i.text}
+        	status_messages_array.push status	
 	 end 
        end	
-	render :status => :ok, :json => {:users_status_messages_list => @status_messages_array}
+	render :status => :ok, :json => {:users_status_messages_list => status_messages_array}
     else
 	render :status => :bad_request, :json => {:error => "400"}
     end
   end
 
-# Can retrieve all comments related to a given status message
+# Retrieve all comments related to a given status message
   def get_comments_for_status_message
-    @person = Person.find_by_diaspora_handle(params[:diaspora_handle])
-    @status=StatusMessage.find_by_id(params[:id])
-    if @person && @status
-      if @person.diaspora_handle==@status.diaspora_handle
-        @user=@person.owner
-        @commentList=Comment.all
-        @comment_list_array = Array.new
-        @commentList.each do |i| 
-	  if i.commentable_id==@status.id
-	        @comment = {author_id: i.author_id.nil? ? "":i.author_id, commentable_id: i.commentable_id.nil? ? "":i.commentable_id, id: i.id.nil? ? "":i.id, likes_count: i.likes_count.nil? ? "":i.likes_count, text: i.text.nil? ? "":i.text}
-        	@comment_list_array.push @comment	
+    person = Person.find_by_diaspora_handle(params[:diaspora_handle])
+    status=StatusMessage.find_by_id(params[:id])
+    if person && status
+      if person.diaspora_handle==status.diaspora_handle
+        commentList=Comment.all
+        comment_list_array = Array.new
+        commentList.each do |i| 
+	  if i.commentable_id==status.id
+	        comment = {author_id: i.author_id.nil? ? "":i.author_id, commentable_id: i.commentable_id.nil? ? "":i.commentable_id, id: i.id.nil? ? "":i.id, likes_count: i.likes_count.nil? ? "":i.likes_count, text: i.text.nil? ? "":i.text}
+        	comment_list_array.push comment	
 	  end  
         end
-	render :status => :ok, :json => {:comment_list => @comment_list_array}
+	render :status => :ok, :json => {:comment_list => comment_list_array}
       else
 	render :status => :bad_request, :json => {:error => "401"}
       end
@@ -73,12 +71,12 @@ class Api::StatusMessagesController < Api::ApiController
 
 # Get number of comments of a given status message
   def get_number_of_comments_for_status_message
-    @person = Person.find_by_diaspora_handle(params[:diaspora_handle])
-    @status=StatusMessage.find_by_id(params[:id])
-    if @person && @status
-      if @person.diaspora_handle==@status.diaspora_handle
-	        @comments_count = {comments_count: @status.comments_count.nil? ? "": @status.comments_count.to_s()}	
-	render :status => :ok, :json => {:comments_count => @comments_count}
+    person = Person.find_by_diaspora_handle(params[:diaspora_handle])
+    status=StatusMessage.find_by_id(params[:id])
+    if person && status
+      if person.diaspora_handle==status.diaspora_handle
+	        comments_count = {comments_count: status.comments_count.nil? ? "": status.comments_count.to_s()}	
+	render :status => :ok, :json => {:comments_count => comments_count}
       else
 	render :status => :bad_request, :json => {:error => "401"}
       end

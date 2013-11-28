@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131124060333) do
+ActiveRecord::Schema.define(:version => 20131128065516) do
 
   create_table "account_deletions", :force => true do |t|
     t.string  "diaspora_handle"
@@ -120,6 +120,7 @@ ActiveRecord::Schema.define(:version => 20131124060333) do
     t.string   "app_version"
     t.datetime "created_at",      :null => false
     t.datetime "updated_at",      :null => false
+    t.string   "redirect_url"
   end
 
   create_table "dauth_access_tokens", :force => true do |t|

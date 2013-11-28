@@ -18,11 +18,11 @@ Diaspora::Application.routes.draw do
     end
      resources :users, :defaults => { :format => 'json' } do
 	    collection do
-	      get 'get_user_person_list/:diaspora_handle/:access_token' , :action => 'get_user_person_list', constraints: { diaspora_handle: /[^\/]+/ }
+	      get 'get_user_contact_list/:diaspora_handle/:access_token' , :action => 'get_user_contact_list', constraints: { diaspora_handle: /[^\/]+/ }
 	      get 'get_user_aspects_list/:diaspora_handle/:access_token' , :action => 'get_user_aspects_list' , constraints: { diaspora_handle: /[^\/]+/ }
 	      get 'get_user_followed_tags_list/:diaspora_handle/:access_token' , :action => 'get_user_followed_tags_list' , constraints: { diaspora_handle: /[^\/]+/ }
 	      get 'get_user_details/:diaspora_handle/:access_token' , :action => 'get_user_details' , constraints: { diaspora_handle: /[^\/]+/ }
-	      get 'get_user_person_handle_list/:diaspora_handle/:access_token' , :action => 'get_user_person_handle_list' , constraints: { diaspora_handle: /[^\/]+/ }
+	      get 'get_user_contact_handle_list/:diaspora_handle/:access_token' , :action => 'get_user_contact_handle_list' , constraints: { diaspora_handle: /[^\/]+/ }
               get 'get_app_scopes_of_given_user/:id/:diaspora_handle/:access_token' , :action => 'get_app_scopes_of_given_user' , constraints: { diaspora_handle: /[^\/]+/ }
 	      post 'edit_email/:access_token' , :action => 'edit_email'
 	      post 'edit_first_name/:access_token' , :action => 'edit_first_name'

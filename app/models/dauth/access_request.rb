@@ -8,7 +8,8 @@ class Dauth::AccessRequest < ActiveRecord::Base
                   :app_id,
                   :app_name,
                   :app_description,
-                  :app_version
+                  :app_version,
+		  :redirect_url
 
   validates :auth_token,  presence: true, uniqueness: true
   validates :callback,  presence: true
