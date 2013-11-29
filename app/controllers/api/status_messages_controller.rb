@@ -87,15 +87,14 @@ class Api::StatusMessagesController < Api::ApiController
 
 # Post a status message
   def create_status_message
-    @person = Person.find_by_diaspora_handle(params[:diaspora_handle])
-    if @person
-    @user=@person.owner
-    @status_message=@user.build_post(:status_message,{"text"=>params[:text],"aspect_ids"=>"all_aspects","location_coords"=>""})
-      if @status_message.save
-        @aspect_ids=@user.aspect_ids
-        @aspects=@user.aspects_from_ids(@aspect_ids)
-        @user.add_to_streams(@status_message, @aspects)
-        @user.dispatch_post(@status_message, :url => short_post_url(@status_message.guid), :service_types => "")
+    user = Person.find_by_diaspora_handle(params[:diaspora_handle]).owner
+    if user
+    status_message=user.build_post(:status_message,{"text"=>params[:text],"aspect_ids"=>"all_aspects","location_coords"=>""})
+      if status_message.save
+        aspect_ids=user.aspect_ids
+        aspects=user.aspects_from_ids(aspect_ids)
+        user.add_to_streams(status_message, aspects)
+        user.dispatch_post(status_message, :url => short_post_url(status_message.guid), :service_types => "")
 	render :nothing => true
       end
     else
@@ -105,13 +104,12 @@ class Api::StatusMessagesController < Api::ApiController
 
 # Delete a status message
   def delete_status_message
-    @person = Person.find_by_diaspora_handle(params[:diaspora_handle])
-    @user=@person.owner
-    @status=StatusMessage.find_by_id(params[:id])
-    if @person && @status
-      if @person.diaspora_handle==@status.diaspora_handle
-        @post=@user.posts.find(params[:id])
-        @user.retract(@post)
+    user = Person.find_by_diaspora_handle(params[:diaspora_handle]).owner
+    status=StatusMessage.find_by_id(params[:id])
+    if user && status
+      if user.diaspora_handle==status.diaspora_handle
+        post=user.posts.find(params[:id])
+        user.retract(post)
 	render :nothing => true
       else
 	render :status => :bad_request, :json => {:error => "401"}
