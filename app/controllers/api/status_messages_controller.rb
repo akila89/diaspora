@@ -46,7 +46,7 @@ class Api::StatusMessagesController < Api::ApiController
         end
 	render :status => :ok, :json => {:comment_list => comment_list_array}
       else
-	render :status => :bad_request, :json => {:error => "401"}
+	render :status => :unauthorized, :json => {:error => "401"}
       end
     else
 	render :status => :bad_request, :json => {:error => "400"}
@@ -62,7 +62,7 @@ class Api::StatusMessagesController < Api::ApiController
 	        @likes_count = {likes_count: @status.likes_count.nil? ? "": @status.likes_count.to_s()}	
 	render :status => :ok, :json => {:likes_count => @likes_count}
       else
-	render :status => :bad_request, :json => {:error => "401"}
+	render :status => :unauthorized, :json => {:error => "401"}
       end
     else
 	render :status => :bad_request, :json => {:error => "400"}
@@ -78,7 +78,7 @@ class Api::StatusMessagesController < Api::ApiController
 	        comments_count = {comments_count: status.comments_count.nil? ? "": status.comments_count.to_s()}	
 	render :status => :ok, :json => {:comments_count => comments_count}
       else
-	render :status => :bad_request, :json => {:error => "401"}
+	render :status => :unauthorized, :json => {:error => "401"}
       end
     else
 	render :status => :bad_request, :json => {:error => "400"}
@@ -112,7 +112,7 @@ class Api::StatusMessagesController < Api::ApiController
         user.retract(post)
 	render :nothing => true
       else
-	render :status => :bad_request, :json => {:error => "401"}
+	render :status => :unauthorized, :json => {:error => "401"}
       end
     else
 	render :status => :bad_request, :json => {:error => "400"}

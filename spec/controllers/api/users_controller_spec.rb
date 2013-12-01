@@ -9,6 +9,11 @@ describe Api::UsersController do
   end
 
   describe "Accessing api methods" do
+
+	scopes = Array  [ "comment_read", "comment_delete", "comment_write" ]
+        rt = FactoryGirl.create(:refresh_token, :user_guid=> Person.first.guid, :scopes=> scopes)
+        at = FactoryGirl.create(:access_token, :refresh_token => rt.token)
+
     it "without an access token'" do
         expected = {:error => "300"}.to_json
         get 'get_user_contact_list'
@@ -22,28 +27,19 @@ describe Api::UsersController do
     end
 
     it "without profile read permission" do
-	scopes = Array  [ "comment_read", "comment_write" ]
         expected = {:error => "310"}.to_json
-        rt = FactoryGirl.create(:refresh_token, :user_guid=> Person.first.guid, :scopes=> scopes)
-        at = FactoryGirl.create(:access_token, :refresh_token => rt.token)
         get 'get_user_contact_list' ,{ 'access_token' => at.token, 'diaspora_handle' => 'alice@192.168.1.3:3000' }
         response.body.should == expected
     end
 
     it "without profile write permission" do
-	scopes = Array  [ "comment_read", "comment_write" ]
         expected = {:error => "311"}.to_json
-        rt = FactoryGirl.create(:refresh_token, :user_guid=> Person.first.guid, :scopes=> scopes)
-        at = FactoryGirl.create(:access_token, :refresh_token => rt.token)
         put 'edit_email' ,{ 'access_token' => at.token, 'email' => 'alice@gmail.com', 'diaspora_handle' => 'alice@192.168.1.3:3000' }
         response.body.should == expected
     end
 
     it "without registered app" do
-	scopes = Array  [ "comment_read", "comment_delete", "comment_write" ]
         expected = {:error => "403"}.to_json
-        rt = FactoryGirl.create(:refresh_token, :user_guid=> Person.first.guid, :scopes=> scopes)
-        at = FactoryGirl.create(:access_token, :refresh_token => rt.token)
         get 'get_user_contact_list' ,{ 'access_token' => at.token, 'diaspora_handle' => 'bob@192.168.1.3:3000' }
         response.body.should == expected
     end    
@@ -162,6 +158,21 @@ describe Api::UsersController do
         get 'get_app_scopes_of_given_user' ,{ 'access_token' => at.token, 'id' => rt.app_id, 'diaspora_handle' => 'alice@192.168.1.3:3000' }
         response.body.should include(expected)
     end
+
+    it "display error 'unauthorized' access" do
+	scopes = Array  [ "profile_read", "profile_delete", "profile_write" ]
+        rt = FactoryGirl.create(:refresh_token, :user_guid=> Person.first.guid, :scopes=> scopes)
+        at = FactoryGirl.create(:access_token, :refresh_token => rt.token)
+        rt1 = FactoryGirl.create(:refresh_token, :user_guid=> Person.last.guid, :scopes=> scopes)
+        at1 = FactoryGirl.create(:access_token, :refresh_token => rt1.token)
+	        expected={
+	         :error  => "401"
+	}.to_json
+
+        get 'get_app_scopes_of_given_user' ,{ 'access_token' => at.token, 'id' => rt1.app_id, 'diaspora_handle' => 'alice@192.168.1.3:3000' }
+        response.body.should include(expected)
+    end
+
   end
 
   describe "#edit_email" do
@@ -172,6 +183,17 @@ describe Api::UsersController do
         at = FactoryGirl.create(:access_token, :refresh_token => rt.token)
 	expected=User.first.email
         put 'edit_email' ,{ 'access_token' => at.token, 'email' => 'alice@gmail.com', 'diaspora_handle' => 'alice@192.168.1.3:3000' }
+        User.first.email.should_not == expected
+    end
+
+    it "display 'unsupported type' error for invalid email address" do
+	scopes = Array  [ "profile_read", "profile_delete", "profile_write" ]
+        rt = FactoryGirl.create(:refresh_token, :user_guid=> Person.first.guid, :scopes=> scopes)
+        at = FactoryGirl.create(:access_token, :refresh_token => rt.token)
+	        expected={
+	         :error  => "402"
+	}.to_json
+        put 'edit_email' ,{ 'access_token' => at.token, 'email' => 'alice', 'diaspora_handle' => 'alice@192.168.1.3:3000' }
         User.first.email.should_not == expected
     end
   end

@@ -10,31 +10,26 @@ describe Api::StatusMessagesController do
 
   describe "#permissions for scopes," do
 
-    it "without post read permission" do
 	scopes = Array  [ "comment_read", "comment_delete", "comment_write" ]
-        expected = {:error => "330"}.to_json
         rt = FactoryGirl.create(:refresh_token, :user_guid=> Person.first.guid, :scopes=> scopes)
         at = FactoryGirl.create(:access_token, :refresh_token => rt.token)
+
+    it "without post read permission" do
+        expected = {:error => "330"}.to_json
         get 'get_given_user_status_list' ,{ 'access_token' => at.token, 'diaspora_handle' => @user.diaspora_handle }
         response.body.should == expected
     end
 
     it "display ok status after creating new status" do
-	scopes = Array  [ "comment_read", "comment_delete", "comment_write" ]
 	text = "Test Status"
         expected = {:error => "331"}.to_json
-        rt   = FactoryGirl.create(:refresh_token, :user_guid=> @user.guid, :scopes=> scopes)
-        at   = FactoryGirl.create(:access_token, :refresh_token => rt.token)
         get 'create_status_message' ,{ 'access_token' => at.token,'text' => text, 'diaspora_handle' => @user.diaspora_handle }
         response.body.should == expected
     end
 
     it "display ok status after deleting given status" do
-	scopes = Array  [ "comment_read", "comment_delete", "comment_write" ]
         expected = {:error => "332"}.to_json
 	status= FactoryGirl.create(:status_message,:author=>@user.person)
-        rt   = FactoryGirl.create(:refresh_token, :user_guid=> @user.guid, :scopes=> scopes)
-        at   = FactoryGirl.create(:access_token, :refresh_token => rt.token)
         get 'delete_status_message' ,{ 'access_token' => at.token,'id' => status.id, 'diaspora_handle' => @user.diaspora_handle }
         response.body.should == expected
     end

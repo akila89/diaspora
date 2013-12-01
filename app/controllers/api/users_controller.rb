@@ -34,7 +34,7 @@ class Api::UsersController < Api::ApiController
 
          contact_list_array.push user_details
        end
-	render :status => :ok, :json => {:user_person_list => contact_list_array}
+	render :status => :ok, :json => {:user_contact_list => contact_list_array}
     end
     else
        render :status => :bad_request, :json => {:error => "400"}
@@ -99,7 +99,7 @@ class Api::UsersController < Api::ApiController
          contact_handle={handle: Person.find_by_id(i).diaspora_handle.nil? ? "": Person.find_by_id(i).diaspora_handle}
 	 contact_handle_list.push contact_handle    
        end
-	render :status => :ok, :json => {:user_person_handle_list => contact_handle_list}
+	render :status => :ok, :json => {:user_contact_handle_list => contact_handle_list}
     else
 	render :status => :bad_request, :json => {:error => "400"}
     end
@@ -114,9 +114,9 @@ class Api::UsersController < Api::ApiController
     guid=app.user_guid
       if guid==person.guid
       app_scopes=app.scopes
-	render :status => :ok, :json => {:user_person_handle_list => app_scopes}
+	render :status => :ok, :json => {:user_app_scopes => app_scopes}
       else
-	render :status => :bad_request, :json => {:error => "401"}	# Unautherized
+	render :status => :unauthorized, :json => {:error => "401"}	# Unautherized
       end
     else
 	render :status => :bad_request, :json => {:error => "400"}
@@ -132,7 +132,7 @@ class Api::UsersController < Api::ApiController
         user.save
 	render :nothing => true
       else
-	render :status => :bad_request, :json => {:error => "402"}	#402 unsuported type
+	render :status => :unsuported_type, :json => {:error => "402"}	#402 unsuported type
       end
     else
 	render :status => :bad_request, :json => {:error => "400"}
@@ -149,7 +149,7 @@ class Api::UsersController < Api::ApiController
         profile.save
 	render :nothing => true
       else
-	render :status => :bad_request, :json => {:error => "402"}
+	render :status => :unsuported_type, :json => {:error => "402"}
       end
     else
 	render :status => :bad_request, :json => {:error => "400"}
@@ -166,7 +166,7 @@ class Api::UsersController < Api::ApiController
         profile.save
 	render :nothing => true
       else
-	render :status => :bad_request, :json => {:error => "402"}
+	render :status => :unsuported_type, :json => {:error => "402"}
       end
     else
 	render :status => :bad_request, :json => {:error => "400"}
@@ -183,7 +183,7 @@ class Api::UsersController < Api::ApiController
         profile.save
 	render :nothing => true
       else
-	render :status => :bad_request, :json => {:error => "402"}
+	render :status => :unsuported_type, :json => {:error => "402"}
       end
     else
 	render :status => :bad_request, :json => {:error => "400"}

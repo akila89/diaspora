@@ -10,34 +10,28 @@ describe Api::CommentsController do
 
   describe "#permissions for scopes," do
 
-    it "without comment read permission" do
 	scopes = Array  [ "post_read", "post_delete", "post_write" ]
-        expected = {:error => "320"}.to_json
         rt = FactoryGirl.create(:refresh_token, :user_guid=> Person.first.guid, :scopes=> scopes)
         at = FactoryGirl.create(:access_token, :refresh_token => rt.token)
+
+    it "without comment read permission" do
+        expected = {:error => "320"}.to_json
         get 'get_given_user_comment_list' ,{ 'access_token' => at.token, 'diaspora_handle' => 'alice@192.168.1.3:3000' }
         response.body.should == expected
     end
 
     it "without comment write permission" do
-	scopes = Array  [ "post_read", "post_delete", "post_write" ]
         expected = {:error => "321"}.to_json
 	status= FactoryGirl.create(:status_message,:author=>@user.person)
 	text = "Test comment"
-        rt   = FactoryGirl.create(:refresh_token, :user_guid=> @user.guid, :scopes=> scopes)
-        at   = FactoryGirl.create(:access_token, :refresh_token => rt.token)
         get 'create_comment' ,{ 'access_token' => at.token, 'post_id' => status.id,'text' => text, 'diaspora_handle' => @user.diaspora_handle }
         expected = {:error => "321"}.to_json
     end
 
     it "without comment delete permission" do
-	scopes = Array  [ "post_read", "post_delete", "post_write" ]
         expected = {:error => "322"}.to_json
 	status= FactoryGirl.create(:status_message,:author=>@user.person)
         comment = FactoryGirl.create(:comment,:post=>status,:author=>@user.person)
-        rt   = FactoryGirl.create(:refresh_token, :user_guid=> @user.guid, :scopes=> scopes)
-        at   = FactoryGirl.create(:access_token, :refresh_token => rt.token)
-
         get 'delete_comment' ,{ 'access_token' => at.token,'id' => comment.id, 'diaspora_handle' => @user.diaspora_handle }
         response.body.should == expected
     end
