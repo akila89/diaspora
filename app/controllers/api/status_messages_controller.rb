@@ -24,9 +24,9 @@ class Api::StatusMessagesController < Api::ApiController
         	status_messages_array.push status	
 	 end 
        end	
-	render :status => :ok, :json => {:users_status_messages_list => status_messages_array}
+	render :status => :ok, :json => {:users_status_messages_list => status_messages_array}	# Successfully render the Json response
     else
-	render :status => :bad_request, :json => {:error => "400"}
+	render :status => :bad_request, :json => {:error => "400"}	# Accessing with a bad request
     end
   end
 
@@ -44,12 +44,12 @@ class Api::StatusMessagesController < Api::ApiController
         	comment_list_array.push comment	
 	  end  
         end
-	render :status => :ok, :json => {:comment_list => comment_list_array}
+	render :status => :ok, :json => {:comment_list => comment_list_array}	# Successfully render the Json response
       else
-	render :status => :unauthorized, :json => {:error => "401"}
+	render :status => :unauthorized, :json => {:error => "401"}	# Accessing unauthorized contents
       end
     else
-	render :status => :bad_request, :json => {:error => "400"}
+	render :status => :bad_request, :json => {:error => "400"}	# Accessing with a bad request
     end
   end
   
@@ -60,12 +60,12 @@ class Api::StatusMessagesController < Api::ApiController
     if @person && @status
       if @person.diaspora_handle==@status.diaspora_handle
 	        @likes_count = {likes_count: @status.likes_count.nil? ? "": @status.likes_count.to_s()}	
-	render :status => :ok, :json => {:likes_count => @likes_count}
+	render :status => :ok, :json => {:likes_count => @likes_count}	# Successfully render the Json response
       else
-	render :status => :unauthorized, :json => {:error => "401"}
+	render :status => :unauthorized, :json => {:error => "401"}	# Accessing unauthorized contents
       end
     else
-	render :status => :bad_request, :json => {:error => "400"}
+	render :status => :bad_request, :json => {:error => "400"}	# Accessing with a bad request
     end
   end
 
@@ -76,12 +76,12 @@ class Api::StatusMessagesController < Api::ApiController
     if person && status
       if person.diaspora_handle==status.diaspora_handle
 	        comments_count = {comments_count: status.comments_count.nil? ? "": status.comments_count.to_s()}	
-	render :status => :ok, :json => {:comments_count => comments_count}
+	render :status => :ok, :json => {:comments_count => comments_count}	# Successfully render the Json response
       else
-	render :status => :unauthorized, :json => {:error => "401"}
+	render :status => :unauthorized, :json => {:error => "401"}	# Accessing unauthorized contents
       end
     else
-	render :status => :bad_request, :json => {:error => "400"}
+	render :status => :bad_request, :json => {:error => "400"}	# Accessing with a bad request
     end
   end
 
@@ -95,10 +95,10 @@ class Api::StatusMessagesController < Api::ApiController
         aspects=user.aspects_from_ids(aspect_ids)
         user.add_to_streams(status_message, aspects)
         user.dispatch_post(status_message, :url => short_post_url(status_message.guid), :service_types => "")
-	render :nothing => true
+	render :nothing => true	# Successfully created the status message
       end
     else
-	render :status => :bad_request, :json => {:error => "400"}
+	render :status => :bad_request, :json => {:error => "400"}	# Accessing with a bad request
     end
   end
 
@@ -110,12 +110,12 @@ class Api::StatusMessagesController < Api::ApiController
       if user.diaspora_handle==status.diaspora_handle
         post=user.posts.find(params[:id])
         user.retract(post)
-	render :nothing => true
+	render :nothing => true	# Successfully deleted the status message
       else
-	render :status => :unauthorized, :json => {:error => "401"}
+	render :status => :unauthorized, :json => {:error => "401"}	# Accessing unauthorized contents
       end
     else
-	render :status => :bad_request, :json => {:error => "400"}
+	render :status => :bad_request, :json => {:error => "400"}	# Accessing with a bad request
     end
   end
 

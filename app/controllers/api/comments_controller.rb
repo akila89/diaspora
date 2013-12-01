@@ -21,9 +21,9 @@ def get_given_user_comment_list
         	comments_array.push comment	
 	 end  
        end
-	render :status => :ok, :json => {:user_comment_list => comments_array}
+	render :status => :ok, :json => {:user_comment_list => comments_array}	# Successfully render the Json response
     else
-	render :status => :bad_request, :json => {:error => "400"}
+	render :status => :bad_request, :json => {:error => "400"}	# Accessing with a bad request
     end
   end
 
@@ -34,12 +34,12 @@ def get_given_user_comment_list
     if person && comment
       if person.diaspora_handle==comment.diaspora_handle
 	        likes_count = {likes_count: comment.likes_count.nil? ? "": comment.likes_count.to_s()}	
-	render :status => :ok, :json => {:likes_count => likes_count}
+	render :status => :ok, :json => {:likes_count => likes_count}	# Successfully render the Json response
       else
-	render :status => :unauthorized, :json => {:error => "401"}		#unauthorized
+	render :status => :unauthorized, :json => {:error => "401"}	# Accessing unauthorized contents
       end
     else
-	render :status => :bad_request, :json => {:error => "400"}
+	render :status => :bad_request, :json => {:error => "400"}	# Accessing with a bad request
     end
   end
 
@@ -51,12 +51,12 @@ def get_given_user_comment_list
     if person && post
     comment = user.comment!(post, params[:text]) if post
       if comment
-	render :status => :ok, :json => {:user_comment_list => CommentPresenter.new(comment)}
+	render :status => :ok, :json => {:user_comment_list => CommentPresenter.new(comment)}	# Successfully created the comment
       else
-        render :nothing => true
+        render :status => :unsuported_type, :json => {:error => "402"}	# Accessing with invalid param values
       end
     else
-	render :status => :bad_request, :json => {:error => "400"}
+	render :status => :bad_request, :json => {:error => "400"}	# Accessing with a bad request
     end
   end
 
@@ -69,12 +69,12 @@ def get_given_user_comment_list
     comment = Comment.find(params[:id])
     if user.owns?(comment) || user.owns?(comment.parent)
       user.retract(comment)
-	render :nothing => true
+	render :nothing => true	# Successfully deleted the comment
     else
-	render :status => :unauthorized, :json => {:error => "401"}
+	render :status => :unauthorized, :json => {:error => "401"}	# Accessing unauthorized contents
     end
     else
-	render :status => :bad_request, :json => {:error => "400"}
+	render :status => :bad_request, :json => {:error => "400"}	# Accessing with a bad request
     end
   end
 

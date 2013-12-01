@@ -34,10 +34,10 @@ class Api::UsersController < Api::ApiController
 
          contact_list_array.push user_details
        end
-	render :status => :ok, :json => {:user_contact_list => contact_list_array}
+	render :status => :ok, :json => {:user_contact_list => contact_list_array}	# Successfully render the Json response
     end
     else
-       render :status => :bad_request, :json => {:error => "400"}
+       render :status => :bad_request, :json => {:error => "400"}	# Accessing with a bad request
     end
   end
 
@@ -51,9 +51,9 @@ class Api::UsersController < Api::ApiController
 	aspect = {aspect_name: i.name.nil? ? "":i.name, id: i.id.nil? ? "":i.id, user_id: i.user_id.nil? ? "":i.user_id}
         aspect_list_array.push aspect
     end
-	render :status => :ok, :json => {:users_aspects_list => aspect_list_array}
+	render :status => :ok, :json => {:users_aspects_list => aspect_list_array}	# Successfully render the Json response
     else
-        render :status => :bad_request, :json => {:error => "400"}
+        render :status => :bad_request, :json => {:error => "400"}	# Accessing with a bad request
     end
   end
 
@@ -62,9 +62,9 @@ class Api::UsersController < Api::ApiController
     user = Person.find_by_diaspora_handle(params[:diaspora_handle]).owner
     if user
     tag_list=user.followed_tags
-	render :status => :ok, :json => {:users_followed_tag_list => tag_list}
+	render :status => :ok, :json => {:users_followed_tag_list => tag_list}	# Successfully render the Json response
     else
-	render :status => :bad_request, :json => {:error => "400"}
+	render :status => :bad_request, :json => {:error => "400"}	# Accessing with a bad request
     end
   end
 
@@ -82,9 +82,9 @@ class Api::UsersController < Api::ApiController
 		person_avatar = pod_url + person_avatar[1..-1]
          end
     user_details = {first_name: (person.first_name.nil? ? "": person.first_name), last_name: (person.last_name.nil? ? "": person.last_name), diaspora_handle: (person.diaspora_handle.nil? ? "": person.diaspora_handle), location: (person.location.nil? ? "": person.location), birthday: (person.birthday.nil? ? "": person.birthday), gender: (person.gender.nil? ? "": person.gender), bio: (person.bio.nil? ? "": person.bio),  url: (person.url.nil? ? "": person.url),  url: (contact_url.nil? ? "": contact_url),  avatar: (person_avatar.nil? ? "": person_avatar)}
-	render :status => :ok, :json => {:user_details => user_details}
+	render :status => :ok, :json => {:user_details => user_details}	# Successfully render the Json response
     else
-	render :status => :bad_request, :json => {:error => "400"}
+	render :status => :bad_request, :json => {:error => "400"}	# Accessing with a bad request
     end
   end
 
@@ -99,9 +99,9 @@ class Api::UsersController < Api::ApiController
          contact_handle={handle: Person.find_by_id(i).diaspora_handle.nil? ? "": Person.find_by_id(i).diaspora_handle}
 	 contact_handle_list.push contact_handle    
        end
-	render :status => :ok, :json => {:user_contact_handle_list => contact_handle_list}
+	render :status => :ok, :json => {:user_contact_handle_list => contact_handle_list}	# Successfully render the Json response
     else
-	render :status => :bad_request, :json => {:error => "400"}
+	render :status => :bad_request, :json => {:error => "400"}	# Accessing with a bad request
     end
   end
 
@@ -114,12 +114,12 @@ class Api::UsersController < Api::ApiController
     guid=app.user_guid
       if guid==person.guid
       app_scopes=app.scopes
-	render :status => :ok, :json => {:user_app_scopes => app_scopes}
+	render :status => :ok, :json => {:user_app_scopes => app_scopes}	# Successfully render the Json response
       else
-	render :status => :unauthorized, :json => {:error => "401"}	# Unautherized
+	render :status => :unauthorized, :json => {:error => "401"}	# Accessing unauthorized contents
       end
     else
-	render :status => :bad_request, :json => {:error => "400"}
+	render :status => :bad_request, :json => {:error => "400"}	# Accessing with a bad request
     end
   end
 
@@ -130,12 +130,12 @@ class Api::UsersController < Api::ApiController
     user.email=params[:email]
       if user.valid?
         user.save
-	render :nothing => true
+	render :nothing => true	# email address edited successfully
       else
-	render :status => :unsuported_type, :json => {:error => "402"}	#402 unsuported type
+	render :status => :unsuported_type, :json => {:error => "402"}	# Accessing with an invalid email
       end
     else
-	render :status => :bad_request, :json => {:error => "400"}
+	render :status => :bad_request, :json => {:error => "400"}	# Accessing with a bad request
     end
   end
 
@@ -147,12 +147,12 @@ class Api::UsersController < Api::ApiController
     profile.first_name=params[:first_name]
       if profile.valid?
         profile.save
-	render :nothing => true
+	render :nothing => true	# first name edited successfully
       else
-	render :status => :unsuported_type, :json => {:error => "402"}
+	render :status => :unsuported_type, :json => {:error => "402"}	# Accessing with an invalid first name
       end
     else
-	render :status => :bad_request, :json => {:error => "400"}
+	render :status => :bad_request, :json => {:error => "400"}	# Accessing with a bad request
     end
   end
 
@@ -164,12 +164,12 @@ class Api::UsersController < Api::ApiController
     profile.last_name=params[:last_name]
       if profile.valid?
         profile.save
-	render :nothing => true
+	render :nothing => true	# last name edited successfully
       else
-	render :status => :unsuported_type, :json => {:error => "402"}
+	render :status => :unsuported_type, :json => {:error => "402"}	# Accessing with an invalid last name 
       end
     else
-	render :status => :bad_request, :json => {:error => "400"}
+	render :status => :bad_request, :json => {:error => "400"}	# Accessing with a bad request
     end
   end
 
@@ -181,12 +181,12 @@ class Api::UsersController < Api::ApiController
     profile.location=params[:location]
       if profile.valid?
         profile.save
-	render :nothing => true
+	render :nothing => true	# location edited successfully
       else
-	render :status => :unsuported_type, :json => {:error => "402"}
+	render :status => :unsuported_type, :json => {:error => "402"}	# Accessing with an invalid location
       end
     else
-	render :status => :bad_request, :json => {:error => "400"}
+	render :status => :bad_request, :json => {:error => "400"}	# Accessing with a bad request
     end
   end
 
