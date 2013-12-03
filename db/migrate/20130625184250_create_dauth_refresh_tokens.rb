@@ -4,13 +4,13 @@ class CreateDauthRefreshTokens < ActiveRecord::Migration
       t.string :token
       t.string :secret
       t.string :app_id
-      t.string :user_guid
+      t.string :user_id
       t.text :scopes
 
       t.timestamps
     end
     
-    add_index :dauth_refresh_tokens, [:app_id, :user_guid], :unique => true
+    add_index :dauth_refresh_tokens, [:app_id, :user_id], :unique => true
     
   end
 end

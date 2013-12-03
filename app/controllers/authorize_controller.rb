@@ -62,8 +62,14 @@ class AuthorizeController < ApplicationController
   end
 
   def update
-    access_request = Dauth::AccessRequest.where(:auth_token => params[:auth_token])
-    refresh_token = Dauth::RefreshToken.create_for_access_request_for_user access_request current_user
+    if params[:commit] == 'Deny' # If user denies app 
+      redirect_to stream_path
+      return
+    end  
+
+    access_request = Dauth::AccessRequest.where(:auth_token => params[:authorize_token])[0]
+    refresh_token = current_user.refresh_tokens.find_or_create_by_app_id(access_request.app_id)
+    refresh_token.scopes = access_request.scopes
 
     if refresh_token.save
       app = current_user.thirdparty_apps.find_or_create_by_app_id(access_request.app_id)
@@ -76,8 +82,8 @@ class AuthorizeController < ApplicationController
       Rails.logger.info("Unable to generate refresh token")
       render :status => :bad_request, :json => {:error => "101"} #Error generating refresh token
     end
-	  sendRefreshToken refresh_token, access_request.callback, @person.diaspora_handle  #Send a HTTP request to App with refresh token
-	  redirect_to access_request.redirect_url
+    redirect_to access_request.redirect_url
+	  sendRefreshToken refresh_token, access_request.callback, current_user.diaspora_handle  #Send a HTTP request to App with refresh token
   end
 
   def access_token

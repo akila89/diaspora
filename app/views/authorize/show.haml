@@ -30,5 +30,11 @@
   .span-8.last
     %h3
       = t('.developer', { :app_name => @access_request.app_name })
+    .media
+      .profile_photo
+        = person_image_link(@dev, :size => :thumb_large, :to => :photos)
+
+    .bd
+      %h3= person_link(@dev)  
 
 

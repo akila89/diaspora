@@ -62,6 +62,7 @@ class Manifest < ActiveRecord::Base
     end  
     manifest.dev_id = payload["dev_id"]
     manifest.callback_url = payload["callback"]
+    manifest.redirect_url = payload["redirect"]
     manifest.scopes = payload["access"]
     manifest.app_id = payload["app_details"]["id"]
     manifest.app_name = payload["app_details"]["name"]

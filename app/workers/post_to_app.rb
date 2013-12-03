@@ -4,7 +4,7 @@ module Workers
     def perform(callback, params)
       begin
         connection = Faraday.new
-        connection.post callback, params
+        connection.get callback, params
       rescue => e
         raise e
       end
