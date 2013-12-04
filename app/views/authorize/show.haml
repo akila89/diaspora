@@ -35,6 +35,8 @@
         = person_image_link(@dev, :size => :thumb_large, :to => :photos)
 
     .bd
-      %h3= person_link(@dev)  
+      %h3= person_link(@dev)
+    %h4
+      = @dev.diaspora_handle  
 
 

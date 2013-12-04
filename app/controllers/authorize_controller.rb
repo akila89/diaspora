@@ -1,6 +1,7 @@
 class AuthorizeController < ApplicationController
   include Authenticator
   before_filter :authenticate_user!, :except => [:verify, :access_token]
+  ALL_SCOPES = ["post_write", "post_read", "post_delete", "comment_write", "comment_read", "profile_read", "friend_list_read"]
   
   def show
 
@@ -18,7 +19,7 @@ class AuthorizeController < ApplicationController
     
     if @access_request
       @dev = Webfinger.new(@access_request.dev_handle).fetch   #developer profile details
-      @scopes_ar = @access_request.scopes 
+      @scopes = ALL_SCOPES - @access_request.scopes
       Rails.logger.info("Content of the scopes #{@access_request.scopes}")
     else
       Rails.logger.info("Authentication token #{@auth_token} is illegal")
