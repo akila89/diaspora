@@ -15,6 +15,8 @@ class Api::UsersController < Api::ApiController
 
   before_filter :require_friend_list_read_permision, :only => [:get_user_contact_list
                                                             ]
+
+  before_filter :validate_user, :except => [:get_user_contact_list]
 # Retrieve contact list of a given user
 
   def get_user_contact_list

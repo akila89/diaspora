@@ -32,13 +32,7 @@ describe Api::UsersController do
       expected = {:error => "311"}.to_json
       put 'edit_email' ,{ 'access_token' => at.token, 'email' => 'alice@gmail.com', 'diaspora_handle' => user.diaspora_handle }
       response.body.should == expected
-    end
-
-    it "without registered app" do
-      expected = {:error => "403"}.to_json
-      get 'get_user_details' ,{ 'access_token' => at.token, 'diaspora_handle' => user_two.diaspora_handle }
-      response.body.should == expected
-    end    
+    end   
 
   end
 
@@ -66,6 +60,21 @@ describe Api::UsersController do
         }.to_json
 
       get 'get_user_contact_list' ,{ 'access_token' => at.token, 'diaspora_handle' => user.diaspora_handle }
+      response.body.should include(expected)
+    end
+
+    it "display error code 'unable to get user scopes'" do
+      user = FactoryGirl.create(:user)
+      user_two = FactoryGirl.create(:user)
+      contact = FactoryGirl.create(:contact, :person => user_two.person, :user => user)
+	    scopes = Array  [ "profile_read", "profile_delete", "profile_write", "friend_list_read" ]
+      rt = FactoryGirl.create(:refresh_token, :user=> user, :scopes=> scopes)
+      at = FactoryGirl.create(:access_token, :refresh_token => rt)
+		  person_url = user_two.person.url + "people/" + user_two.person.guid
+		  avatar = user_two.person.url + "assets/user/default.png"
+	      expected = {:error => "313"}.to_json
+
+      get 'get_user_contact_list' ,{ 'access_token' => at.token, 'diaspora_handle' => 'test@localhost' }
       response.body.should include(expected)
     end
 

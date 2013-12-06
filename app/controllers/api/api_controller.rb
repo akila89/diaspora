@@ -1,6 +1,6 @@
 class Api::ApiController < ApplicationController
 
-  before_filter :validate_access_token , :validate_user
+  before_filter :validate_access_token
 
   def validate_access_token
     @token = params[:access_token]
@@ -60,7 +60,10 @@ class Api::ApiController < ApplicationController
   
   def require_friend_list_read_permision
     @scopes = get_scopes_of_relevent_friend
-    
+    unless @scopes
+      render :status => :bad_request, :json => {:error => "313"}
+      return
+    end
     unless @scopes.include?('friend_list_read')
       Rails.logger.info("User do not friendlist read permissions")
       render :status => :bad_request, :json => {:error => "314"} #No friend list read permissions
@@ -148,7 +151,7 @@ class Api::ApiController < ApplicationController
       end
     rescue
       Rails.logger.info("User do not friendlist read permissions")
-      render :status => :bad_request, :json => {:error => "313"} # unable get users scopes
+      return nil # unable get users scopes
     end 
   end
 
