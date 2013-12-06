@@ -218,6 +218,8 @@ FactoryGirl.define do
 
   factory :refresh_token, {:class=>Dauth::RefreshToken} do
     sequence(:app_id) { |n| "#{n}" }
+    association(:user, :factory => :user)
+    scopes ["post_write", "friend_list_read"]
   end
 
   factory :post do
