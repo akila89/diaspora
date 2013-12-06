@@ -2,36 +2,57 @@ require 'spec_helper'
 
 describe Dauth::AccessRequest do
   before { 
-    @accessrequest = Dauth::AccessRequest.new(
-      auth_token: "asdfghjkl", 
-      callback: "http://abcd.com", 
-      dev_handle: "dev@pod.com",
-      scopes: "name yes"
-      )}
-      
-  subject { @accessrequest }
+    @access_request = FactoryGirl.create(:access_request)
+  }
   
-  it { should respond_to(:auth_token) }
-  it { should respond_to(:callback) }
-  it { should respond_to(:dev_handle) }
-  it { should respond_to(:scopes) }
-  it { should be_valid }
-  
-  describe "when authentication token is not present" do
-    before{ @accessrequest.auth_token ="" }
-    it {should_not be_valid }
+  describe "validation" do
+    
+   describe "of object from fractory" do
+      it "must be ok" do
+        @access_request.should be_valid
+      end
+    end
+
+    describe "of auth token" do
+      describe "requires presence" do
+        before{ @access_request.auth_token ="" }
+        it {@access_request.should_not be_valid}
+      end   
+    end
+    
+    describe "of callback" do
+      describe "requires presence" do
+        before{ @access_request.callback ="" }
+        it {@access_request.should_not be_valid}
+      end   
+    end
+    
+    describe "of scopes" do
+      describe "requires presence" do
+        before{ @access_request.scopes ="" }
+        it {@access_request.should_not be_valid}
+      end   
+    end
+    
+    describe "of dev_handle" do
+      describe "requires presence" do
+        before{ @access_request.dev_handle ="" }
+        it {@access_request.should_not be_valid}
+      end   
+    end
+    
+    describe "of app_id" do
+      describe "requires presence" do
+        before{ @access_request.app_id ="" }
+        it {@access_request.should_not be_valid}
+      end   
+    end
+    
+    describe "of redirect_url" do
+      describe "requires presence" do
+        before{ @access_request.redirect_url ="" }
+        it {@access_request.should_not be_valid}
+      end   
+    end
   end
-  
-  #TODO auth_token uniqueness validate
-  
-  describe "when callback url is not present" do
-    before{ @accessrequest.callback ="" }
-    it {should_not be_valid }
-  end
-  
-  describe "when scopes is not present" do
-    before{ @accessrequest.scopes ="" }
-    it {should_not be_valid }
-  end
-  
 end

@@ -212,6 +212,14 @@ FactoryGirl.define do
     association(:post, :factory => :status_message)
   end
 
+  factory :access_request, {:class=>Dauth::AccessRequest} do
+    sequence(:app_id) { |n| "#{n}" }
+    dev_handle "dev@pod.com"
+    callback_url "http://coolbirds.com/diasporaapp"
+    redirect_url "http://coolbirds.com/welcome"
+    scopes ["post_write", "friend_list_read"]
+  end
+
   factory :access_token, {:class=>Dauth::AccessToken} do
 
   end
