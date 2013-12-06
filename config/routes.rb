@@ -44,7 +44,7 @@ Diaspora::Application.routes.draw do
 	    collection do
 	      get 'index/:access_token' , :action => 'index'
 	      get 'show/:id/:access_token' , :action => 'show'
-	end
+	    end
     end
     #resources :users, :defaults => { :format => 'json' } do
      resources :comments, :defaults => { :format => 'json' } do
@@ -273,8 +273,11 @@ Diaspora::Application.routes.draw do
   post 'dauth/authorize/access_token' => 'authorize#access_token'
  
   namespace :dauth do
-    match 'thirdparty_apps/revoke/:id', to: 'thirdparty_apps#revoke', as: 'dfs'
-    resources :thirdparty_apps
+    resources :thirdparty_apps do
+      member do
+        post :revokexx
+      end
+    end
   end
 
   # API

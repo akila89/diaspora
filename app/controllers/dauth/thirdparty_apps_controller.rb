@@ -1,35 +1,19 @@
 class Dauth::ThirdpartyAppsController < ApplicationController
-  # GET /dauth/thirdparty_apps
-  # GET /dauth/thirdparty_apps.json
+  before_filter :authenticate_user!
   
   def index
-    @dauth_thirdparty_apps = Dauth::ThirdpartyApp.all
-
-    respond_to do |format|
-      format.html # index.html.erb
-      format.json { render json: @dauth_thirdparty_apps }
-    end
+    @dauth_thirdparty_apps = current_user.thirdparty_apps
   end
 
-  # GET /dauth/thirdparty_apps/1
-  # GET /dauth/thirdparty_apps/1.json
   def show
-    @app = Dauth::ThirdpartyApp.find(params[:id])
+    @app = current_user.thirdparty_apps.find(params[:id])
     @dev = Webfinger.new(@app.dev_handle).fetch
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.json { render json: @dauth_thirdparty_app }
-    end
   end
 
-  # GET /dauth/thirdparty_apps/1/edit
   def edit
     @dauth_thirdparty_app = Dauth::ThirdpartyApp.find(params[:id])
   end
 
-  # PUT /dauth/thirdparty_apps/1
-  # PUT /dauth/thirdparty_apps/1.json
   def update
     @dauth_thirdparty_app = Dauth::ThirdpartyApp.find(params[:id])
 
@@ -44,11 +28,8 @@ class Dauth::ThirdpartyAppsController < ApplicationController
     end
   end
   
-  def revoke
-    @app = Dauth::ThirdpartyApp.find(params[:id])
-    @refresh_token = Dauth::RefreshToken.find_by_app_id(@app.app_id)
-    @refresh_token.destroy
-    @dauth_thirdparty_apps = Dauth::ThirdpartyApp.all
+  def destroy
+    @dauth_thirdparty_apps = current_user.thirdparty_apps
     render :index
   end  
 

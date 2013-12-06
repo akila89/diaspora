@@ -12,5 +12,4 @@
     = render :partial => 'dauth/dev'
 .submit_block
   %p Revoke this app to disallow it to use your data
-  %form{ :action => dauth_dfs_path(@app), :method => "post" }
-    %input{ :type => "submit", :value => "Revoke" }
+  = link_to "Revoke", dauth_thirdparty_app_path(@app), :method => :delete, data: { confirm: 'Are you sure?' } , :class => "button"
