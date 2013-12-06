@@ -70,7 +70,11 @@ class AuthorizeController < ApplicationController
 
     access_request = Dauth::AccessRequest.where(:auth_token => params[:authorize_token])[0]
     refresh_token = current_user.refresh_tokens.find_or_create_by_app_id(access_request.app_id)
-    refresh_token.scopes = access_request.scopes + params[:scopes]
+    if params[:scopes]
+      refresh_token.scopes = access_request.scopes + params[:scopes]
+    else
+      refresh_token.scopes = access_request.scopes
+    end
 
     if refresh_token.save
       app = current_user.thirdparty_apps.find_or_create_by_app_id(access_request.app_id)
@@ -82,25 +86,24 @@ class AuthorizeController < ApplicationController
     else
       Rails.logger.info("Unable to generate refresh token")
       render :status => :bad_request, :json => {:error => "101"} #Error generating refresh token
+      return
     end
-    d
     redirect_to access_request.redirect_url
 	  sendRefreshToken refresh_token, access_request.callback, current_user.diaspora_handle  #Send a HTTP request to App with refresh token
   end
 
   def access_token
-    @refresh_token= params[:refresh_token]
+    @refresh_token = Dauth::RefreshToken.find_by_token params[:refresh_token]
 
-    if (Dauth::RefreshToken.find_by_token(@refresh_token).nil?)
+    if not @refresh_token
       Rails.logger.info("refresh token #{@refresh_token} is illegal")
-      render :status => :bad_request, :json => {:error => "200"} #Illegal Refresh Token    
+      render :status => :bad_request, :json => {:error => "200"} #Illegal Refresh Token   
     else
-      if not Dauth::AccessToken.find_by_refresh_token(@refresh_token).nil?
-        @access_token = Dauth::AccessToken.find_by_refresh_token(@refresh_token)
-        if (@access_token.expire?)
+      if @refresh_token.access_tokens.last
+        @access_token = @refresh_token.access_tokens.last
+        if @access_token.expire?
           Rails.logger.info("Access token #{@access_token} is expired")
-          @new_access_token= Dauth::AccessToken.new
-          @new_access_token.refresh_token=@refresh_token
+          @new_access_token= @refresh_token.access_tokens.new
           @new_access_token.save
           Rails.logger.info("New access token - #{@new_access_token}")
           render :status => :ok, :json => {:access_token => "#{@new_access_token.token}"}
@@ -109,8 +112,7 @@ class AuthorizeController < ApplicationController
           render :status => :ok, :json => {:access_token => "#{@access_token.token}"} #send current access token
         end
       else
-        @new_access_token= Dauth::AccessToken.new
-        @new_access_token.refresh_token=@refresh_token
+        @new_access_token= @refresh_token.access_tokens.new
         @new_access_token.save
         Rails.logger.info("New access token - #{@new_access_token}")
         render :status => :ok, :json => {:access_token => "#{@new_access_token.token}"}
