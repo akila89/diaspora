@@ -973,6 +973,7 @@ en:
       title: "Authenticate %{app_name}"
       developer: "Creator of %{app_name}"
       acess_request: "%{app_name} would like do following on your data,"
+      additional_acess_request: "You can additionaly allow it to following,"
       allow: "Allow"
       deny: "Deny"
 

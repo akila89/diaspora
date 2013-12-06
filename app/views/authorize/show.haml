@@ -16,13 +16,22 @@
     .span-13.prepend-1
       %strong
         %h3
-          = t('.acess_request', { :app_name => @access_request.app_name })
+          = t('.acess_request', { :app_name => @access_request.app_name })    
       - @access_request.scopes.each do |scope|
         %li
-          = t(".#{scope}")
-
+          %label
+            = t(".#{scope}")
       %br
+      %strong
+        %h3
+          = t('.additional_acess_request', { :app_name => @access_request.app_name })
       = form_tag('/dauth/authorize/update') do
+        %p
+          - @scopes.each do |scope|
+            %p.checkbox_select
+              = check_box_tag "scopes[]", scope, false,  :id => scope
+              = label_tag t(".#{scope}")
+              %br
         = hidden_field_tag 'authorize_token', @access_request.auth_token
         = submit_tag t('.allow')
         = submit_tag t('.deny')
