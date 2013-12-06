@@ -1,13 +1,15 @@
 class Dauth::AccessToken < ActiveRecord::Base
-  attr_accessible :refresh_token, 
-                  :secret,
-                  :expire_at, 
-                  :token        
-             
+
+  belongs_to :refresh_token, class_name: 'Dauth::RefreshToken'
+
+  attr_accessible :secret,
+                  :expire_at,
+                  :token
+
   validates :refresh_token,  presence: true
   validates :token,  presence: true, uniqueness: true
   validates :secret,  presence: true
-  
+
   before_validation :generateToken, :on => :create
   before_validation :generateSecret, :on => :create
   before_validation :generateExpireTime, :on => :create

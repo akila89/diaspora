@@ -1,21 +1,22 @@
 class Dauth::RefreshToken < ActiveRecord::Base
-  
+
   serialize :scopes, Array
 
   belongs_to :user
-   
-  attr_accessible :app_id, 
-                  :scopes, 
-                  :secret, 
-                  :token, 
+  has_many :access_tokens, class_name: 'Dauth::AccessToken'
+
+  attr_accessible :app_id,
+                  :scopes,
+                  :secret,
+                  :token,
                   :user_guid
-                  
+
   validates :token,  presence: true, uniqueness: true
   validates :app_id,  presence: true
   validates :scopes,  presence: true
   validates :user_id,  presence: true
   validates :secret,  presence: true
-  
+
   before_validation :generateToken, :on => :create
   before_validation :generateSecret, :on => :create
 
