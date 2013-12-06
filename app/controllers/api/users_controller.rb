@@ -2,17 +2,17 @@ class Api::UsersController < Api::ApiController
 
   before_filter :require_profile_read_permision, :only => [:get_user_contact_list,
                                                            :get_user_aspects_list,
-							   :get_user_followed_tags_list,
-							   :get_user_details,
-							   :get_user_contact_handle_list,
+							                                             :get_user_followed_tags_list,
+							                                             :get_user_details,
+							                                             :get_user_contact_handle_list,
                                                            :get_app_scopes_of_given_user,
-							   ]
+							                                             ]
 
   before_filter :require_profile_write_permision, :only => [:edit_email,
                                                             :edit_first_name,
-							    :edit_last_name,
-							    :edit_user_location
-							   ]
+							                                              :edit_last_name,
+							                                              :edit_user_location
+							                                              ]
 # Retrieve contact list of a given user
 
   def get_user_contact_list
@@ -22,21 +22,21 @@ class Api::UsersController < Api::ApiController
       if contact_list
         contact_list_array = Array.new
         contact_list.each do |i|  
-	  person_as_json = Person.find_by_id(i).as_json
+	        person_as_json = Person.find_by_id(i).as_json
           person_url = person_as_json[:url]
-	  person_url = person_url[1..-1]
+	        person_url = person_url[1..-1]
           pod_url = Person.find_by_id(i).url
-	  contact_url = pod_url + person_url
+	        contact_url = pod_url + person_url
           person_avatar = person_as_json[:avatar]
           if person_avatar=="/assets/user/default.png"
-	    person_avatar = pod_url + person_avatar[1..-1]
+	          person_avatar = pod_url + person_avatar[1..-1]
           end
 
           user_details = {first_name: (Person.find_by_id(i).first_name.nil? ? "": Person.find_by_id(i).first_name), last_name: (Person.find_by_id(i).last_name.nil? ? "": Person.find_by_id(i).last_name), diaspora_handle: (Person.find_by_id(i).diaspora_handle.nil? ? "": Person.find_by_id(i).diaspora_handle), location: (Person.find_by_id(i).location.nil? ? "": Person.find_by_id(i).location), birthday: (Person.find_by_id(i).birthday.nil? ? "": Person.find_by_id(i).birthday), gender: (Person.find_by_id(i).gender.nil? ? "": Person.find_by_id(i).gender), bio: (Person.find_by_id(i).bio.nil? ? "": Person.find_by_id(i).bio), url: (contact_url.nil? ? "": contact_url), avatar: (person_avatar.nil? ? "": person_avatar)}
 
-	  if Person.find_by_id(i).profile.searchable
+	        if Person.find_by_id(i).profile.searchable
             contact_list_array.push user_details
-	  end
+	        end
         end
         render :status => :ok, :json => {:user_contact_list => contact_list_array}	# Successfully render the Json response
       end
@@ -54,7 +54,7 @@ class Api::UsersController < Api::ApiController
       aspect_list_array=Array.new
       aspect_list.each do |i|
 
-      aspect = {aspect_name: i.name.nil? ? "":i.name, id: i.id.nil? ? "":i.id, user_id: i.user_id.nil? ? "":i.user_id}
+        aspect = {aspect_name: i.name.nil? ? "":i.name, id: i.id.nil? ? "":i.id, user_id: i.user_id.nil? ? "":i.user_id}
 
         aspect_list_array.push aspect
       end
@@ -129,9 +129,9 @@ class Api::UsersController < Api::ApiController
       guid=app.user_guid
       if guid==person.guid
         app_scopes=app.scopes
-	render :status => :ok, :json => {:user_app_scopes => app_scopes}	# Successfully render the Json response
+	      render :status => :ok, :json => {:user_app_scopes => app_scopes}	# Successfully render the Json response
       else
-	render :status => :bad_request, :json => {:error => "401"}	# Accessing unauthorized contents
+	      render :status => :bad_request, :json => {:error => "401"}	# Accessing unauthorized contents
       end
     else
       render :status => :bad_request, :json => {:error => "400"}	# Accessing with a bad request
@@ -146,7 +146,7 @@ class Api::UsersController < Api::ApiController
       user.email=params[:email]
       if user.valid?
         user.save
-	render :nothing => true	# email address edited successfully
+	      render :nothing => true	# email address edited successfully
       else
         render :status => :bad_request, :json => {:error => "402"}	# Accessing with an invalid type
       end
@@ -164,9 +164,9 @@ class Api::UsersController < Api::ApiController
       profile.first_name=params[:first_name]
       if profile.valid?
         profile.save
-	render :nothing => true	# first name edited successfully
+	      render :nothing => true	# first name edited successfully
       else
-	render :status => :bad_request, :json => {:error => "402"}	# Accessing with an invalid type
+	      render :status => :bad_request, :json => {:error => "402"}	# Accessing with an invalid type
       end
     else
       render :status => :bad_request, :json => {:error => "400"}	# Accessing with a bad request
@@ -182,9 +182,9 @@ class Api::UsersController < Api::ApiController
       profile.last_name=params[:last_name]
       if profile.valid?
         profile.save
-	render :nothing => true	# last name edited successfully
+	      render :nothing => true	# last name edited successfully
       else
-	render :status => :bad_request, :json => {:error => "402"}	# Accessing with an invalid type 
+	      render :status => :bad_request, :json => {:error => "402"}	# Accessing with an invalid type 
       end
     else
       render :status => :bad_request, :json => {:error => "400"}	# Accessing with a bad request
@@ -200,9 +200,9 @@ class Api::UsersController < Api::ApiController
       profile.location=params[:location]
       if profile.valid?
         profile.save
-	render :nothing => true	# location edited successfully
+	      render :nothing => true	# location edited successfully
       else
-	render :status => :bad_request, :json => {:error => "402"}	# Accessing with an invalid type 
+	      render :status => :bad_request, :json => {:error => "402"}	# Accessing with an invalid type 
       end
     else
       render :status => :bad_request, :json => {:error => "400"}	# Accessing with a bad request
