@@ -1,6 +1,7 @@
 class Api::ApiController < ApplicationController
 
-  before_filter :validate_access_token, :validate_user
+  before_filter :validate_access_token 
+  before_filter :validate_user , :except => [:require_friend_list_read_permision]
 
   def validate_access_token
     @token = params[:access_token]
@@ -53,6 +54,17 @@ class Api::ApiController < ApplicationController
     unless @scopes.include?('profile_delete')
       Rails.logger.info("User do not have profile delete permissions")
       render :status => :bad_request, :json => {:error => "312"} #No profile delete permissions
+    end
+  end
+  
+  # Friend list read permissions validates
+  
+  def require_friend_list_read_permision
+    @scopes = get_given_user_comment_list
+    
+    unless @scopes.include?('friend_list_read')
+      Rails.logger.info("User do not friendlist read permissions")
+      render :status => :bad_request, :json => {:error => "314"} #No friend list read permissions
     end
   end
   
@@ -122,6 +134,23 @@ class Api::ApiController < ApplicationController
     
     return @scopes
   end
-
+  
+  #get scopes relevant friend 
+  def get_scopes_of_relevent_friend
+    begin
+      user_refreshtoken_list = Person.find_by_diaspora_handle(params[:diaspora_handle]).owner.refresh_tokens
+      app_id = Dauth::AccessToken.find_by_token(params[:access_token]).refresh_token.app_id
+      scopes = nil
+      user_refreshtoken_list.each do |l|
+        if l.app_id = app_id
+          scopes = l.scopes
+          return scopes
+        end
+      end
+    rescue
+      Rails.logger.info("User do not friendlist read permissions")
+      render :status => :bad_request, :json => {:error => "313"} #No friend list read permissions
+    end 
+  end
 
 end
