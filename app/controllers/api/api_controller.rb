@@ -23,7 +23,7 @@ class Api::ApiController < ApplicationController
     @access_token_tuple=Dauth::AccessToken.find_by_token(params[:access_token])
     @handle=Dauth::RefreshToken.find_by_token(@access_token_tuple.refresh_token).user.diaspora_handle
     if @handle!=@diaspora_handle
-	render :status => :bad_request, :json => {:error => "403"} #Accessing with an unauthorized access token
+	    render :status => :bad_request, :json => {:error => "403"} #Accessing with an unauthorized access token
     end
   end
 

@@ -11,7 +11,7 @@ describe Api::StatusMessagesController do
   describe "#permissions for scopes," do
 
 	scopes = Array  [ "comment_read", "comment_delete", "comment_write" ]
-    rt = FactoryGirl.create(:refresh_token, :user_guid=> Person.first.guid, :scopes=> scopes)
+    rt = FactoryGirl.create(:refresh_token, :user=> User.first, :scopes=> scopes)
     at = FactoryGirl.create(:access_token, :refresh_token => rt.token)
 
     it "without post read permission" do
@@ -40,7 +40,7 @@ describe Api::StatusMessagesController do
     it "display given user status list" do
 	    scopes = Array  [ "post_read", "post_delete", "post_write" ]
 	    status= FactoryGirl.create(:status_message,:author=>@user.person)
-      rt   = FactoryGirl.create(:refresh_token, :user_guid=> @user.guid, :scopes=> scopes)
+      rt = FactoryGirl.create(:refresh_token, :user=> User.first, :scopes=> scopes)
       at   = FactoryGirl.create(:access_token, :refresh_token => rt.token)
 	      expected={
           :author_id      		        => status.author_id,
@@ -62,7 +62,7 @@ describe Api::StatusMessagesController do
 	    scopes = Array  [ "post_read", "post_delete", "post_write" ]
 	    status= FactoryGirl.create(:status_message,:author=>@user.person)
       comment = FactoryGirl.create(:comment,:post=>status)
-      rt   = FactoryGirl.create(:refresh_token, :user_guid=> @user.guid, :scopes=> scopes)
+      rt = FactoryGirl.create(:refresh_token, :user=> User.first, :scopes=> scopes)
       at   = FactoryGirl.create(:access_token, :refresh_token => rt.token)
 	      expected={
           :author_id      => comment.author_id,
@@ -83,7 +83,7 @@ describe Api::StatusMessagesController do
 	    scopes = Array  [ "post_read", "post_delete", "post_write" ]
 	    status= FactoryGirl.create(:status_message,:author=>@user.person)
 	    FactoryGirl.create(:like,:author=> @user.person, :target=> status)
-      rt   = FactoryGirl.create(:refresh_token, :user_guid=> @user.guid, :scopes=> scopes)
+      rt = FactoryGirl.create(:refresh_token, :user=> User.first, :scopes=> scopes)
       at   = FactoryGirl.create(:access_token, :refresh_token => rt.token)
 	      expected={
 	        :likes_count => "1"
@@ -101,7 +101,7 @@ describe Api::StatusMessagesController do
 	    status= FactoryGirl.create(:status_message,:author=>@user.person)
       comment = FactoryGirl.create(:comment,:post=>status)
 	    FactoryGirl.create(:like,:author=> @user.person, :target=> status)
-      rt   = FactoryGirl.create(:refresh_token, :user_guid=> @user.guid, :scopes=> scopes)
+      rt = FactoryGirl.create(:refresh_token, :user=> User.first, :scopes=> scopes)
       at   = FactoryGirl.create(:access_token, :refresh_token => rt.token)
 	      expected={
 	        :comments_count => "1"
@@ -117,7 +117,7 @@ describe Api::StatusMessagesController do
     it "display ok status after creating new status" do
 	    scopes = Array  [ "post_read", "post_delete", "post_write" ]
 	    text = "Test Status"
-      rt   = FactoryGirl.create(:refresh_token, :user_guid=> @user.guid, :scopes=> scopes)
+      rt = FactoryGirl.create(:refresh_token, :user=> User.first, :scopes=> scopes)
       at   = FactoryGirl.create(:access_token, :refresh_token => rt.token)
 
       get 'create_status_message' ,{ 'access_token' => at.token,'text' => text, 'diaspora_handle' => @user.diaspora_handle }
@@ -130,7 +130,7 @@ describe Api::StatusMessagesController do
     it "display ok status after deleting given status" do
 	    scopes = Array  [ "post_read", "post_delete", "post_write" ]
 	    status= FactoryGirl.create(:status_message,:author=>@user.person)
-      rt   = FactoryGirl.create(:refresh_token, :user_guid=> @user.guid, :scopes=> scopes)
+      rt = FactoryGirl.create(:refresh_token, :user=> User.first, :scopes=> scopes)
       at   = FactoryGirl.create(:access_token, :refresh_token => rt.token)
 
       get 'delete_status_message' ,{ 'access_token' => at.token,'id' => status.id, 'diaspora_handle' => @user.diaspora_handle }

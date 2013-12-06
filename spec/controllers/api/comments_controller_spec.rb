@@ -11,7 +11,7 @@ describe Api::CommentsController do
   describe "#permissions for scopes," do
 
 	  scopes = Array  [ "post_read", "post_delete", "post_write" ]
-    rt = FactoryGirl.create(:refresh_token, :user_guid=> Person.first.guid, :scopes=> scopes)
+    rt = FactoryGirl.create(:refresh_token, :user=> User.first, :scopes=> scopes)
     at = FactoryGirl.create(:access_token, :refresh_token => rt.token)
 
     it "without comment read permission" do
@@ -45,7 +45,7 @@ describe Api::CommentsController do
 	    scopes = Array  [ "comment_read", "comment_delete", "comment_write" ]
 	    status= FactoryGirl.create(:status_message,:author=>@user.person)
       comment = FactoryGirl.create(:comment,:post=>status,:author=>@user.person)
-      rt   = FactoryGirl.create(:refresh_token, :user_guid=> @user.guid, :scopes=> scopes)
+      rt = FactoryGirl.create(:refresh_token, :user=> User.first, :scopes=> scopes)
       at   = FactoryGirl.create(:access_token, :refresh_token => rt.token)
 	      
         expected={
@@ -68,7 +68,7 @@ describe Api::CommentsController do
 	    status= FactoryGirl.create(:status_message,:author=>@user.person)
       comment = FactoryGirl.create(:comment,:post=>status,:author=>@user.person)
 	    FactoryGirl.create(:like,:author=> @user.person, :target=> comment)
-      rt   = FactoryGirl.create(:refresh_token, :user_guid=> @user.guid, :scopes=> scopes)
+      rt = FactoryGirl.create(:refresh_token, :user=> User.first, :scopes=> scopes)
       at   = FactoryGirl.create(:access_token, :refresh_token => rt.token)
 	      expected={
 	        :likes_count => "1"
@@ -85,7 +85,7 @@ describe Api::CommentsController do
 	    scopes = Array  [ "comment_read", "comment_delete", "comment_write" ]
 	    status= FactoryGirl.create(:status_message,:author=>@user.person)
 	    text = "Test comment"
-      rt   = FactoryGirl.create(:refresh_token, :user_guid=> @user.guid, :scopes=> scopes)
+      rt = FactoryGirl.create(:refresh_token, :user=> User.first, :scopes=> scopes)
       at   = FactoryGirl.create(:access_token, :refresh_token => rt.token)
       get 'create_comment' ,{ 'access_token' => at.token, 'post_id' => status.id,'text' => text, 'diaspora_handle' => @user.diaspora_handle }
 
@@ -105,7 +105,7 @@ describe Api::CommentsController do
 	    scopes = Array  [ "comment_read", "comment_delete", "comment_write" ]
 	    status= FactoryGirl.create(:status_message,:author=>@user.person)
       comment = FactoryGirl.create(:comment,:post=>status,:author=>@user.person)
-      rt   = FactoryGirl.create(:refresh_token, :user_guid=> @user.guid, :scopes=> scopes)
+      rt = FactoryGirl.create(:refresh_token, :user=> User.first, :scopes=> scopes)
       at   = FactoryGirl.create(:access_token, :refresh_token => rt.token)
       get 'delete_comment' ,{ 'access_token' => at.token,'id' => comment.id, 'diaspora_handle' => @user.diaspora_handle }
       response.response_code.should == 200

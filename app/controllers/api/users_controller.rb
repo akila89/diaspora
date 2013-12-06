@@ -126,7 +126,7 @@ class Api::UsersController < Api::ApiController
     app=Dauth::RefreshToken.find_by_app_id(params[:id])
     if person && app
       handle=params[:diaspora_handle]    
-      guid=app.user_guid
+      guid=app.user.guid
       if guid==person.guid
         app_scopes=app.scopes
 	      render :status => :ok, :json => {:user_app_scopes => app_scopes}	# Successfully render the Json response
