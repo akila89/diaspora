@@ -1,7 +1,6 @@
 class Api::UsersController < Api::ApiController
 
-  before_filter :require_profile_read_permision, :only => [:get_user_contact_list,
-                                                           :get_user_aspects_list,
+  before_filter :require_profile_read_permision, :only => [:get_user_aspects_list,
 							                                             :get_user_followed_tags_list,
 							                                             :get_user_details,
 							                                             :get_user_contact_handle_list,
@@ -13,6 +12,9 @@ class Api::UsersController < Api::ApiController
 							                                              :edit_last_name,
 							                                              :edit_user_location
 							                                              ]
+
+  before_filter :require_friend_list_read_permision, :only => [:get_user_contact_list
+                                                            ]
 # Retrieve contact list of a given user
 
   def get_user_contact_list

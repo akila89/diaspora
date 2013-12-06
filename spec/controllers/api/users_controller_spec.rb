@@ -22,8 +22,8 @@ describe Api::UsersController do
       response.body.should == expected
     end
 
-    it "without profile read permission" do
-      expected = {:error => "310"}.to_json
+    it "without friend list read permission" do
+      expected = {:error => "314"}.to_json
       get 'get_user_contact_list' ,{ 'access_token' => at.token, 'diaspora_handle' => user.diaspora_handle }
       response.body.should == expected
     end
@@ -36,7 +36,7 @@ describe Api::UsersController do
 
     it "without registered app" do
       expected = {:error => "403"}.to_json
-      get 'get_user_contact_list' ,{ 'access_token' => at.token, 'diaspora_handle' => user_two.diaspora_handle }
+      get 'get_user_details' ,{ 'access_token' => at.token, 'diaspora_handle' => user_two.diaspora_handle }
       response.body.should == expected
     end    
 
@@ -48,7 +48,7 @@ describe Api::UsersController do
       user = FactoryGirl.create(:user)
       user_two = FactoryGirl.create(:user)
       contact = FactoryGirl.create(:contact, :person => user_two.person, :user => user)
-	    scopes = Array  [ "profile_read", "profile_delete", "profile_write" ]
+	    scopes = Array  [ "profile_read", "profile_delete", "profile_write", "friend_list_read" ]
       rt = FactoryGirl.create(:refresh_token, :user=> user, :scopes=> scopes)
       at = FactoryGirl.create(:access_token, :refresh_token => rt)
 		  person_url = user_two.person.url + "people/" + user_two.person.guid
@@ -68,6 +68,7 @@ describe Api::UsersController do
       get 'get_user_contact_list' ,{ 'access_token' => at.token, 'diaspora_handle' => user.diaspora_handle }
       response.body.should include(expected)
     end
+
   end
 
   describe "#get_user_aspects_list" do
