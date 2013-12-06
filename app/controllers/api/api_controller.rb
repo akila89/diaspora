@@ -20,8 +20,8 @@ class Api::ApiController < ApplicationController
   # validate user
   def validate_user
     @diaspora_handle=params[:diaspora_handle]
-    @access_token_tuple=Dauth::AccessToken.find_by_token(params[:access_token])
-    @handle=Dauth::RefreshToken.find_by_token(@access_token_tuple.refresh_token).user.diaspora_handle
+    @access_token=Dauth::AccessToken.find_by_token(params[:access_token])
+    @handle=@access_token.refresh_token.user.diaspora_handle
     if @handle!=@diaspora_handle
 	    render :status => :bad_request, :json => {:error => "403"} #Accessing with an unauthorized access token
     end
@@ -118,7 +118,7 @@ class Api::ApiController < ApplicationController
   def get_scopes
     @token = params[:access_token]
     @refresh_token = Dauth::AccessToken.find_by_token(@token).refresh_token
-    @scopes = Dauth::RefreshToken.find_by_token(@refresh_token).scopes
+    @scopes = @refresh_token.scopes
     
     return @scopes
   end

@@ -8,7 +8,7 @@ describe Api::UsersController do
     user_two = FactoryGirl.create(:user)
 	  scopes = Array  [ "comment_read", "comment_delete", "comment_write" ]
     rt = FactoryGirl.create(:refresh_token, :user=> user, :scopes=> scopes)
-    at = FactoryGirl.create(:access_token, :refresh_token => rt.token)
+    at = FactoryGirl.create(:access_token, :refresh_token => rt)
 
     it "without an access token'" do
       expected = {:error => "300"}.to_json
@@ -50,7 +50,7 @@ describe Api::UsersController do
       contact = FactoryGirl.create(:contact, :person => user_two.person, :user => user)
 	    scopes = Array  [ "profile_read", "profile_delete", "profile_write" ]
       rt = FactoryGirl.create(:refresh_token, :user=> user, :scopes=> scopes)
-      at = FactoryGirl.create(:access_token, :refresh_token => rt.token)
+      at = FactoryGirl.create(:access_token, :refresh_token => rt)
 		  person_url = user_two.person.url + "people/" + user_two.person.guid
 		  avatar = user_two.person.url + "assets/user/default.png"
 	      expected={
@@ -75,7 +75,7 @@ describe Api::UsersController do
     it "display aspects list" do
       scopes = Array [ "profile_read", "profile_delete", "profile_write" ]
       rt = FactoryGirl.create(:refresh_token, :user=> User.first, :scopes=> scopes)
-      at = FactoryGirl.create(:access_token, :refresh_token => rt.token)
+      at = FactoryGirl.create(:access_token, :refresh_token => rt)
          expected={
           :aspect_name => User.first.aspects.first.name,
           :id => User.first.aspects.first.id,
@@ -94,7 +94,7 @@ describe Api::UsersController do
 	    scopes = Array  [ "profile_read", "profile_delete", "profile_write" ]
       as = FactoryGirl.create(:tag_following)
       rt = FactoryGirl.create(:refresh_token, :user=> user, :scopes=> scopes)
-      at = FactoryGirl.create(:access_token, :refresh_token => rt.token)
+      at = FactoryGirl.create(:access_token, :refresh_token => rt)
 	      expected=user.followed_tags.to_json
 
       get 'get_user_followed_tags_list' ,{ 'access_token' => at.token, 'diaspora_handle' => user.diaspora_handle }
@@ -108,7 +108,7 @@ describe Api::UsersController do
       user = FactoryGirl.create(:user)
 	    scopes = Array  [ "profile_read", "profile_delete", "profile_write" ]
       rt = FactoryGirl.create(:refresh_token, :user=> user, :scopes=> scopes)
-      at = FactoryGirl.create(:access_token, :refresh_token => rt.token)
+      at = FactoryGirl.create(:access_token, :refresh_token => rt)
 		  person_url = user.person.url + "people/" + user.guid
 		  avatar = user.person.url + "assets/user/default.png"
 	      expected={
@@ -137,7 +137,7 @@ describe Api::UsersController do
       contact = FactoryGirl.create(:contact, :person=> user_two.person, :user=> user)
 	    scopes = Array  [ "profile_read", "profile_delete", "profile_write" ]
       rt = FactoryGirl.create(:refresh_token, :user=> user, :scopes=> scopes)
-      at = FactoryGirl.create(:access_token, :refresh_token => rt.token)
+      at = FactoryGirl.create(:access_token, :refresh_token => rt)
 	      expected={
 	        :handle  => user_two.diaspora_handle
 	      }.to_json
@@ -153,7 +153,7 @@ describe Api::UsersController do
       user = FactoryGirl.create(:user)
 	    scopes = Array  [ "profile_read", "profile_delete", "profile_write" ]
       rt = FactoryGirl.create(:refresh_token, :user=> user, :scopes=> scopes)
-      at = FactoryGirl.create(:access_token, :refresh_token => rt.token)
+      at = FactoryGirl.create(:access_token, :refresh_token => rt)
 	      expected=[
 	        "profile_read",
        	  "profile_delete",
@@ -169,9 +169,9 @@ describe Api::UsersController do
       user_two = FactoryGirl.create(:user)
 	    scopes = Array  [ "profile_read", "profile_delete", "profile_write" ]
       rt = FactoryGirl.create(:refresh_token, :user=> user, :scopes=> scopes)
-      at = FactoryGirl.create(:access_token, :refresh_token => rt.token)
+      at = FactoryGirl.create(:access_token, :refresh_token => rt)
       rt1 = FactoryGirl.create(:refresh_token, :user=> user_two, :scopes=> scopes)
-      at1 = FactoryGirl.create(:access_token, :refresh_token => rt1.token)
+      at1 = FactoryGirl.create(:access_token, :refresh_token => rt1)
 	      expected={
 	        :error  => "401"
 	      }.to_json
@@ -188,7 +188,7 @@ describe Api::UsersController do
     it "update email with given email address" do
       scopes = Array [ "profile_read", "profile_delete", "profile_write" ]
       rt = FactoryGirl.create(:refresh_token, :user=> User.first, :scopes=> scopes)
-      at = FactoryGirl.create(:access_token, :refresh_token => rt.token)
+      at = FactoryGirl.create(:access_token, :refresh_token => rt)
       expected=User.first.email
       put 'edit_email' ,{ 'access_token' => at.token, 'email' => 'alice@gmail.com', 'diaspora_handle' => User.first.diaspora_handle }
       User.first.email.should_not == expected
@@ -197,7 +197,7 @@ describe Api::UsersController do
     it "display 'unsupported type' error for invalid email address" do
       scopes = Array [ "profile_read", "profile_delete", "profile_write" ]
       rt = FactoryGirl.create(:refresh_token, :user=> User.first, :scopes=> scopes)
-      at = FactoryGirl.create(:access_token, :refresh_token => rt.token)
+      at = FactoryGirl.create(:access_token, :refresh_token => rt)
          expected={
          :error => "402"
          }.to_json
@@ -211,7 +211,7 @@ describe Api::UsersController do
     it "update first name with given first name" do
       scopes = Array [ "profile_read", "profile_delete", "profile_write" ]
       rt = FactoryGirl.create(:refresh_token, :user=> User.first, :scopes=> scopes)
-      at = FactoryGirl.create(:access_token, :refresh_token => rt.token)
+      at = FactoryGirl.create(:access_token, :refresh_token => rt)
          expected=User.first.first_name
       put 'edit_first_name' ,{ 'access_token' => at.token, 'first_name' => 'alice-test', 'diaspora_handle' => User.first.diaspora_handle }
       User.first.first_name.should_not == expected
@@ -223,7 +223,7 @@ describe Api::UsersController do
     it "update last name with given last name" do
       scopes = Array [ "profile_read", "profile_delete", "profile_write" ]
       rt = FactoryGirl.create(:refresh_token, :user=> User.first, :scopes=> scopes)
-      at = FactoryGirl.create(:access_token, :refresh_token => rt.token)
+      at = FactoryGirl.create(:access_token, :refresh_token => rt)
          expected=User.first.last_name
       put 'edit_last_name' ,{ 'access_token' => at.token, 'last_name' => 'alice-last', 'diaspora_handle' => User.first.diaspora_handle }
       User.first.last_name.should_not == expected
@@ -235,7 +235,7 @@ describe Api::UsersController do
     it "update user location with given location" do
       scopes = Array [ "profile_read", "profile_delete", "profile_write" ]
       rt = FactoryGirl.create(:refresh_token, :user=> User.first, :scopes=> scopes)
-      at = FactoryGirl.create(:access_token, :refresh_token => rt.token)
+      at = FactoryGirl.create(:access_token, :refresh_token => rt)
          expected=Person.first.location
       put 'edit_user_location' ,{ 'access_token' => at.token, 'location' => 'Moon', 'diaspora_handle' => User.first.diaspora_handle }
       Person.first.location.should_not == expected

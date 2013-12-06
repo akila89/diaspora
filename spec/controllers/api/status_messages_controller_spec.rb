@@ -7,7 +7,7 @@ describe Api::StatusMessagesController do
   user = FactoryGirl.create(:user)
 	scopes = Array  [ "comment_read", "comment_delete", "comment_write" ]
     rt = FactoryGirl.create(:refresh_token, :user=> user, :scopes=> scopes)
-    at = FactoryGirl.create(:access_token, :refresh_token => rt.token)
+    at = FactoryGirl.create(:access_token, :refresh_token => rt)
 
     it "without post read permission" do
       expected = {:error => "330"}.to_json
@@ -37,7 +37,7 @@ describe Api::StatusMessagesController do
 	    scopes = Array  [ "post_read", "post_delete", "post_write" ]
 	    status= FactoryGirl.create(:status_message,:author=>user.person)
       rt = FactoryGirl.create(:refresh_token, :user=> user, :scopes=> scopes)
-      at   = FactoryGirl.create(:access_token, :refresh_token => rt.token)
+      at   = FactoryGirl.create(:access_token, :refresh_token => rt)
 	      expected={
           :author_id      		        => status.author_id,
           :comments_count       	    => status.comments_count,
@@ -60,7 +60,7 @@ describe Api::StatusMessagesController do
 	    status= FactoryGirl.create(:status_message,:author=>user.person)
       comment = FactoryGirl.create(:comment,:post=>status)
       rt = FactoryGirl.create(:refresh_token, :user=> user, :scopes=> scopes)
-      at   = FactoryGirl.create(:access_token, :refresh_token => rt.token)
+      at   = FactoryGirl.create(:access_token, :refresh_token => rt)
 	      expected={
           :author_id      => comment.author_id,
           :commentable_id => comment.commentable_id,
@@ -82,7 +82,7 @@ describe Api::StatusMessagesController do
 	    status= FactoryGirl.create(:status_message,:author=>user.person)
 	    FactoryGirl.create(:like,:author=> user.person, :target=> status)
       rt = FactoryGirl.create(:refresh_token, :user=> user, :scopes=> scopes)
-      at   = FactoryGirl.create(:access_token, :refresh_token => rt.token)
+      at   = FactoryGirl.create(:access_token, :refresh_token => rt)
 	      expected={
 	        :likes_count => "1"
         }.to_json
@@ -101,7 +101,7 @@ describe Api::StatusMessagesController do
       comment = FactoryGirl.create(:comment,:post=>status)
 	    FactoryGirl.create(:like,:author=> user.person, :target=> status)
       rt = FactoryGirl.create(:refresh_token, :user=> user, :scopes=> scopes)
-      at   = FactoryGirl.create(:access_token, :refresh_token => rt.token)
+      at   = FactoryGirl.create(:access_token, :refresh_token => rt)
 	      expected={
 	        :comments_count => "1"
         }.to_json
@@ -118,7 +118,7 @@ describe Api::StatusMessagesController do
 	    scopes = Array  [ "post_read", "post_delete", "post_write" ]
 	    text = "Test Status"
       rt = FactoryGirl.create(:refresh_token, :user=> user, :scopes=> scopes)
-      at   = FactoryGirl.create(:access_token, :refresh_token => rt.token)
+      at   = FactoryGirl.create(:access_token, :refresh_token => rt)
 
       get 'create_status_message' ,{ 'access_token' => at.token,'text' => text, 'diaspora_handle' => user.diaspora_handle }
       response.response_code.should == 200
@@ -132,7 +132,7 @@ describe Api::StatusMessagesController do
 	    scopes = Array  [ "post_read", "post_delete", "post_write" ]
 	    status= FactoryGirl.create(:status_message,:author=>user.person)
       rt = FactoryGirl.create(:refresh_token, :user=> user, :scopes=> scopes)
-      at   = FactoryGirl.create(:access_token, :refresh_token => rt.token)
+      at   = FactoryGirl.create(:access_token, :refresh_token => rt)
 
       get 'delete_status_message' ,{ 'access_token' => at.token,'id' => status.id, 'diaspora_handle' => user.diaspora_handle }
       response.response_code.should == 200
