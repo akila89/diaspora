@@ -4,8 +4,8 @@ class Dauth::AccessToken < ActiveRecord::Base
                   :expire_at, 
                   :token        
              
-  validates :refresh_token,  presence: true, uniqueness: true
-  validates :token,  presence: true
+  validates :refresh_token,  presence: true
+  validates :token,  presence: true, uniqueness: true
   validates :secret,  presence: true
   
   before_validation :generateToken, :on => :create

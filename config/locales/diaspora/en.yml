@@ -968,9 +968,26 @@ en:
     activity:
       title: "My Activity"
 
+  authorize:
+    show:
+      title: "Authenticate %{app_name}"
+      developer: "Creator of %{app_name}"
+      acess_request: "%{app_name} would like do following on your data,"
+      allow: "Allow"
+      deny: "Deny"
+
+      post_write: "Put posts on your behalf"
+      post_read: "Read posts you put up"
+      post_delete:  "Delete your posts"
+      comment_read:  "Read comments you make on posts"
+      comment_write:  "Write comments on posts on your behalf"
+      profile_read:  "Read information from your personal profile"
+      friend_list_read:  "Read the your contact list"      
+
   manifests:
     missing_values: "Missing or incorrect values"
     successfully_updated: "Manifest is successfully updated"
+    successfully_created: "Manifest is successfully created"
 
     index:
       create_new: "Create new manifest"
@@ -996,14 +1013,15 @@ en:
       your_app_discription: "A short discription of your app"
       your_app_version: "Version of your app"
       callback_url: "Callback URL of your app"
+      download: "Download Manifest"
 
-      post_write: "Put posts on your behalf"
-      post_read: "Read posts you put up"
-      post_delete:  "Delete your posts"
-      comment_read:  "Read comments you make on posts"
-      comment_write:  "Write comments on posts on your behalf"
-      profile_read:  "Read information from your personal profile"
-      friend_list_read:  "Read the your contact list"
+      post_write: "Put posts on user's behalf"
+      post_read: "Read posts user put up"
+      post_delete:  "Delete user's posts"
+      comment_read:  "Read comments user make on posts"
+      comment_write:  "Write comments on posts on user's behalf"
+      profile_read:  "Read information from user's personal profile"
+      friend_list_read:  "Read the user's contact list"
 
   users:
     edit:

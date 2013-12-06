@@ -23,6 +23,7 @@ class ManifestsController < ApplicationController
     @manifest.app_id = get_app_id
     if @manifest.save
       render "show"
+      flash[:notice] = t("manifests.missing_values")
     else
       render "new"
       flash[:notice] = t("manifests.missing_values")

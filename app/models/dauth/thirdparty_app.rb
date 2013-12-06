@@ -1,7 +1,12 @@
 class Dauth::ThirdpartyApp < ActiveRecord::Base
-  attr_accessible :app_id, 
+
+  belongs_to :user
+
+  attr_accessible :user_id,
+                  :app_id,
+                  :app_name,
                   :description,
                   :dev_handle,
-                  :homepage_url,
-                  :name
+                  :homepage_url
+
 end

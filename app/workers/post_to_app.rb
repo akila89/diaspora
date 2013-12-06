@@ -6,7 +6,6 @@ module Workers
         connection = Faraday.new
         connection.post callback, params
       rescue => e
-        raise e
       end
     end
   end

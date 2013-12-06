@@ -148,15 +148,16 @@ ActiveRecord::Schema.define(:version => 20131128065516) do
     t.string   "token"
     t.string   "secret"
     t.string   "app_id"
-    t.string   "user_guid"
+    t.string   "user_id"
     t.text     "scopes"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end
 
-  add_index "dauth_refresh_tokens", ["app_id", "user_guid"], :name => "index_dauth_refresh_tokens_on_app_id_and_user_guid", :unique => true
+  add_index "dauth_refresh_tokens", ["app_id", "user_id"], :name => "index_dauth_refresh_tokens_on_app_id_and_user_id", :unique => true
 
   create_table "dauth_thirdparty_apps", :force => true do |t|
+    t.string   "user_id"
     t.string   "app_id"
     t.string   "name"
     t.string   "description"

@@ -30,3 +30,5 @@
   %br
   %p
     = f.submit :class => 'button'
+    - if download_button
+      = link_to t('.download'), download_manifest_path(@manifest), :class => "button"
