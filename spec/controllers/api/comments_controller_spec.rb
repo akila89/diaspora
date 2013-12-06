@@ -6,7 +6,7 @@ describe Api::CommentsController do
     user = FactoryGirl.create(:user)
 	  scopes = Array  [ "post_read", "post_delete", "post_write" ]
     rt = FactoryGirl.create(:refresh_token, :user=> user, :scopes=> scopes)
-    at = FactoryGirl.create(:access_token, :refresh_token => rt.token)
+    at = FactoryGirl.create(:access_token, :refresh_token => rt)
 
     it "without comment read permission" do
       expected = {:error => "320"}.to_json
@@ -41,7 +41,7 @@ describe Api::CommentsController do
 	    status= FactoryGirl.create(:status_message,:author=>user.person)
       comment = FactoryGirl.create(:comment,:post=>status,:author=>user.person)
       rt = FactoryGirl.create(:refresh_token, :user=> user, :scopes=> scopes)
-      at   = FactoryGirl.create(:access_token, :refresh_token => rt.token)
+      at   = FactoryGirl.create(:access_token, :refresh_token => rt)
 	      
         expected={
           :author_id      => comment.author_id,
@@ -65,7 +65,7 @@ describe Api::CommentsController do
       comment = FactoryGirl.create(:comment,:post=>status,:author=>user.person)
 	    FactoryGirl.create(:like,:author=> user.person, :target=> comment)
       rt = FactoryGirl.create(:refresh_token, :user=> user, :scopes=> scopes)
-      at   = FactoryGirl.create(:access_token, :refresh_token => rt.token)
+      at   = FactoryGirl.create(:access_token, :refresh_token => rt)
 	      expected={
 	        :likes_count => "1"
         }.to_json
@@ -83,7 +83,7 @@ describe Api::CommentsController do
 	    status= FactoryGirl.create(:status_message,:author=>user.person)
 	    text = "Test comment"
       rt = FactoryGirl.create(:refresh_token, :user=> user, :scopes=> scopes)
-      at   = FactoryGirl.create(:access_token, :refresh_token => rt.token)
+      at   = FactoryGirl.create(:access_token, :refresh_token => rt)
       get 'create_comment' ,{ 'access_token' => at.token, 'post_id' => status.id,'text' => text, 'diaspora_handle' => user.diaspora_handle }
 
 	      expected={
@@ -104,7 +104,7 @@ describe Api::CommentsController do
 	    status= FactoryGirl.create(:status_message,:author=>user.person)
       comment = FactoryGirl.create(:comment,:post=>status,:author=>user.person)
       rt = FactoryGirl.create(:refresh_token, :user=> user, :scopes=> scopes)
-      at   = FactoryGirl.create(:access_token, :refresh_token => rt.token)
+      at   = FactoryGirl.create(:access_token, :refresh_token => rt)
       get 'delete_comment' ,{ 'access_token' => at.token,'id' => comment.id, 'diaspora_handle' => user.diaspora_handle }
       response.response_code.should == 200
     end
