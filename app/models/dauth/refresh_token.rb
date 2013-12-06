@@ -8,8 +8,7 @@ class Dauth::RefreshToken < ActiveRecord::Base
   attr_accessible :app_id,
                   :scopes,
                   :secret,
-                  :token,
-                  :user_guid
+                  :token
 
   validates :token,  presence: true, uniqueness: true
   validates :app_id,  presence: true
@@ -19,10 +18,6 @@ class Dauth::RefreshToken < ActiveRecord::Base
 
   before_validation :generateToken, :on => :create
   before_validation :generateSecret, :on => :create
-
-  def self.create_for_access_request_for_user access_request, user
-    refresh_token
-  end
 
   private
 
