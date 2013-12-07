@@ -33,6 +33,7 @@
               = label_tag t(".#{scope}")
               %br
         = hidden_field_tag 'authorize_token', @access_request.auth_token
+        = hidden_field_tag 'handle', @diaspora_han
         = submit_tag t('.allow')
         = submit_tag t('.deny')
 

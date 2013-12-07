@@ -31,7 +31,10 @@ class Api::ApiController < ApplicationController
   
   def require_profile_read_permision
     @scopes = get_scopes
-    
+    unless @scopes
+      render :status => :bad_request, :json => {:error => "310"}
+      return
+    end
     unless @scopes.include?('profile_read')
       Rails.logger.info("User do not have profile read permissions")
       render :status => :bad_request, :json => {:error => "310"} #No profile read permissions
@@ -65,7 +68,7 @@ class Api::ApiController < ApplicationController
       return
     end
     unless @scopes.include?('friend_list_read')
-      Rails.logger.info("User do not friendlist read permissions")
+      Rails.logger.info("User do not have friendlist read permissions")
       render :status => :bad_request, :json => {:error => "314"} #No friend list read permissions
     end
   end
@@ -130,11 +133,16 @@ class Api::ApiController < ApplicationController
   
   #get scopes relevant to user
   def get_scopes
+    begin
     @token = params[:access_token]
     @refresh_token = Dauth::AccessToken.find_by_token(@token).refresh_token
     @scopes = @refresh_token.scopes
     
     return @scopes
+    rescue
+      Rails.logger.info("User do not have scopes")
+      return nil 
+    end
   end
   
   #get scopes relevant friend 
@@ -150,7 +158,7 @@ class Api::ApiController < ApplicationController
         end
       end
     rescue
-      Rails.logger.info("User do not friendlist read permissions")
+      Rails.logger.info("User do not have friendlist read permissions")
       return nil # unable get users scopes
     end 
   end

@@ -29,6 +29,9 @@ class Dauth::ThirdpartyAppsController < ApplicationController
   end
   
   def destroy
+    app = current_user.thirdparty_apps.find params[:id]
+    current_user.refresh_tokens.find_by_app_id(app.app_id).destroy
+    app.destroy
     @dauth_thirdparty_apps = current_user.thirdparty_apps
     render :index
   end  

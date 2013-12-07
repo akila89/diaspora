@@ -69,7 +69,8 @@ class AuthorizeController < ApplicationController
     end  
 
     access_request = Dauth::AccessRequest.where(:auth_token => params[:authorize_token])[0]
-    refresh_token = current_user.refresh_tokens.find_or_create_by_app_id(access_request.app_id)
+    cur_user = Person.find_by_diaspora_handle(params[:handle]).owner
+    refresh_token = cur_user.refresh_tokens.find_or_create_by_app_id(access_request.app_id)
     if params[:scopes]
       refresh_token.scopes = access_request.scopes + params[:scopes]
     else
@@ -77,7 +78,7 @@ class AuthorizeController < ApplicationController
     end
 
     if refresh_token.save
-      app = current_user.thirdparty_apps.find_or_create_by_app_id(access_request.app_id)
+      app = cur_user.thirdparty_apps.find_or_create_by_app_id(access_request.app_id)
       app.app_id = access_request.app_id
       app.name = access_request.app_name
       app.description = access_request.app_description
@@ -89,7 +90,7 @@ class AuthorizeController < ApplicationController
       return
     end
     redirect_to access_request.redirect_url
-	  sendRefreshToken refresh_token, access_request.callback, current_user.diaspora_handle  #Send a HTTP request to App with refresh token
+	  sendRefreshToken refresh_token, access_request.callback, cur_user.diaspora_handle  #Send a HTTP request to App with refresh token
   end
 
   def access_token
